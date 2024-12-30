@@ -32,7 +32,7 @@ class Browser:
             chrome_options.add_argument("--disable-software-rasterizer")  # Tắt phần mềm rasterizer
             chrome_options.add_argument("--use-gl=swiftshader")  # Sử dụng renderer SwiftShader
             chrome_options.add_argument("--disable-dev-shm-usage")  # Giúp tránh một số lỗi liên quan đến bộ nhớ
-            chrome_options.add_argument("--remote-debugging-port=9222")  # Mở cổng debug cho Chrome
+            # chrome_options.add_argument("--remote-debugging-port=9222")  # Mở cổng debug cho Chrome
 
 
         # Các tùy chọn khác
