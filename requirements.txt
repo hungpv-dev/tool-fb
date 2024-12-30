@@ -1,0 +1,8 @@
+selenium
+dateparser
+requests
+pillow
+pywin32
+pyautogui
+inquirer
+rich
