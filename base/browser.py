@@ -27,12 +27,12 @@ class Browser:
         # Tùy chọn chạy headless (nếu cần)
         if headless: 
             chrome_options.add_argument("--headless")  # Chế độ không giao diện
-            chrome_options.add_argument("--disable-gpu")  # Vô hiệu hóa GPU
             chrome_options.add_argument("--no-sandbox")  # Không sử dụng sandbox
             chrome_options.add_argument("--disable-software-rasterizer")  # Tắt phần mềm rasterizer
+            chrome_options.add_argument("--disable-gpu")  # Vô hiệu hóa GPU
             chrome_options.add_argument("--use-gl=swiftshader")  # Sử dụng renderer SwiftShader
             chrome_options.add_argument("--disable-dev-shm-usage")  # Giúp tránh một số lỗi liên quan đến bộ nhớ
-            # chrome_options.add_argument("--remote-debugging-port=9222")  # Mở cổng debug cho Chrome
+            chrome_options.add_argument("--remote-debugging-port=9222")  # Mở cổng debug cho Chrome
 
 
         # Các tùy chọn khác
