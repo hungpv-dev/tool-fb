@@ -1,7 +1,6 @@
 import psutil
 import inquirer
 from rich.console import Console
-from rich.table import Table
 from rich.prompt import Confirm
 
 
@@ -15,30 +14,23 @@ def get_processes(search_term=""):
     return processes
 
 
-# Hàm hiển thị bảng tiến trình
-def display_processes(processes):
-    table = Table(title="Danh sách Tiến Trình Đang Chạy")
-    table.add_column("PID", style="bold green")
-    table.add_column("Tên Tiến Trình", style="bold cyan")
-
-    for process in processes:
-        table.add_row(str(process['pid']), process['name'])
-
-    console.print(table)
-
-
 # Hàm cho phép người dùng chọn tiến trình để kill
-def choose_process_to_kill(processes):
+def choose_process_to_kill():
+    # Lấy tất cả tiến trình
+    processes = get_processes()
+
     # Liệt kê các tiến trình cho người dùng chọn
     process_names = [f"{proc['name']} (PID: {proc['pid']})" for proc in processes]
+    
     questions = [
         inquirer.Text('search', message="Nhập tên tiến trình để tìm kiếm (hoặc để trống để hiển thị tất cả)", default=""),
         inquirer.Checkbox('processes',
                           message="Chọn tiến trình bạn muốn kill",
                           choices=process_names + ["Thoát"],
-                          carousel=True,
+                          carousel=False,  # Không cuộn, sẽ hiển thị hết
         ),
     ]
+    
     answers = inquirer.prompt(questions)
 
     # Kiểm tra xem người dùng có nhập tìm kiếm không, nếu có thì lọc lại
@@ -49,9 +41,18 @@ def choose_process_to_kill(processes):
             console.print("Không có tiến trình nào phù hợp với từ khóa tìm kiếm.", style="bold red")
             return
 
-        # display_processes(filtered_processes)
+        # Cập nhật lại danh sách tiến trình sau khi tìm kiếm
+        process_names = [f"{proc['name']} (PID: {proc['pid']})" for proc in filtered_processes]
 
-        selected_processes = answers['processes']
+        # Cho phép chọn tiến trình
+        selected_processes = inquirer.prompt([
+            inquirer.Checkbox('processes',
+                              message="Chọn tiến trình bạn muốn kill",
+                              choices=process_names + ["Thoát"],
+                              carousel=False,  # Không cuộn, sẽ hiển thị hết
+            ),
+        ])['processes']
+        
         if "Thoát" in selected_processes:
             selected_processes.remove("Thoát")
 
@@ -76,14 +77,5 @@ if __name__ == "__main__":
 
     console.print("Xin chào! Đây là công cụ quản lý tiến trình hệ thống.", style="bold blue")
 
-    # Lấy danh sách tiến trình
-    processes = get_processes()
-
-    if not processes:
-        console.print("Không có tiến trình nào đang chạy.", style="bold red")
-    else:
-        # Hiển thị bảng tiến trình
-        # display_processes(processes)
-
-        # Cho phép người dùng chọn tiến trình để kill
-        choose_process_to_kill(processes)
+    # Cho phép người dùng chọn tiến trình để kill
+    choose_process_to_kill()
