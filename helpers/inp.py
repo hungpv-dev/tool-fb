@@ -94,10 +94,6 @@ def selected_proxy():
 
     proxy_choices.append("Không sử dụng proxy")
 
-    if len(proxy_choices) == 1:  # Chỉ có "Không sử dụng proxy"
-        console.print("[bold yellow]Không có proxy hoạt động khả dụng.[/]")
-        return None
-
     # Hiển thị danh sách proxy cho người dùng chọn
     proxy_question = inquirer.List(
         'proxy',
