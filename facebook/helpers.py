@@ -26,7 +26,7 @@ def login(browser, account):
             browser.add_cookie(cookie)
         
         sleep(1)
-        browser.get('https://facebook.com')
+        browser.refresh()
         sleep(1)
         
         try:
@@ -199,4 +199,21 @@ def crawlNewFeed(dirextension):
         except Exception as e:
             newfeed_instance.destroy(id)
             error_instance.insertContent(e)
-    
+
+
+def push_list(posts,account):
+    try:
+        from base.browser import Browser
+        from facebook.push import Push
+        manager = Browser()
+        browser = manager.start(False)
+        # browser.get('https://facebook.com')
+        # cookie = login(browser,account)
+        # print(f"{account['name']} đăng {len(posts)}")
+        sleep(5)
+    except Exception as e:
+        print(f'Lỗi khi xử lý đăng bài: {e}')
+    finally: 
+        if 'browser' in locals():
+            pass
+            # browser.quit()

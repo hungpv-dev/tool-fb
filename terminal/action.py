@@ -22,11 +22,11 @@ def fanpage():
     crawl(countTab)
 
 def post():
-    accounts = account.get_accounts({'type': 2})['data']
+    accounts = account.get_accounts({'typenot': 1})['data']
     accounts_question = inquirer.Checkbox('accounts', message="Chọn tài khoản:", choices=[account['name'] for account in accounts], default=[])
     accounts_answers = inquirer.prompt([accounts_question])
 
-    selectAccount = accounts_answers['accounts'];
+    selectAccount = accounts_answers['accounts']
     if len(selectAccount) > 0:
         selected_account_ids = [account['id'] for account in accounts if account['name'] in accounts_answers['accounts']]
         console.print(f"[bold yellow]Tài khoản đã chọn:[/] [bold cyan]{', '.join(selectAccount)}[/]")
@@ -35,7 +35,7 @@ def post():
         console.print("Bạn đã không chọn tài khoản.")
 
 def newsfeed():
-    accounts = account.get_accounts({'type': 1})['data']
+    accounts = account.get_accounts({'typenot': 2})['data']
     accounts_question = inquirer.Checkbox('accounts', message="Chọn tài khoản:", choices=[account['name'] for account in accounts], default=[])
     accounts_answers = inquirer.prompt([accounts_question])
 
@@ -52,7 +52,6 @@ def newsfeed():
         newfeedhandle(selected_account_ids,dirextension)
     else:
         console.print("Bạn đã không chọn tài khoản.")
-    pass
 
 def login():
     accounts = account.get_accounts()['data']

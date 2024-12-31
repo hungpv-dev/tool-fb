@@ -19,8 +19,9 @@ from io import BytesIO
 from sql.accounts import Account
 from selenium.webdriver.common.action_chains import ActionChains
 import pyautogui
+import threading
 from PIL import Image
-from facebook.helpers import login,updateStatusAcount,updateStatusAcountCookie,updatePagePostInfo
+from facebook.helpers import login,updateStatusAcount,updateStatusAcountCookie,updatePagePostInfo,push_list
 
 
 class Push:
@@ -46,21 +47,41 @@ class Push:
                 self.account = account
                 cookie = login(self.browser,self.account)
                 updateStatusAcount(self.account['id'],4) # Đang đăng bài
-                self.browseFanpage(cookie);          
-                print('Đã duyệt xong, chờ 30p để tiếp tục...')
-                sleep(1800)
+                self.handleData(cookie);          
             except Exception as e:
                 print(f"Lỗi khi xử lý đăng bài!: {e}")
                 updateStatusAcount(self.account['id'],1)
                 if self.account.get('latest_cookie'): 
                     updateStatusAcountCookie(self.account['latest_cookie']['id'], 1)
                 self.error_instance.insertContent(e)
-                print("Thử lại sau 10 phút...")
-                sleep(600)
+                print("Thử lại sau 3 phút...")
+                sleep(180)
             except KeyboardInterrupt: 
                  if self.account.get('latest_cookie'): 
                     updateStatusAcountCookie(self.account['latest_cookie']['id'], 2)
-               
+
+    def handleData(self,cookie):    
+        print('Bắt đầu xử lý dữ liệu')
+        while True: 
+            try:
+                listTimes = self.browseTime()
+                if(len(listTimes) > 0):
+                    worker_thread = threading.Thread(target=push_list, args=(listTimes,self.account))
+                    worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
+                    worker_thread.start()
+                
+                # self.browseFanpage(cookie)
+            except Exception as e:
+                raise e
+            
+            print('Chờ 60s để tiếp tục...')
+            sleep(60)
+    
+    def browseTime(self):
+        listPosts = self.pagePosts_instance.get_post_time({'account_id': self.account['id']})
+        return listPosts
+        
+
     def browseFanpage(self,cookie):
         print('Duyệt danh sách fanpage')
         try:

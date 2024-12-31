@@ -17,7 +17,5 @@ class PagePosts(Model):
     def first(self, params=None):
         return self.get(f"page-posts-first", params=params)
     
-    # def update_time(self, page_id):
-    #     return self.put(f"pages/time/{page_id}", {
-    #         "updated_at" : True
-    #     })
+    def get_post_time(self, params=None):
+        return self.get(f"page-posts-time", params=params)
