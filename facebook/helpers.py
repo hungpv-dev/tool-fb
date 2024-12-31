@@ -10,10 +10,12 @@ from sql.pagePosts import PagePosts
 from selenium.common.exceptions import StaleElementReferenceException
 from sql.newsfeed import NewFeedModel
 from base.browser import Browser
+from sql.system import System
 from sql.errors import Error
 import unicodedata
 from sql.account_cookies import AccountCookies
 from urllib.parse import urlparse, parse_qs
+from helpers.system import get_system_info
 
 def login(browser, account):
     try:
@@ -147,58 +149,67 @@ def remove_accents(input_str):
 
 def crawlNewFeed(dirextension):
     from facebook.crawl import Crawl
-    
+    system_instance = System()
     newfeed_instance = NewFeedModel()
     error_instance = Error()
     manager = Browser('hung',dirextension)
     browser = manager.start()
     browser.get('https://facebook.com')
     crawl_instance = Crawl(browser)
-    
-    while True:
-        try:
-            up = newfeed_instance.first()
-            if up is None:
-                print('Hiện chưa có bài viết nào cần lấy! chờ 1p để tiếp tục...')
-                sleep(60)
-                break
-            id = up['id']
-            browser.get(up['post_fb_link'])
-            up['newfeed'] = 1
-            up['id'] = up['post_fb_id']
-            up['link'] = up['post_fb_link']
-            data = crawl_instance.crawlContentPost({},up,{},True)
-            
-            keywords = up.get('keywords') or []
-            check = False
-            
-            post = data.get('post')
-            comments = data.get('comments')
-            post['keywords'] = keywords
-            
-            post_content_no_accents = remove_accents(post['content'].lower())
-            if any(remove_accents(keyword.lower()) in post_content_no_accents for keyword in keywords):
-                check = True
-
-
-            for cm in comments:
-                comment_content_no_accents = remove_accents(cm['content'].lower())
-                if any(remove_accents(keyword.lower()) in comment_content_no_accents for keyword in keywords):
+    info = get_system_info()
+    system = system_instance.insert({
+        'info': info
+    })
+    try:
+        while True:
+            try:
+                up = newfeed_instance.first()
+                if up is None:
+                    print('Hiện chưa có bài viết nào cần lấy! chờ 1p để tiếp tục...')
+                    sleep(60)
+                    break
+                id = up['id']
+                browser.get(up['post_fb_link'])
+                up['newfeed'] = 1
+                up['id'] = up['post_fb_id']
+                up['link'] = up['post_fb_link']
+                data = crawl_instance.crawlContentPost({},up,{},True)
+                
+                keywords = up.get('keywords') or []
+                check = False
+                
+                post = data.get('post')
+                comments = data.get('comments')
+                post['keywords'] = keywords
+                
+                post_content_no_accents = remove_accents(post['content'].lower())
+                if any(remove_accents(keyword.lower()) in post_content_no_accents for keyword in keywords):
                     check = True
 
-            if keywords is None or len(keywords) == 0:
-                if 'media' in post and 'images' in post['media'] and 'videos' in post['media']:
-                    if len(post['media']['images']) > 0 or len(post['media']['videos']) > 0:
+
+                for cm in comments:
+                    comment_content_no_accents = remove_accents(cm['content'].lower())
+                    if any(remove_accents(keyword.lower()) in comment_content_no_accents for keyword in keywords):
                         check = True
 
-            if check:
-                crawl_instance.insertPostAndComment(post,comments,{},id)
-            else:
+                if keywords is None or len(keywords) == 0:
+                    if 'media' in post and 'images' in post['media'] and 'videos' in post['media']:
+                        if len(post['media']['images']) > 0 or len(post['media']['videos']) > 0:
+                            check = True
+
+                if check:
+                    system_instance.update_count(system['id'])
+                    crawl_instance.insertPostAndComment(post,comments,{},id)
+                else:
+                    newfeed_instance.destroy(id)
+                sleep(2)
+            except Exception as e:
                 newfeed_instance.destroy(id)
-            sleep(2)
-        except Exception as e:
-            newfeed_instance.destroy(id)
-            error_instance.insertContent(e)
+                error_instance.insertContent(e)
+    except: 
+        if system:
+            system_instance.update(system['id'], {'status': 2})
+    
 
 
 def push_list(posts,account):

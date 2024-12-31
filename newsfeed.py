@@ -34,6 +34,13 @@ def process_push(account,dirextension):
             browser.quit()
             manager.cleanup()
 
+def terminate_processes(processes):
+    for process in processes:
+        if process.is_alive():
+            print(f"Đang dừng tiến trình PID: {process.pid}")
+            process.terminate()
+            process.join()
+
 def newsfeed(ids,dirextension):
     try:
         print('\n==================== Lấy bài viết NewsFeed ====================')
@@ -52,10 +59,10 @@ def newsfeed(ids,dirextension):
             crawl_nf.start()
             sleep(2)
 
-        
         for process in processes:
             process.join()
-
         print("Tất cả các tài khoản đã được xử lý.")
     except Exception as e:
         print(f"Lỗi không mong muốn: {e}")
+    finally:
+        terminate_processes(processes)
