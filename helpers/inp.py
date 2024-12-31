@@ -51,6 +51,7 @@ def check_proxy(proxy):
     }
     try:
         response = requests.get("https://httpbin.org/ip", proxies=proxies, timeout=10)
+        print(response)
         if response.status_code == 200:
             proxy_instance.update(proxy['id'],{'status':1})
             return True
