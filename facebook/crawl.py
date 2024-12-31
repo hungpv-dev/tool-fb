@@ -63,6 +63,7 @@ class Crawl:
         }
         dataComment = []
         closeModal(0, self.browser)
+        self.browser.execute_script("window.scrollTo(0, 0);")
         sleep(2)
         print(f"Bắt đầu lấy dữ liệu bài viết")
         modal = None # Xử lý lấy ô bài viết
@@ -78,25 +79,27 @@ class Crawl:
         else:
             aria_posinset = modal.get_attribute("aria-posinset")
             if aria_posinset is not None:
-                # closeModal(0, self.browser)
-            # else:
+                closeModal(0, self.browser)
+            else:
                 pass
                 # closeModal(2, self.browser)
         
 
         # Lấy thời gian đăng
         timeUp = None
-        linkTimeUp = modal.find_elements(By.TAG_NAME, "a")
+        linkTimeUp = modal.find_elements(By.XPATH, ".//a[@attributionsrc]")
         if linkTimeUp and len(linkTimeUp) > 0:
             for link in linkTimeUp:
-                href_text = link.text.strip()
-                cleaned_text = re.sub(r'[^a-zA-Z0-9 ]', '', href_text)
-                formatted_time = convert_to_db_format(cleaned_text)
-                if formatted_time:
-                    timeUp = formatted_time
-                    break
+                rect = link.rect
+                if rect['width'] > 0 and rect['height'] > 0:
+                    # Xử lý text của thẻ
+                    href_text = link.text.strip()
+                    cleaned_text = re.sub(r'[^a-zA-Z0-9 ]', '', href_text)
+                    formatted_time = convert_to_db_format(cleaned_text)
+                    if formatted_time:
+                        timeUp = formatted_time
+                        break
 
-        print('==> Thời gian đăng: ', timeUp)
         data['time_up'] = timeUp
 
         try:
