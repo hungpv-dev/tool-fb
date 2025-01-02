@@ -101,7 +101,7 @@ class Crawl:
 
         if likeButton:
             try:
-                likeButton = modal.find_element(By.XPATH, '//*[@aria-label="Like"]')
+                likeButton = modal.find_element(By.XPATH, './/*[@aria-label="Like"]')
                 likeButton.click()
             except Exception as e:
                 print('Không tìm thấy nút link')
