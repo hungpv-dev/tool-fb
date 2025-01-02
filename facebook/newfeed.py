@@ -52,41 +52,54 @@ class NewFeed:
                 
 
     def crawlNewFeed(self,account):
-        print(f"Chuyển hướng tới trang chủ!")
-        # Mở trang cá nhân
-        self.browser.get('https://facebook.com')
-        sleep(2)
-        try:
-            profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
-            profile_button.click()
+        checker = PageChecker(self.browser, self.dirextension)
+        checker.check_and_process_pages(account)
+        
+
+class PageChecker:
+    def __init__(self, browser, dirextension):
+        self.browser = browser
+        self.dirextension = dirextension
+        self.listPages = set() 
+
+    def check_and_process_pages(self, account):
+        while True:
             
-        except: 
-            raise ValueError('Không thể mở trang cá nhân!')
-        
-        sleep(5)
-        
-        try:
+            print(f"Chuyển hướng tới trang chủ!")
+            # Mở trang cá nhân
+            self.browser.get('https://facebook.com')
+
+            try:
+                profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
+                profile_button.click()
+            except: 
+                raise ValueError('Không thể mở trang cá nhân!')
+            sleep(5)
+
+            # Tìm tất cả các page
             allPages = self.browser.find_elements(By.XPATH, '//div[contains(@aria-label, "Switch to")]')
             print(f'Số fanpage để lướt: {len(allPages)}')
-            processes = []
-            dirextension = self.dirextension
+            
+            new_pages = []
             for page in allPages:
                 name = page.text.strip()
-                process = Process(target=handleCrawlNewFeed, args=(account,name,dirextension))
+                if name not in self.listPages:  # Kiểm tra page mới
+                    new_pages.append(name)
+                    self.listPages.add(name)  # Đánh dấu page đã xử lý
+            
+            # Xử lý page mới
+            processes = []
+            for name in new_pages:
+                process = Process(target=handleCrawlNewFeed, args=(account, name, self.dirextension))
                 processes.append(process)
                 process.start()
-                
-                crawl_process_1 = Process(target=crawlNewFeed,args=(dirextension,))
-                crawl_process_2 = Process(target=crawlNewFeed,args=(dirextension,))
-                processes.extend([crawl_process_1])  
-                processes.extend([crawl_process_2])  
-                crawl_process_1.start()
-                crawl_process_2.start() 
-            
-            for process in processes:
-                process.join()
-            print("Tất cả fanpage đã được xử lý.")
-            
-        except Exception as e: 
-            raise ValueError(e)
-        
+
+            # Các tiến trình bổ sung khác
+            crawl_process_1 = Process(target=crawlNewFeed, args=(self.dirextension,))
+            crawl_process_2 = Process(target=crawlNewFeed, args=(self.dirextension,))
+            processes.extend([crawl_process_1, crawl_process_2])
+            crawl_process_1.start()
+            crawl_process_2.start()
+
+            # Đợi 5 phút trước khi kiểm tra lại
+            sleep(300)

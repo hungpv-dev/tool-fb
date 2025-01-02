@@ -17,15 +17,16 @@ import json
 from time import sleep
 manager = Browser()
 browser = manager.start(False)
-browser.get("https://www.facebook.com/permalink.php?story_fbid=pfbid02og9c73UfN12LyQPe79iwtr9YyNDmV64Tf4jndWnzpHiM1mBQnwapStY3BG6fpUJnl&id=100091838821588")
+browser.get("https://www.facebook.com/Bosschicksnews/posts/pfbid024CVJ1uvizCbWBqEx6VCy3P3dLPN9gyTk7jzd7i9F7tqwCTTaptJipffmuzSJ8vRKl")
 sleep(2)
 crawl = Crawl(browser)
 data = crawl.crawlContentPost({}, {
-    'id': 'pfbid02og9c73UfN12LyQPe79iwtr9YyNDmV64Tf4jndWnzpHiM1mBQnwapStY3BG6fpUJnl',
-    'link': 'https://www.facebook.com/permalink.php?story_fbid=pfbid02og9c73UfN12LyQPe79iwtr9YyNDmV64Tf4jndWnzpHiM1mBQnwapStY3BG6fpUJnl&id=100091838821588',
+    'id': 'pfbid024CVJ1uvizCbWBqEx6VCy3P3dLPN9gyTk7jzd7i9F7tqwCTTaptJipffmuzSJ8vRKl',
+    'link': 'https://www.facebook.com/Bosschicksnews/posts/pfbid024CVJ1uvizCbWBqEx6VCy3P3dLPN9gyTk7jzd7i9F7tqwCTTaptJipffmuzSJ8vRKl',
 }, {}, newfeed = True)
 
 print(json.dumps(data,indent=4))
+sleep(1000)
 
 
 
