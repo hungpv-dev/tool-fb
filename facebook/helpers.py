@@ -28,7 +28,7 @@ def login(browser, account):
             browser.add_cookie(cookie)
         
         sleep(1)
-        browser.refresh()
+        browser.get('https://facebook.com')
         sleep(1)
         
         try:
