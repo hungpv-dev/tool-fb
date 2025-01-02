@@ -21,7 +21,7 @@ def process_push(account,dirextension):
     manager = None
     try:
         manager = Browser(f"/newsfeed/{account['id']}/home",dirextension)
-        browser = manager.start(False)
+        browser = manager.start()
         browser.get("https://facebook.com")
         newfeed = NewFeed(browser,account,dirextension)
         newfeed.handle()
