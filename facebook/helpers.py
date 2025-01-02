@@ -70,7 +70,7 @@ def handleCrawlNewFeed(account, name, dirextension = None):
     newfeed_instance = NewFeedModel()
     try:
         manager = Browser(f"/newsfeed/{account['id']}/{str(uuid.uuid4())}",dirextension)
-        browser = manager.start(False)
+        browser = manager.start()
         browser.get("https://facebook.com")
         print(f'Chuyển hướng tới fanpage: {name}')
         cookie = login(browser,account)
@@ -167,7 +167,7 @@ def crawlNewFeed(account,dirextension):
             'info': info
         })
         manager = Browser(f"/newsfeed/{account['id']}/{str(uuid.uuid4())}",dirextension)
-        browser = manager.start(False)
+        browser = manager.start()
         browser.get('https://facebook.com')
         sleep(1)
         login(browser,account)
