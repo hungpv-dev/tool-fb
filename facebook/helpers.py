@@ -67,75 +67,81 @@ def updateStatusAcount(account_id, status):
         account_instance.update_account(account_id, {'status_login': status})
         
 def handleCrawlNewFeed(account, name, dirextension = None):
-    print(f'Chạy hàm handleCrawlNewFeed: {name}')
-    return
     newfeed_instance = NewFeedModel()
-    browserStart = Browser('hung',dirextension)
-    browser = browserStart.start(False)
-    browser.get("https://facebook.com")
-    print(f'Chuyển hướng tới fanpage: {name}')
-    cookie = login(browser,account)
-    profile_button = browser.find_element(By.XPATH, push['openProfile'])
-    profile_button.click()
-    sleep(2)
-    switchPage = browser.find_element(By.XPATH, push['switchPage'](name))
-    switchPage.click()
-    sleep(2)
-    closeModal(1,browser)
-    pageLinkPost = f"/posts/"
-    pageLinkStory = "https://www.facebook.com/permalink.php"
-    
-    browser.execute_script("document.body.style.zoom='0.2';")
-    sleep(3)
-    
-    listId = set() 
-    while True: 
-        listPosts = browser.find_elements(By.XPATH, types['list_posts']) 
-        actions = ActionChains(browser)
+    try:
+        manager = Browser(f"/newsfeed/{account['id']}/{str(uuid.uuid4())}",dirextension)
+        browser = manager.start(False)
+        browser.get("https://facebook.com")
+        print(f'Chuyển hướng tới fanpage: {name}')
+        cookie = login(browser,account)
+        profile_button = browser.find_element(By.XPATH, push['openProfile'])
+        profile_button.click()
+        sleep(2)
+        switchPage = browser.find_element(By.XPATH, push['switchPage'](name))
+        switchPage.click()
+        sleep(2)
+        closeModal(1,browser)
+        pageLinkPost = f"/posts/"
+        pageLinkStory = "https://www.facebook.com/permalink.php"
         
-        for p in listPosts:
-            try:
-                idAreaPost = p.get_attribute('aria-posinset')
-                if idAreaPost not in listId:
-                    listId.add(idAreaPost)
-                    links = p.find_elements(By.XPATH, ".//a")
-                    for link in links:
-                            if link.is_displayed() and link.size['width'] > 0 and link.size['height'] > 0:
-                                actions.move_to_element(link).perform()
-                                href = link.get_attribute('href')
-                                post_id = ''
-                                if any(substring in href for substring in [pageLinkPost, pageLinkStory]):
-                                    if pageLinkPost in href:
-                                        post_id = href.replace(pageLinkPost, '').split('?')[0]
-                                        post_id = post_id.split('/')[-1]
-                                    elif pageLinkStory in href:
-                                        parsed_url = urlparse(href)
-                                        query_params = parse_qs(parsed_url.query)
-                                        post_id = query_params.get('story_fbid', [None])[0]
-                                    if post_id == '': continue
+        browser.execute_script("document.body.style.zoom='0.2';")
+        sleep(3)
+        
+        listId = set() 
+        while True: 
+            listPosts = browser.find_elements(By.XPATH, types['list_posts']) 
+            actions = ActionChains(browser)
+            if(len(listPosts) == 0):
+                raise ValueError("Không tìm thấy bài viết nào.")
+            
+            for p in listPosts:
+                try:
+                    idAreaPost = p.get_attribute('aria-posinset')
+                    if idAreaPost not in listId:
+                        listId.add(idAreaPost)
+                        links = p.find_elements(By.XPATH, ".//a")
+                        for link in links:
+                                if link.is_displayed() and link.size['width'] > 0 and link.size['height'] > 0:
+                                    actions.move_to_element(link).perform()
+                                    href = link.get_attribute('href')
+                                    post_id = ''
+                                    if any(substring in href for substring in [pageLinkPost, pageLinkStory]):
+                                        if pageLinkPost in href:
+                                            post_id = href.replace(pageLinkPost, '').split('?')[0]
+                                            post_id = post_id.split('/')[-1]
+                                        elif pageLinkStory in href:
+                                            parsed_url = urlparse(href)
+                                            query_params = parse_qs(parsed_url.query)
+                                            post_id = query_params.get('story_fbid', [None])[0]
+                                        if post_id == '': continue
 
-                                    data = {
-                                        'post_fb_id': post_id,
-                                        'post_fb_link': href,
-                                        'status': 1,
-                                        'cookie_id': cookie['id'],
-                                        'account_id': cookie['account_id'],
-                                    }
-                                    newfeed_instance.insert(data)
-            except StaleElementReferenceException:
-                print("Phần tử đã không còn tồn tại, tìm lại phần tử.")
-                continue
-    
-        if len(listId) >= 20:
-            browser.refresh() 
-            sleep(2)  
-            listId.clear() 
-            browser.execute_script("document.body.style.zoom='0.2';")
-            sleep(3)
-            print('Load lại trang!')
-        else:
-            browser.execute_script("window.scrollBy(0, 500);")
-        sleep(5)
+                                        data = {
+                                            'post_fb_id': post_id,
+                                            'post_fb_link': href,
+                                            'status': 1,
+                                            'cookie_id': cookie['id'],
+                                            'account_id': cookie['account_id'],
+                                        }
+                                        newfeed_instance.insert(data)
+                except StaleElementReferenceException:
+                    print("Phần tử đã không còn tồn tại, tìm lại phần tử.")
+                    continue
+        
+            if len(listId) >= 20:
+                browser.refresh() 
+                sleep(2)  
+                listId.clear() 
+                browser.execute_script("document.body.style.zoom='0.2';")
+                sleep(3)
+                print('Load lại trang!')
+            else:
+                browser.execute_script("window.scrollBy(0, 500);")
+            sleep(5)
+    except Exception as e:
+        if browser:
+            browser.quit()
+            manager.cleanup()
+
     
 def is_valid_link(href, post):
     """
@@ -180,8 +186,12 @@ def crawlNewFeed(account,dirextension):
                 up['newfeed'] = 1
                 up['id'] = up['post_fb_id']
                 up['link'] = up['post_fb_link']
-                data = crawl_instance.crawlContentPost({},up,{},True,True)
-                
+                try:
+                    data = crawl_instance.crawlContentPost({},up,{},True)
+                except Exception as e:
+                    newfeed_instance.destroy(id)
+                    continue
+
                 keywords = up.get('keywords') or []
                 check = False
                 
@@ -193,7 +203,6 @@ def crawlNewFeed(account,dirextension):
                 if any(remove_accents(keyword.lower()) in post_content_no_accents for keyword in keywords):
                     check = True
 
-
                 for cm in comments:
                     comment_content_no_accents = remove_accents(cm['content'].lower())
                     if any(remove_accents(keyword.lower()) in comment_content_no_accents for keyword in keywords):
@@ -204,9 +213,9 @@ def crawlNewFeed(account,dirextension):
                         if len(post['media']['images']) > 0 or len(post['media']['videos']) > 0:
                             check = True
 
-                sleep(100000)
 
                 if check:
+                    crawl_instance.likePost()
                     system_instance.update_count(system['id'])
                     crawl_instance.insertPostAndComment(post,comments,{},id)
                 else:
@@ -214,8 +223,9 @@ def crawlNewFeed(account,dirextension):
                 sleep(2)
             except Exception as e:
                 newfeed_instance.destroy(id)
-                error_instance.insertContent(e)
-    except: 
+                raise e
+    except Exception as e:
+        print('Đã có lỗi xảy ra: ',e) 
         if system:
             system_instance.update(system['id'], {'status': 2})
         if browser:

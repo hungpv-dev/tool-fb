@@ -45,7 +45,7 @@ class Crawl:
             print(f'Lỗi khi cào: {e}')
             raise e
   
-    def crawlContentPost(self,page, post, his, newfeed = False, likeButton = False):
+    def crawlContentPost(self,page, post, his, newfeed = False):
         from facebook.helpers import is_valid_link
         data = {
             'account_id': post.get('account_id') or 0,
@@ -99,13 +99,8 @@ class Crawl:
 
         data['time_up'] = timeUp
 
-        if likeButton:
-            try:
-                likeButton = modal.find_element(By.XPATH, './/*[@aria-label="Like"]')
-                likeButton.click()
-            except Exception as e:
-                print('Không tìm thấy nút link')
-                pass
+        self.modal = modal
+
         try:
             content = modal.find_element(By.XPATH, types['content'])
             contentText = content.text
@@ -279,6 +274,13 @@ class Crawl:
             }
         self.insertPostAndComment(data,dataComment, his)
         
+    def likePost(self):
+        try:
+            likeButton = self.modal.find_element(By.XPATH, './/*[@aria-label="Like"]')
+            likeButton.click()
+        except Exception as e:
+            print('Không tìm thấy nút link')
+
     def insertPostAndComment(self, data, dataComment, his, newfeedid = 0):
         # print(json.dumps(data, indent=4))
         # print(json.dumps(dataComment, indent=4))
