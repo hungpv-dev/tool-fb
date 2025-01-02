@@ -19,12 +19,11 @@ account_instance = Account()
 def process_push(account,dirextension):
     browser = None
     manager = None
-    
     try:
-        manager = Browser(account['id'],dirextension)
+        manager = Browser(f"/newsfeed/{account['id']}/home",dirextension)
         browser = manager.start(False)
         browser.get("https://facebook.com")
-        newfeed = NewFeed(browser,account, dirextension)
+        newfeed = NewFeed(browser,account,dirextension)
         newfeed.handle()
         sleep(10)
     except Exception as e:
@@ -50,13 +49,9 @@ def newsfeed(ids,dirextension):
             if 'id' not in account:
                 print(f'Không tìm thấy user có id: {id}')
                 continue
-            
             push_process = multiprocessing.Process(target=process_push,args=(account,dirextension))
             processes.extend([push_process])  
             push_process.start()
-            crawl_nf = multiprocessing.Process(target=crawlNewFeed,args=(dirextension,))
-            processes.extend([crawl_nf])  
-            crawl_nf.start()
             sleep(2)
 
         for process in processes:

@@ -53,7 +53,7 @@ class NewFeed:
 
     def crawlNewFeed(self,account):
         checker = PageChecker(self.browser, self.dirextension)
-        checker.check_and_process_pages(account)
+        checker.run(account)
         
 
 class PageChecker:
@@ -62,44 +62,55 @@ class PageChecker:
         self.dirextension = dirextension
         self.listPages = set() 
 
-    def check_and_process_pages(self, account):
+    def run(self, account):
         while True:
-            
             print(f"Chuyển hướng tới trang chủ!")
             # Mở trang cá nhân
-            self.browser.get('https://facebook.com')
-
             try:
+                self.browser.get('https://facebook.com')
                 profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
                 profile_button.click()
-            except: 
+            except Exception as e:
+                print(f"Lỗi: {e}")
+                self.terminate_processes(processes)  # Đóng tiến trình
                 raise ValueError('Không thể mở trang cá nhân!')
+
             sleep(5)
 
             # Tìm tất cả các page
             allPages = self.browser.find_elements(By.XPATH, '//div[contains(@aria-label, "Switch to")]')
             print(f'Số fanpage để lướt: {len(allPages)}')
-            
+
             new_pages = []
             for page in allPages:
                 name = page.text.strip()
-                if name not in self.listPages:  # Kiểm tra page mới
+                if name not in self.listPages:
                     new_pages.append(name)
-                    self.listPages.add(name)  # Đánh dấu page đã xử lý
-            
+                    self.listPages.add(name)
+
             # Xử lý page mới
             processes = []
-            for name in new_pages:
-                process = Process(target=handleCrawlNewFeed, args=(account, name, self.dirextension))
-                processes.append(process)
-                process.start()
+            try:
+                for name in new_pages:
+                    print(f'=================={name}================')
+                    process = Process(target=handleCrawlNewFeed, args=(account,name,self.dirextension))
+                    process_get = Process(target=crawlNewFeed, args=(account,self.dirextension))
+                    processes.append(process)
+                    processes.append(process_get)
+                    process.start()
+                    process_get.start()
 
-            # Các tiến trình bổ sung khác
-            crawl_process_1 = Process(target=crawlNewFeed, args=(self.dirextension,))
-            crawl_process_2 = Process(target=crawlNewFeed, args=(self.dirextension,))
-            processes.extend([crawl_process_1, crawl_process_2])
-            crawl_process_1.start()
-            crawl_process_2.start()
+                # Đợi 5 phút trước khi kiểm tra lại
+                sleep(300)
 
-            # Đợi 5 phút trước khi kiểm tra lại
-            sleep(300)
+            except Exception as e:
+                print(f"Lỗi trong quá trình xử lý: {e}")
+                self.terminate_processes(processes)
+                raise
+
+    def terminate_processes(self, processes):
+        """Hàm đóng tất cả tiến trình"""
+        for process in processes:
+            if process.is_alive():
+                process.terminate()
+                print(f"Đã dừng process: {process.pid}")

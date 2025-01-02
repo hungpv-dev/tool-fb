@@ -6,6 +6,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from facebook.type import types,push
 from helpers.modal import closeModal
 from sql.accounts import Account
+import uuid
 from sql.pagePosts import PagePosts
 from selenium.common.exceptions import StaleElementReferenceException
 from sql.newsfeed import NewFeedModel
@@ -66,6 +67,8 @@ def updateStatusAcount(account_id, status):
         account_instance.update_account(account_id, {'status_login': status})
         
 def handleCrawlNewFeed(account, name, dirextension = None):
+    print(f'Chạy hàm handleCrawlNewFeed: {name}')
+    return
     newfeed_instance = NewFeedModel()
     browserStart = Browser('hung',dirextension)
     browser = browserStart.start(False)
@@ -147,23 +150,27 @@ def remove_accents(input_str):
     nfkd_form = unicodedata.normalize('NFKD', input_str)
     return ''.join([c for c in nfkd_form if not unicodedata.combining(c)])
 
-def crawlNewFeed(dirextension):
-    from facebook.crawl import Crawl
-    system_instance = System()
-    newfeed_instance = NewFeedModel()
-    error_instance = Error()
-    manager = Browser('hung',dirextension)
-    browser = manager.start()
-    browser.get('https://facebook.com')
-    crawl_instance = Crawl(browser)
-    info = get_system_info()
-    system = system_instance.insert({
-        'info': info
-    })
+def crawlNewFeed(account,dirextension):
     try:
+        from facebook.crawl import Crawl
+        system_instance = System()
+        newfeed_instance = NewFeedModel()
+        error_instance = Error()
+        info = get_system_info()
+        system = system_instance.insert({
+            'info': info
+        })
+        manager = Browser(f"/newsfeed/{account['id']}/{str(uuid.uuid4())}",dirextension)
+        browser = manager.start(False)
+        browser.get('https://facebook.com')
+        sleep(1)
+        login(browser,account)
+        sleep(2)
+        browser.get('https://facebook.com')
+        crawl_instance = Crawl(browser)
         while True:
             try:
-                up = newfeed_instance.first()
+                up = newfeed_instance.first({'account_id': account['id']})
                 if up is None:
                     print('Hiện chưa có bài viết nào cần lấy! chờ 1p để tiếp tục...')
                     sleep(60)
@@ -173,7 +180,7 @@ def crawlNewFeed(dirextension):
                 up['newfeed'] = 1
                 up['id'] = up['post_fb_id']
                 up['link'] = up['post_fb_link']
-                data = crawl_instance.crawlContentPost({},up,{},True)
+                data = crawl_instance.crawlContentPost({},up,{},True,True)
                 
                 keywords = up.get('keywords') or []
                 check = False
@@ -197,6 +204,8 @@ def crawlNewFeed(dirextension):
                         if len(post['media']['images']) > 0 or len(post['media']['videos']) > 0:
                             check = True
 
+                sleep(100000)
+
                 if check:
                     system_instance.update_count(system['id'])
                     crawl_instance.insertPostAndComment(post,comments,{},id)
@@ -209,6 +218,9 @@ def crawlNewFeed(dirextension):
     except: 
         if system:
             system_instance.update(system['id'], {'status': 2})
+        if browser:
+            browser.quit()
+            manager.cleanup()
     
 
 

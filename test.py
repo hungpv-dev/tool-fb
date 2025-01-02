@@ -11,24 +11,26 @@
 
 
 
-from facebook.crawl import Crawl
-from base.browser import Browser
-import json
-from time import sleep
-manager = Browser()
-browser = manager.start(False)
-browser.get("https://www.facebook.com/Bosschicksnews/posts/pfbid024CVJ1uvizCbWBqEx6VCy3P3dLPN9gyTk7jzd7i9F7tqwCTTaptJipffmuzSJ8vRKl")
-sleep(2)
-crawl = Crawl(browser)
-data = crawl.crawlContentPost({}, {
-    'id': 'pfbid024CVJ1uvizCbWBqEx6VCy3P3dLPN9gyTk7jzd7i9F7tqwCTTaptJipffmuzSJ8vRKl',
-    'link': 'https://www.facebook.com/Bosschicksnews/posts/pfbid024CVJ1uvizCbWBqEx6VCy3P3dLPN9gyTk7jzd7i9F7tqwCTTaptJipffmuzSJ8vRKl',
-}, {}, newfeed = True)
+# from facebook.crawl import Crawl
+# from base.browser import Browser
+# import json
+# from time import sleep
+# manager = Browser()
+# browser = manager.start(False)
+# browser.get("https://www.facebook.com/Bosschicksnews/posts/pfbid024CVJ1uvizCbWBqEx6VCy3P3dLPN9gyTk7jzd7i9F7tqwCTTaptJipffmuzSJ8vRKl")
+# sleep(2)
+# crawl = Crawl(browser)
+# data = crawl.crawlContentPost({}, {
+#     'id': 'pfbid024CVJ1uvizCbWBqEx6VCy3P3dLPN9gyTk7jzd7i9F7tqwCTTaptJipffmuzSJ8vRKl',
+#     'link': 'https://www.facebook.com/Bosschicksnews/posts/pfbid024CVJ1uvizCbWBqEx6VCy3P3dLPN9gyTk7jzd7i9F7tqwCTTaptJipffmuzSJ8vRKl',
+# }, {}, newfeed = True)
 
-print(json.dumps(data,indent=4))
-sleep(1000)
+# print(json.dumps(data,indent=4))
+# sleep(1000)
 
-
+import uuid
+unique_id = str(uuid.uuid4())
+print(unique_id)
 
 
 

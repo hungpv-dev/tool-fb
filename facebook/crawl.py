@@ -45,7 +45,7 @@ class Crawl:
             print(f'Lỗi khi cào: {e}')
             raise e
   
-    def crawlContentPost(self,page, post, his, newfeed = False):
+    def crawlContentPost(self,page, post, his, newfeed = False, likeButton = False):
         from facebook.helpers import is_valid_link
         data = {
             'account_id': post.get('account_id') or 0,
@@ -62,7 +62,6 @@ class Crawl:
             'up': 0,
         }
         dataComment = []
-        closeModal(0, self.browser)
         self.browser.execute_script("window.scrollTo(0, 0);")
         sleep(2)
         print(f"Bắt đầu lấy dữ liệu bài viết")
@@ -81,9 +80,7 @@ class Crawl:
             if aria_posinset is not None:
                 closeModal(0, self.browser)
             else:
-                pass
-                # closeModal(2, self.browser)
-        
+                closeModal(2, self.browser)
 
         # Lấy thời gian đăng
         timeUp = None
@@ -102,6 +99,13 @@ class Crawl:
 
         data['time_up'] = timeUp
 
+        if likeButton:
+            try:
+                likeButton = modal.find_element(By.XPATH, '//*[@aria-label="Like"]')
+                likeButton.click()
+            except Exception as e:
+                print('Không tìm thấy nút link')
+                pass
         try:
             content = modal.find_element(By.XPATH, types['content'])
             contentText = content.text
