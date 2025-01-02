@@ -44,10 +44,10 @@ class NewFeed:
                 if self.account.get('latest_cookie'): 
                     updateStatusAcountCookie(self.account['latest_cookie']['id'], 1)
                 self.error_instance.insertContent(e)
-                print("Thử lại sau 10 phút...")
-                sleep(600)
+                print("Thử lại sau 5 phút...")
+                sleep(300)
             except KeyboardInterrupt: 
-                 if self.account.get('latest_cookie'): 
+                if self.account.get('latest_cookie'): 
                     updateStatusAcountCookie(self.account['latest_cookie']['id'], 2)
                 
 

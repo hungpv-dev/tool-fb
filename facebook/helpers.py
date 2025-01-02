@@ -167,7 +167,7 @@ def crawlNewFeed(dirextension):
                 if up is None:
                     print('Hiện chưa có bài viết nào cần lấy! chờ 1p để tiếp tục...')
                     sleep(60)
-                    break
+                    continue
                 id = up['id']
                 browser.get(up['post_fb_link'])
                 up['newfeed'] = 1
