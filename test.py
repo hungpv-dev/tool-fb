@@ -11,24 +11,41 @@
 
 
 
-from facebook.crawl import Crawl
-from base.browser import Browser
-import json
+# from facebook.crawl import Crawl
+# from base.browser import Browser
+# import json
+# from time import sleep
+# manager = Browser()
+# browser = manager.start(False)
+# browser.get("https://www.facebook.com/phoenixrisingandsthriving/posts/pfbid0cn9ob8eMqZkNFwiAr4iPo1ojfobeYgML9sd35wV757puKZPH15JCqKsfhdPxwu9Dl?amp%3B__tn__=%2CO%2CP-R")
+# sleep(2)
+# crawl = Crawl(browser)
+# data = crawl.crawlContentPost({}, {
+#     'id': 'pfbid0cn9ob8eMqZkNFwiAr4iPo1ojfobeYgML9sd35wV757puKZPH15JCqKsfhdPxwu9Dl',
+#     'link': 'https://www.facebook.com/phoenixrisingandsthriving/posts/pfbid0cn9ob8eMqZkNFwiAr4iPo1ojfobeYgML9sd35wV757puKZPH15JCqKsfhdPxwu9Dl?amp%3B__tn__=%2CO%2CP-R',
+# }, {}, newfeed = True)
+
+# crawl.likePost()
+
+# # print(json.dumps(data,indent=4))
+# sleep(1000)
+
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 from time import sleep
-manager = Browser()
-browser = manager.start(False)
-browser.get("https://www.facebook.com/phoenixrisingandsthriving/posts/pfbid0cn9ob8eMqZkNFwiAr4iPo1ojfobeYgML9sd35wV757puKZPH15JCqKsfhdPxwu9Dl?amp%3B__tn__=%2CO%2CP-R")
-sleep(2)
-crawl = Crawl(browser)
-data = crawl.crawlContentPost({}, {
-    'id': 'pfbid0cn9ob8eMqZkNFwiAr4iPo1ojfobeYgML9sd35wV757puKZPH15JCqKsfhdPxwu9Dl',
-    'link': 'https://www.facebook.com/phoenixrisingandsthriving/posts/pfbid0cn9ob8eMqZkNFwiAr4iPo1ojfobeYgML9sd35wV757puKZPH15JCqKsfhdPxwu9Dl?amp%3B__tn__=%2CO%2CP-R',
-}, {}, newfeed = True)
 
-crawl.likePost()
 
-# print(json.dumps(data,indent=4))
+chrome_options = Options()
+chrome_options.add_extension("extensions/62_164_255_151.zip")
+
+driver = webdriver.Chrome(service=Service("chromedriver.exe"), options=chrome_options)
+driver.get("https://whatismyipaddress.com")
 sleep(1000)
-
+driver.quit()
 
 

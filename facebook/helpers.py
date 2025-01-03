@@ -121,7 +121,6 @@ def handleCrawlNewFeed(account, name, dirextension = None):
                                             post_id = query_params.get('story_fbid', [None])[0]
                                         if post_id == '': continue
 
-                                        print('===>Link bài viết: ', href)
                                         data = {
                                             'post_fb_id': post_id,
                                             'post_fb_link': href,

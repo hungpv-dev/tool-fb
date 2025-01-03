@@ -43,13 +43,7 @@ def newsfeed():
     if len(selectAccount) > 0:
         selected_account_ids = [account['id'] for account in accounts if account['name'] in accounts_answers['accounts']]
         console.print(f"[bold yellow]Tài khoản đã chọn:[/] [bold cyan]{', '.join(selectAccount)}[/]")
-        
-        dirextension = None
-        selectProxy = selected_proxy()
-        if selectProxy is not None:
-            dirextension = create_proxy_extension(selectProxy)
-            
-        newfeedhandle(selected_account_ids,dirextension)
+        newfeedhandle(selected_account_ids)
     else:
         console.print("Bạn đã không chọn tài khoản.")
 

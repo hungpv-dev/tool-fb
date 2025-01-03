@@ -12,13 +12,27 @@ from time import sleep
 import json
 from facebook.helpers import crawlNewFeed
 from helpers.inp import get_list_user_input
+from extensions.auth_proxy import create_proxy_extension
+from helpers.inp import check_proxy
 from sql.accounts import Account
 
 account_instance = Account()
 
-def process_push(account,dirextension):
+def process_push(account):
     browser = None
     manager = None
+    
+    proxy = account.get('proxy')
+    checkProxy = True
+    dirextension = None
+    if proxy:
+        checkProxy = check_proxy(proxy)
+        if checkProxy:
+            dirextension = create_proxy_extension(proxy)
+
+    if checkProxy == False:
+        raise Exception(f"Không thể sử dụng proxy: {proxy['ip']}:{proxy['port']}")
+
     try:
         manager = Browser(f"/newsfeed/{account['id']}/home",dirextension)
         browser = manager.start()
@@ -40,7 +54,7 @@ def terminate_processes(processes):
             process.terminate()
             process.join()
 
-def newsfeed(ids,dirextension):
+def newsfeed(ids):
     try:
         print('\n==================== Lấy bài viết NewsFeed ====================')
         processes = []
@@ -49,7 +63,7 @@ def newsfeed(ids,dirextension):
             if 'id' not in account:
                 print(f'Không tìm thấy user có id: {id}')
                 continue
-            push_process = multiprocessing.Process(target=process_push,args=(account,dirextension))
+            push_process = multiprocessing.Process(target=process_push,args=(account,))
             processes.extend([push_process])  
             push_process.start()
             sleep(2)
