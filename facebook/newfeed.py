@@ -63,6 +63,8 @@ class PageChecker:
         self.listPages = set() 
 
     def run(self, account):
+        # Xử lý page mới
+        processes = []
         while True:
             print(f"Chuyển hướng tới trang chủ!")
             # Mở trang cá nhân
@@ -88,19 +90,17 @@ class PageChecker:
                     new_pages.append(name)
                     self.listPages.add(name)
 
-            # Xử lý page mới
-            processes = []
             try:
                 for name in new_pages:
                     print(f'=================={name}================')
-                    process = Process(target=handleCrawlNewFeed, args=(account,name,self.dirextension))
-                    process_get = Process(target=crawlNewFeed, args=(account,self.dirextension))
+                    # process = Process(target=handleCrawlNewFeed, args=(account,name,self.dirextension))
+                    # process_get = Process(target=crawlNewFeed, args=(account,self.dirextension))
                     process_get_two = Process(target=crawlNewFeed, args=(account,self.dirextension))
-                    processes.append(process)
-                    processes.append(process_get)
+                    # processes.append(process)
+                    # processes.append(process_get)
                     processes.append(process_get_two)
-                    process.start()
-                    process_get.start()
+                    # process.start()
+                    # process_get.start()
                     process_get_two.start()
 
                 # Đợi 5 phút trước khi kiểm tra lại
