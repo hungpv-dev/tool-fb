@@ -77,8 +77,11 @@ def handleCrawlNewFeed(account, name, dirextension = None):
         browser.get("https://facebook.com")
         print(f'Chuyển hướng tới fanpage: {name}')
         cookie = login(browser,account)
-        profile_button = browser.find_element(By.XPATH, push['openProfile'])
-        profile_button.click()
+        try:
+            profile_button = browser.find_element(By.XPATH, push['openProfile'])
+            profile_button.click()
+        except Exception as e:
+            raise ValueError("Không thể mở trang cá nhân.")
         sleep(2)
         switchPage = browser.find_element(By.XPATH, push['switchPage'](name))
         switchPage.click()
@@ -118,6 +121,7 @@ def handleCrawlNewFeed(account, name, dirextension = None):
                                             post_id = query_params.get('story_fbid', [None])[0]
                                         if post_id == '': continue
 
+                                        print('===>Link bài viết: ', href)
                                         data = {
                                             'post_fb_id': post_id,
                                             'post_fb_link': href,

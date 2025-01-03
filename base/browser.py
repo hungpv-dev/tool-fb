@@ -26,6 +26,9 @@ class Browser:
         if self.dirextension is not None: 
             chrome_options.add_extension(self.dirextension)
         
+        # Tắt WebGPU
+        chrome_options.add_argument("--disable-webgpu")  # Tắt WebGPU
+
         # Tùy chọn chạy headless (nếu cần)
         if headless: 
             chrome_options.add_argument("--headless")  # Chế độ không giao diện

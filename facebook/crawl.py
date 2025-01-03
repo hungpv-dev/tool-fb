@@ -31,6 +31,7 @@ class Crawl:
         self.error_instance = Error()
         self.account_instance = Account()
         self.account_cookies = AccountCookies()
+        self.modal = None
 
     def get(self,page, post, his):
         try:
@@ -62,7 +63,6 @@ class Crawl:
             'up': 0,
         }
         dataComment = []
-        self.browser.execute_script("window.scrollTo(0, 0);")
         sleep(2)
         print(f"Bắt đầu lấy dữ liệu bài viết")
         modal = None # Xử lý lấy ô bài viết
@@ -276,10 +276,19 @@ class Crawl:
         
     def likePost(self):
         try:
-            likeButton = self.modal.find_element(By.XPATH, './/*[@aria-label="Like"]')
-            likeButton.click()
-        except Exception as e:
-            print('Không tìm thấy nút link')
+            scroll = self.modal.find_element(By.XPATH,types['scroll'])
+            self.browser.execute_script("arguments[0].scrollTop = 0;", scroll)
+        except: 
+            self.browser.execute_script("window.scrollTo(0, 0);")
+        # # Tìm thẻ có aria-label="Like"
+        self.browser.execute_script("document.body.style.zoom='50%';")
+        sleep(1)
+        try:
+            like_element = self.modal.find_element(By.XPATH, '//*[@aria-label="Like"]')
+            like_element.click()
+        except:
+            print("Không tìm thấy thẻ like!")
+        
 
     def insertPostAndComment(self, data, dataComment, his, newfeedid = 0):
         # print(json.dumps(data, indent=4))
