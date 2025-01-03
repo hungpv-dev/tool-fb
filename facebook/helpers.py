@@ -24,9 +24,12 @@ def login(browser, account):
             raise ValueError("Không có cookie để đăng nhập.")
 
         last_cookie = account['latest_cookie']  
-        cookies = last_cookie['cookies']
-        for cookie in cookies:
-            browser.add_cookie(cookie)
+        try:
+            cookies = last_cookie['cookies']
+            for cookie in cookies:
+                browser.add_cookie(cookie)
+        except Exception as e:
+            raise ValueError("Không thể thêm cookie vào trình duyệt.")
         
         sleep(1)
         browser.get('https://facebook.com')
