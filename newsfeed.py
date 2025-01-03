@@ -66,7 +66,7 @@ def newsfeed(ids):
             push_process = multiprocessing.Process(target=process_push,args=(account,))
             processes.extend([push_process])  
             push_process.start()
-            sleep(2)
+            sleep(5)
 
         for process in processes:
             process.join()

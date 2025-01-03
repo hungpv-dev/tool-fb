@@ -2,8 +2,10 @@ import inquirer
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
+import warnings
 from terminal.action import post,newsfeed,fanpage,login
 
+warnings.filterwarnings("ignore", message="Old MapAsync APIs are deprecated")
 
 def main():
     console = Console()

@@ -5,25 +5,22 @@ import tempfile
 import os
 
 class Browser:
-    def __init__(self,account = 'hung',dirextension = None):
+    def __init__(self,account = '/hung',dirextension = None):
         self.account = account
         self.dirextension = dirextension
-        if account != 'hung':
-            base_profile_dir = "/profiles"
-            if not os.path.exists(base_profile_dir):
-                os.makedirs(base_profile_dir)
-            profile_dir = os.path.join(base_profile_dir, f"account_{account}")
-            if not os.path.exists(profile_dir):
-                os.makedirs(profile_dir)
-            self.profile_dir = profile_dir
+        base_profile_dir = "/profiles"+account
+
+        if not os.path.exists(base_profile_dir):
+            os.makedirs(base_profile_dir)
+
+        self.profile_dir = base_profile_dir
         
         
     def start(self, headless = True):
         chrome_options = Options()
-        if self.account != 'hung':
-            chrome_options.add_argument(f"--user-data-dir={self.profile_dir}")
+        chrome_options.add_argument(f"--user-data-dir={self.profile_dir}")
         
-        if self.dirextension is not None: 
+        if self.dirextension: 
             chrome_options.add_extension(self.dirextension)
         
         # Tắt WebGPU
