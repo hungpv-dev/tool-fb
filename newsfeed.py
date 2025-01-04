@@ -13,6 +13,7 @@ import json
 from facebook.helpers import crawlNewFeed
 from helpers.inp import terminate_processes
 from extensions.auth_proxy import create_proxy_extension
+from facebook.helpers import updateStatusAcount
 from helpers.inp import check_proxy
 from sql.accounts import Account
 
@@ -22,23 +23,31 @@ def process_newsfeed(account):
     browser = None
     manager = None
     
-    proxy = account.get('proxy')
-    checkProxy = True
-    dirextension = None
-    if proxy:
-        checkProxy = check_proxy(proxy)
-        if checkProxy:
-            dirextension = create_proxy_extension(proxy)
+    while True:
+        checkProxy = True
+        dirextension = None
+        proxy = account.get('proxy')
+        updateStatusAcount(account['id'],2)
+        if proxy:
+            checkProxy = check_proxy(proxy)
+            if checkProxy:
+                dirextension = create_proxy_extension(proxy)
+
+        try:
+            manager = Browser(f"/newsfeed/{account['id']}/home",dirextension)
+            browser = manager.start()
+            break
+        except: 
+            print(f"Không thể khởi tạo trình duyệt với proxy: {proxy['ip']}:{proxy['port']}, thử lại sau 3 phút...")
+            updateStatusAcount(account['id'],6)
+            sleep(180)
+            account = account_instance.find(account['id'])
+    
 
     if checkProxy == False:
         raise Exception(f"Không thể sử dụng proxy: {proxy['ip']}:{proxy['port']}")
 
     try:
-        try:
-            manager = Browser(f"/newsfeed/{account['id']}/home",dirextension)
-            browser = manager.start()
-        except: 
-            raise Exception(f"{account['name']} => Không thể sử dụng proxy")
         browser.get("https://facebook.com")
         newfeed = NewFeed(browser,account,dirextension)
         newfeed.handle()
