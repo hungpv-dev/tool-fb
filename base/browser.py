@@ -18,23 +18,27 @@ class Browser:
         self.profile_dir = base_profile_dir
         
         
-    def start(self, headless = True):
+    def start(self, headless=True):
         chrome_options = Options()
+        
         if self.profile_dir != '/profiles/crawl':
             chrome_options.add_argument(f"--user-data-dir={self.profile_dir}")
-        
+
         if self.dirextension: 
             chrome_options.add_extension(self.dirextension)
-        
-        # Tắt WebGPU
+
+        # Tắt WebGPU và các tính năng GPU
         chrome_options.add_argument("--disable-webgpu")  # Tắt WebGPU
+        chrome_options.add_argument("--disable-gpu")  # Tắt GPU
+        chrome_options.add_argument("--disable-software-rasterizer")  # Tắt phần mềm vẽ đồ họa
+        chrome_options.add_argument("--disable-accelerated-2d-canvas")  # Tắt tăng tốc vẽ canvas 2D
+        chrome_options.add_argument("--disable-gpu-compositing")  # Tắt GPU compositing
+        chrome_options.add_argument("--disable-dev-shm-usage")  # Tắt việc sử dụng /dev/shm
 
         # Tùy chọn chạy headless (nếu cần)
         if headless: 
             chrome_options.add_argument("--headless")  # Chế độ không giao diện
             chrome_options.add_argument("--no-sandbox")  # Không sử dụng sandbox
-            chrome_options.add_argument("--disable-gpu")  # Tắt GPU khi headless
-            chrome_options.add_argument("--disable-software-rasterizer") 
 
         # Tối ưu tình huống cụ thể
         chrome_options.add_argument("--disable-notifications")  # Tắt thông báo
@@ -42,15 +46,10 @@ class Browser:
         chrome_options.add_argument("--disable-translate")  # Tắt dịch trang
         chrome_options.add_argument("--disable-infobars")  # Tắt thanh thông tin của Chrome
         chrome_options.add_argument("--disable-browser-side-navigation")  # Tắt tối ưu điều hướng
-
-        # #  Tăng tốc phần cứng!
-        chrome_options.add_argument("--enable-unsafe-swiftshader")  # Cho phép SwiftShader nếu không có GPU
-
-        # Tăng cường bảo mật và tránh bị phát hiện sử dụng Selenium
-        chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+        chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Tránh bị phát hiện Selenium
 
         service = Service(ChromeDriverManager().install())
-        browser = webdriver.Chrome(service=service,options=chrome_options)
+        browser = webdriver.Chrome(service=service, options=chrome_options)
         
         return browser
     
