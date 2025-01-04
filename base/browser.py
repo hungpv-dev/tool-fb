@@ -18,7 +18,9 @@ class Browser:
         
     def start(self, headless = True):
         chrome_options = Options()
-        chrome_options.add_argument(f"--user-data-dir={self.profile_dir}")
+        print(self.profile_dir)
+        if self.profile_dir != '/profiles/crawl':
+            chrome_options.add_argument(f"--user-data-dir={self.profile_dir}")
         
         if self.dirextension: 
             chrome_options.add_extension(self.dirextension)
@@ -30,8 +32,6 @@ class Browser:
         if headless: 
             chrome_options.add_argument("--headless")  # Chế độ không giao diện
             chrome_options.add_argument("--no-sandbox")  # Không sử dụng sandbox
-            chrome_options.add_argument("--disable-dev-shm-usage")  # Giải quyết lỗi bộ nhớ (dành cho container)
-            # Tăng hiệu xuất khi chạy headless
             chrome_options.add_argument("--disable-gpu")  # Tắt GPU khi headless
 
         # Tối ưu tình huống cụ thể
