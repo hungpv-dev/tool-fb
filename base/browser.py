@@ -7,7 +7,7 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.options import Options as EdgeOptions
-from webdriver_manager.microsoft import EdgeChromiumDriverManager  # Import cho Edge
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
 import logging
 import os
 
@@ -17,7 +17,7 @@ class Browser:
         self.account = account
         self.dirextension = dirextension
         self.browser_type = browser_type  # Chọn loại trình duyệt
-        base_profile_dir = "/profiles" + account
+        base_profile_dir = "./profiles" + account
 
         if not os.path.exists(base_profile_dir):
             os.makedirs(base_profile_dir)
@@ -37,7 +37,7 @@ class Browser:
     def start_chrome(self, headless):
         chrome_options = Options()
         
-        if self.profile_dir != '/profiles/crawl':
+        if self.profile_dir != './profiles/crawl':
             chrome_options.add_argument(f"--user-data-dir={self.profile_dir}")
 
         if self.dirextension:
@@ -115,8 +115,8 @@ class Browser:
         edge_options.add_argument("--remote-debugging-port=0")
 
         try:
-            # Cài đặt và khởi tạo WebDriver cho Edge
             service = EdgeService(EdgeChromiumDriverManager().install())
+            # Cài đặt và khởi tạo WebDriver cho Edge
             driver = webdriver.Edge(service=service, options=edge_options)
             logging.info("Edge browser started successfully.")
             return driver

@@ -28,20 +28,15 @@
 # crawl.likePost()
 
 # # print(json.dumps(data,indent=4))
+
 # sleep(1000)
 
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
+
+from base.browser import Browser
+
+driver = Browser('/hung','./extensions/207_228_22_249.zip','edge').start(False)
 from time import sleep
 
-
-chrome_options = Options()
-chrome_options.add_extension("extensions/62_164_255_151.zip")
-
-service = Service(ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service, options=chrome_options)
 driver.get("https://whatismyipaddress.com")
 sleep(1000)
 driver.quit()

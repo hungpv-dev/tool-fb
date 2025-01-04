@@ -1,3 +1,3 @@
 @echo off
-python 'C:\Users\user\Documents\Python\Python37\Scripts\index.py'
+python C:\Users\ADMIN\Desktop\tool-fb\index.py
 pause

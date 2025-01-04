@@ -7,10 +7,10 @@ def create_proxy_extension(proxy):
     username = proxy['user']
     password = proxy['pass']
     
-    output_dir = '/extensions/'
+    output_dir = './extensions/'
     os.makedirs(output_dir, exist_ok=True)
     
-    output_file = f'extensions/{proxy_host.replace(".", "_")}.zip'
+    output_file = f'{output_dir}/{proxy_host.replace(".", "_")}.zip'
     
     """
     Tạo extension Chrome hỗ trợ proxy.
