@@ -11,14 +11,14 @@ from facebook.newfeed import NewFeed
 from time import sleep
 import json
 from facebook.helpers import crawlNewFeed
-from helpers.inp import get_list_user_input
+from helpers.inp import terminate_processes
 from extensions.auth_proxy import create_proxy_extension
 from helpers.inp import check_proxy
 from sql.accounts import Account
 
 account_instance = Account()
 
-def process_push(account):
+def process_newsfeed(account):
     browser = None
     manager = None
     
@@ -47,13 +47,6 @@ def process_push(account):
             browser.quit()
             manager.cleanup()
 
-def terminate_processes(processes):
-    for process in processes:
-        if process.is_alive():
-            print(f"Đang dừng tiến trình PID: {process.pid}")
-            process.terminate()
-            process.join()
-
 def newsfeed(ids):
     try:
         print('\n==================== Lấy bài viết NewsFeed ====================')
@@ -63,7 +56,7 @@ def newsfeed(ids):
             if 'id' not in account:
                 print(f'Không tìm thấy user có id: {id}')
                 continue
-            push_process = multiprocessing.Process(target=process_push,args=(account,))
+            push_process = multiprocessing.Process(target=process_newsfeed,args=(account,))
             processes.extend([push_process])  
             push_process.start()
             sleep(5)

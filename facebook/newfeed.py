@@ -33,7 +33,8 @@ class NewFeed:
                     raise ValueError('Không tìm thấy tài khoản')
                 self.account = account
                 cookie = login(self.browser,self.account)
-                print('==================last login================')
+                updateStatusAcountCookie(cookie['id'], 2)
+                print(f'==================Newsfeed ({account["name"]})================')
                 updateStatusAcount(self.account['id'],3) # Đang lấy
                 self.crawlNewFeed(account) # Bắt đầu quá trình crawl
                 print('Đã duyệt xong, chờ 30s để tiếp tục...')
@@ -49,6 +50,7 @@ class NewFeed:
             except KeyboardInterrupt: 
                 if self.account.get('latest_cookie'): 
                     updateStatusAcountCookie(self.account['latest_cookie']['id'], 2)
+                updateStatusAcount(self.account['id'],2)
                 
 
     def crawlNewFeed(self,account):
@@ -70,11 +72,13 @@ class PageChecker:
             # Mở trang cá nhân
             try:
                 self.browser.get('https://facebook.com')
+                sleep(2)
                 profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
                 profile_button.click()
             except Exception as e:
                 print(f"Lỗi: {e}")
                 self.terminate_processes(processes)  # Đóng tiến trình
+                self.listPages = set() # Xóa danh sách page
                 raise ValueError('Không thể mở trang cá nhân!')
 
             sleep(5)
@@ -109,6 +113,7 @@ class PageChecker:
             except Exception as e:
                 print(f"Lỗi trong quá trình xử lý: {e}")
                 self.terminate_processes(processes)
+                self.listPages = set() # Xóa danh sách page
                 raise
 
     def terminate_processes(self, processes):

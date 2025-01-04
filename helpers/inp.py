@@ -7,6 +7,12 @@ import re
 console = Console()
 proxy_instance = Proxy()
 
+def terminate_processes(processes):
+    for process in processes:
+        if process.is_alive():
+            print(f"Đang dừng tiến trình PID: {process.pid}")
+            process.terminate()
+            process.join()  # Đảm bảo tiến trình đã dừng hẳn
 
 def get_user_input():
     while True:

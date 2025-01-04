@@ -43,7 +43,6 @@ class Push:
                 account = self.account_instance.find(self.account['id'])
                 if account is None or 'id' not in account:
                     raise ValueError('Không tìm thấy tài khoản')
-                
                 self.account = account
                 cookie = login(self.browser,self.account)
                 updateStatusAcount(self.account['id'],4) # Đang đăng bài
@@ -54,11 +53,12 @@ class Push:
                 if self.account.get('latest_cookie'): 
                     updateStatusAcountCookie(self.account['latest_cookie']['id'], 1)
                 self.error_instance.insertContent(e)
-                print("Thử lại sau 3 phút...")
-                sleep(180)
+                print("Thử lại sau 5 phút...")
+                sleep(300)
             except KeyboardInterrupt: 
-                 if self.account.get('latest_cookie'): 
+                if self.account.get('latest_cookie'): 
                     updateStatusAcountCookie(self.account['latest_cookie']['id'], 2)
+                updateStatusAcount(self.account['id'],2)
 
     def handleData(self,cookie):    
         print('Bắt đầu xử lý dữ liệu')

@@ -71,6 +71,7 @@ def updateStatusAcount(account_id, status):
         
 def handleCrawlNewFeed(account, name, dirextension = None):
     newfeed_instance = NewFeedModel()
+    account_cookie_instance = AccountCookies()
     try:
         manager = Browser(f"/newsfeed/{account['id']}/{str(uuid.uuid4())}",dirextension)
         browser = manager.start()
@@ -121,6 +122,7 @@ def handleCrawlNewFeed(account, name, dirextension = None):
                                             post_id = query_params.get('story_fbid', [None])[0]
                                         if post_id == '': continue
 
+                                        account_cookie_instance.updateCount(account['latest_cookie']['id'], 'counts')
                                         data = {
                                             'post_fb_id': post_id,
                                             'post_fb_link': href,
@@ -163,6 +165,7 @@ def remove_accents(input_str):
     return ''.join([c for c in nfkd_form if not unicodedata.combining(c)])
 
 def crawlNewFeed(account,dirextension):
+    account_cookie_instance = AccountCookies()
     try:
         from facebook.crawl import Crawl
         system_instance = System()
@@ -223,6 +226,7 @@ def crawlNewFeed(account,dirextension):
                 if check:
                     crawl_instance.likePost()
                     system_instance.update_count(system['id'])
+                    account_cookie_instance.updateCount(account['latest_cookie']['id'], 'count_get')
                     crawl_instance.insertPostAndComment(post,comments,{},id)
                 else:
                     newfeed_instance.destroy(id)

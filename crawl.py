@@ -6,7 +6,7 @@ from selenium.common.exceptions import WebDriverException
 from base.browser import Browser
 from facebook.crawlid import CrawlId
 from time import sleep
-from helpers.inp import get_user_input
+from helpers.inp import terminate_processes
 from sql.system import System
 from helpers.system import get_system_info
 
@@ -33,13 +33,6 @@ def process_crawl():
         if browser:
             browser.quit()
             manager.cleanup()
-
-def terminate_processes(processes):
-    for process in processes:
-        if process.is_alive():
-            print(f"Đang dừng tiến trình PID: {process.pid}")
-            process.terminate()
-            process.join()  # Đảm bảo tiến trình đã dừng hẳn
 
 def crawl(countGet):
     try:
