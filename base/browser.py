@@ -2,6 +2,9 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.firefox.service import Service as FirefoxService
 
 import logging
 import os
@@ -19,6 +22,8 @@ class Browser:
         
         
     def start(self, headless=True):
+        return self.start_firefox(headless)
+
         chrome_options = Options()
         
         if self.profile_dir != '/profiles/crawl':
@@ -57,6 +62,35 @@ class Browser:
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=chrome_options)
         return driver
+
+    def start_firefox(self, headless):
+        firefox_options = FirefoxOptions()
+
+        # Thiết lập profile người dùng nếu không phải mặc định
+        if self.profile_dir and self.profile_dir != '/profiles/crawl':
+            firefox_options.set_preference("browser.download.dir", self.profile_dir)
+
+        # Thêm extension nếu có (Firefox yêu cầu định dạng .xpi)
+        if self.dirextension:
+            firefox_options.add_extension(self.dirextension)
+
+        # Chế độ headless (tùy chọn)
+        if headless:
+            firefox_options.add_argument("--headless")
+
+        # Vô hiệu hóa các thông báo và tối ưu
+        firefox_options.set_preference("dom.webnotifications.enabled", False)  # Tắt thông báo
+        firefox_options.set_preference("intl.accept_languages", "en-US, en")  # Ngôn ngữ mặc định
+
+        # Khởi động trình duyệt
+        try:
+            service = FirefoxService(GeckoDriverManager().install())
+            driver = webdriver.Firefox(service=service, options=firefox_options)
+            return driver
+        except Exception as e:
+            logging.error(f"Lỗi khi khởi động trình duyệt: {e}")
+            raise e  # Ném lỗi để xử lý ngoài hàm
+
     
     def cleanup(self):
         """Xóa thư mục tạm nếu được tạo."""
