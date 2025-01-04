@@ -42,6 +42,7 @@ def process_newsfeed(account):
             else:
                 raise Exception("Proxy không hợp lệ")
         except Exception as e:
+            print(e)
             print(f"Không thể khởi tạo trình duyệt với proxy: {proxy['ip']}:{proxy['port']}, thử lại sau 3 phút...")
             updateStatusAcount(account['id'],6)
             log_newsfeed(account,f"Lỗi k dùng được cookiew: { proxy['ip'] }:{ proxy['port'] }")
@@ -50,6 +51,8 @@ def process_newsfeed(account):
 
 
     try:
+        # browser.get('https://whatismyipaddress.com/')
+        # sleep(1000000)
         browser.get("https://facebook.com")
         newfeed = NewFeed(browser,account,dirextension)
         newfeed.handle()

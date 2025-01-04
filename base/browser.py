@@ -5,95 +5,127 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.firefox.service import Service as FirefoxService
-
+from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.edge.options import Options as EdgeOptions
+from webdriver_manager.microsoft import EdgeChromiumDriverManager  # Import cho Edge
 import logging
 import os
 
+
 class Browser:
-    def __init__(self,account = '/hung',dirextension = None):
+    def __init__(self, account='/hung', dirextension=None, browser_type='chrome'):
         self.account = account
         self.dirextension = dirextension
-        base_profile_dir = "/profiles"+account
+        self.browser_type = browser_type  # Chọn loại trình duyệt
+        base_profile_dir = "/profiles" + account
 
         if not os.path.exists(base_profile_dir):
             os.makedirs(base_profile_dir)
 
         self.profile_dir = base_profile_dir
-        
-        
-    def start(self, headless=True):
-        return self.start_firefox(headless)
 
+    def start(self, headless=True):
+        if self.browser_type == 'chrome':
+            return self.start_chrome(headless)
+        elif self.browser_type == 'firefox':
+            return self.start_firefox(headless)
+        elif self.browser_type == 'edge':  # Kiểm tra browser_type
+            return self.start_edge(headless)
+        else:
+            raise ValueError("Unsupported browser type. Please choose 'chrome', 'firefox', or 'edge'.")
+
+    def start_chrome(self, headless):
         chrome_options = Options()
         
         if self.profile_dir != '/profiles/crawl':
             chrome_options.add_argument(f"--user-data-dir={self.profile_dir}")
 
-        if self.dirextension: 
+        if self.dirextension:
             chrome_options.add_extension(self.dirextension)
 
-        # Tùy chọn chạy headless (nếu cần)
-        if headless: 
-            chrome_options.add_argument("--headless=new")  # Chế độ không giao diện, dùng API mới
-            chrome_options.add_argument("--no-sandbox")  # Không sử dụng sandbox
+        if headless:
+            chrome_options.add_argument("--headless=new")
+            chrome_options.add_argument("--no-sandbox")
 
-        # Vô hiệu hóa GPU và rendering liên quan
-        # chrome_options.add_argument("--disable-gpu")  # Tắt GPU
-        # chrome_options.add_argument("--disable-software-rendering")  # Tắt rendering phần mềm
+        chrome_options.add_argument("--disable-notifications")
+        chrome_options.add_argument("--disable-translate")
+        chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+        chrome_options.add_argument("--disable-infobars")
+        chrome_options.add_argument("--start-maximized")
+        chrome_options.add_argument("--disable-dev-shm-usage")
 
-        # Các tối ưu khác
-        chrome_options.add_argument("--disable-notifications")  # Tắt thông báo
-        chrome_options.add_argument("--disable-translate")  # Tắt tính năng dịch
-        chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Tránh bị nhận diện tự động hóa
-        chrome_options.add_argument("--disable-infobars")  # Tắt thanh thông báo "Chrome is being controlled..."
-        chrome_options.add_argument("--start-maximized")  # Mở rộng cửa sổ
-        chrome_options.add_argument("--disable-dev-shm-usage")  # Tránh vấn đề bộ nhớ chia sẻ
-
-        # Khởi động trình duyệt với các tùy chọn đã cấu hình
         try:
-            # Giả sử bạn có phương thức để khởi động trình duyệt
-            self.driver = self.start_browser(chrome_options)
-            logging.info("Trình duyệt đã khởi động thành công")
-            return self.driver
+            service = Service('chromedriver.exe')
+            driver = webdriver.Chrome(service=service, options=chrome_options)
+            return driver
         except Exception as e:
-            logging.error(f"Lỗi khi khởi động trình duyệt: {e}")
-
-    def start_browser(self, chrome_options):
-        service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, options=chrome_options)
-        return driver
+            logging.error(f"Error starting Chrome browser: {e}")
+            raise e
 
     def start_firefox(self, headless):
         firefox_options = FirefoxOptions()
 
-        # Thiết lập profile người dùng nếu không phải mặc định
         if self.profile_dir and self.profile_dir != '/profiles/crawl':
             firefox_options.set_preference("browser.download.dir", self.profile_dir)
 
-        # Thêm extension nếu có (Firefox yêu cầu định dạng .xpi)
-        if self.dirextension:
-            firefox_options.add_extension(self.dirextension)
-
-        # Chế độ headless (tùy chọn)
         if headless:
             firefox_options.add_argument("--headless")
 
-        # Vô hiệu hóa các thông báo và tối ưu
-        firefox_options.set_preference("dom.webnotifications.enabled", False)  # Tắt thông báo
-        firefox_options.set_preference("intl.accept_languages", "en-US, en")  # Ngôn ngữ mặc định
+        firefox_options.set_preference("dom.webnotifications.enabled", False)
+        firefox_options.set_preference("intl.accept_languages", "en-US, en")
 
-        # Khởi động trình duyệt
         try:
             service = FirefoxService(GeckoDriverManager().install())
             driver = webdriver.Firefox(service=service, options=firefox_options)
+            if self.dirextension:
+                print(self.dirextension)
+                # driver.install_addon(self.dirextension)
+            logging.info("Firefox browser started successfully.")
             return driver
         except Exception as e:
-            logging.error(f"Lỗi khi khởi động trình duyệt: {e}")
-            raise e  # Ném lỗi để xử lý ngoài hàm
+            logging.error(f"Error starting Firefox browser: {e}")
+            raise e
 
-    
+    def start_edge(self, headless):
+        edge_options = EdgeOptions()
+
+        # Thêm tùy chọn cho profile người dùng nếu cần
+        if self.profile_dir != '/profiles/crawl':
+            edge_options.add_argument(f"--user-data-dir={self.profile_dir}")
+
+        # Thêm extension nếu có
+        if self.dirextension:
+            edge_options.add_extension(self.dirextension)
+
+        # Chạy ở chế độ headless nếu cần
+        if headless:
+            edge_options.add_argument("--headless")
+            edge_options.add_argument("--no-sandbox")
+
+        # Thêm các tùy chọn để giảm thiểu thông báo DevTools và lỗi
+        edge_options.add_argument("--disable-notifications")
+        edge_options.add_argument("--disable-translate")
+        edge_options.add_argument("--disable-blink-features=AutomationControlled")
+        edge_options.add_argument("--disable-infobars")
+        edge_options.add_argument("--start-maximized")
+        edge_options.add_argument("--disable-dev-shm-usage")
+
+        # Tắt DevTools Protocol và các lỗi liên quan đến rendering
+        edge_options.add_argument("--disable-features=VizDisplayCompositor")
+        edge_options.add_argument("--remote-debugging-port=0")
+
+        try:
+            # Cài đặt và khởi tạo WebDriver cho Edge
+            service = EdgeService(EdgeChromiumDriverManager().install())
+            driver = webdriver.Edge(service=service, options=edge_options)
+            logging.info("Edge browser started successfully.")
+            return driver
+        except Exception as e:
+            logging.error(f"Error starting Edge browser: {e}")
+            raise e
+
     def cleanup(self):
-        """Xóa thư mục tạm nếu được tạo."""
+        """Remove temporary directory if created."""
         if hasattr(self, 'profile_dir') and self.profile_dir:
             import shutil
             shutil.rmtree(self.profile_dir, ignore_errors=True)

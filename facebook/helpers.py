@@ -98,7 +98,7 @@ def handleCrawlNewFeed(account, name, dirextension = None):
         sleep(3)
         
         listId = set() 
-        log_newsfeed(account,f"Thực thi cào fanpage {name}")
+        log_newsfeed(account,f"================================Thực thi cào fanpage {name}==================================")
         while True: 
             listPosts = browser.find_elements(By.XPATH, types['list_posts']) 
             actions = ActionChains(browser)
@@ -148,7 +148,7 @@ def handleCrawlNewFeed(account, name, dirextension = None):
                 browser.execute_script("window.scrollBy(0, 500);")
             sleep(5)
     except Exception as e:
-        log_newsfeed(account,f"Đóng fanpage {name}")
+        log_newsfeed(account,f"==========================Đóng fanpage {name}================================")
         if browser:
             browser.quit()
             manager.cleanup()
