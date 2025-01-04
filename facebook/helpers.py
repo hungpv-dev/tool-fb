@@ -77,18 +77,29 @@ def handleCrawlNewFeed(account, name, dirextension = None):
     try:
         manager = Browser(f"/newsfeed/{account['id']}/{str(uuid.uuid4())}",dirextension)
         browser = manager.start()
-        browser.get("https://facebook.com")
         log_newsfeed(account,f"Cào page {name}")
         print(f'Chuyển hướng tới fanpage: {name}')
-        cookie = login(browser,account)
-        try:
-            profile_button = browser.find_element(By.XPATH, push['openProfile'])
-            profile_button.click()
-        except Exception as e:
-            raise ValueError("Không thể mở trang cá nhân.")
-        sleep(2)
-        switchPage = browser.find_element(By.XPATH, push['switchPage'](name))
-        switchPage.click()
+        while True:
+            browser.get("https://facebook.com")
+            cookie = login(browser,account)
+            sleep(2)
+            try:
+                profile_button = browser.find_element(By.XPATH, push['openProfile'])
+                profile_button.click()
+            except Exception as e:
+                print(f"Không thể mở profile: {name}")
+            sleep(2)
+
+            try:
+                switchPage = browser.find_element(By.XPATH, push['switchPage'](name))
+                switchPage.click()
+                break
+            except Exception as e:
+                print(f"Không thể chuyển hướng tới fanpage: {name}")
+            
+            print('Chờ 30s để thử chuyển hướng lại')
+            sleep(30)
+        
         sleep(2)
         closeModal(1,browser)
         pageLinkPost = f"/posts/"
@@ -148,7 +159,7 @@ def handleCrawlNewFeed(account, name, dirextension = None):
                 browser.execute_script("window.scrollBy(0, 500);")
             sleep(5)
     except Exception as e:
-        log_newsfeed(account,f"==========================Đóng fanpage {name}================================")
+        log_newsfeed(account,f"==========================Đóng fanpage {name}================================\n{str(e)}\n=======================")
         if browser:
             browser.quit()
             manager.cleanup()
@@ -240,7 +251,7 @@ def crawlNewFeed(account,dirextension):
                 newfeed_instance.destroy(id)
     except Exception as e:
         print('Đã có lỗi xảy ra: ',e) 
-        log_newsfeed(account,f"Đừng quá trình thực thi lưu bài viết vô db")
+        log_newsfeed(account,f"==========> Dừng quá trình thực thi lưu bài viết vô db")
         if system:
             system_instance.update(system['id'], {'status': 2})
         if browser:
