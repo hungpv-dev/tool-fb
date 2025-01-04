@@ -27,29 +27,22 @@ class Browser:
         if self.dirextension: 
             chrome_options.add_extension(self.dirextension)
 
-        # Tắt WebGPU và các tính năng GPU
-        # chrome_options.add_argument("--disable-webgpu")  # Tắt WebGPU
-        # chrome_options.add_argument("--disable-gpu")  # Tắt GPU
-        # chrome_options.add_argument("--disable-software-rasterizer")  # Tắt phần mềm vẽ đồ họa
-        # chrome_options.add_argument("--disable-accelerated-2d-canvas")  # Tắt tăng tốc vẽ canvas 2D
-        # chrome_options.add_argument("--disable-gpu-compositing")  # Tắt GPU compositing
-        # chrome_options.add_argument("--disable-dev-shm-usage")  # Tắt việc sử dụng /dev/shm
-
         # Tùy chọn chạy headless (nếu cần)
         if headless: 
-            chrome_options.add_argument("--headless")  # Chế độ không giao diện
+            chrome_options.add_argument("--headless=new")  # Chế độ không giao diện, dùng API mới
             chrome_options.add_argument("--no-sandbox")  # Không sử dụng sandbox
 
-        # Tối ưu tình huống cụ thể
-        chrome_options.add_argument("--disable-notifications")  # Tắt thông báo
-        # chrome_options.add_argument("--disable-popup-blocking")  # Tắt chặn popup
-        chrome_options.add_argument("--disable-translate")  # Tắt dịch trang
-        # chrome_options.add_argument("--disable-infobars")  # Tắt thanh thông tin của Chrome
-        # chrome_options.add_argument("--disable-browser-side-navigation")  # Tắt tối ưu điều hướng
+        # Vô hiệu hóa GPU và rendering liên quan
+        # chrome_options.add_argument("--disable-gpu")  # Tắt GPU
+        # chrome_options.add_argument("--disable-software-rendering")  # Tắt rendering phần mềm
 
-        chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-        chrome_options.add_argument("--disable-infobars")
-        chrome_options.add_argument("--start-maximized")
+        # Các tối ưu khác
+        chrome_options.add_argument("--disable-notifications")  # Tắt thông báo
+        chrome_options.add_argument("--disable-translate")  # Tắt tính năng dịch
+        chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Tránh bị nhận diện tự động hóa
+        chrome_options.add_argument("--disable-infobars")  # Tắt thanh thông báo "Chrome is being controlled..."
+        chrome_options.add_argument("--start-maximized")  # Mở rộng cửa sổ
+        chrome_options.add_argument("--disable-dev-shm-usage")  # Tránh vấn đề bộ nhớ chia sẻ
 
         # Khởi động trình duyệt với các tùy chọn đã cấu hình
         try:
