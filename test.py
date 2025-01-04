@@ -31,19 +31,17 @@
 # sleep(1000)
 
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
 from time import sleep
 
 
 chrome_options = Options()
 chrome_options.add_extension("extensions/62_164_255_151.zip")
 
-driver = webdriver.Chrome(service=Service("chromedriver.exe"), options=chrome_options)
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service, options=chrome_options)
 driver.get("https://whatismyipaddress.com")
 sleep(1000)
 driver.quit()

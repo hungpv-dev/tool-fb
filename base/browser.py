@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+
 import tempfile
 import os
 
@@ -48,7 +49,7 @@ class Browser:
         # Tăng cường bảo mật và tránh bị phát hiện sử dụng Selenium
         chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
-        service = Service(ChromeDriverManager().install()) 
+        service = Service(ChromeDriverManager().install())
         browser = webdriver.Chrome(service=service,options=chrome_options)
         
         return browser
