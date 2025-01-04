@@ -18,7 +18,6 @@ class Browser:
         
     def start(self, headless = True):
         chrome_options = Options()
-        print(self.profile_dir)
         if self.profile_dir != '/profiles/crawl':
             chrome_options.add_argument(f"--user-data-dir={self.profile_dir}")
         
