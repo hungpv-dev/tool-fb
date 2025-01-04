@@ -34,8 +34,11 @@ def process_newsfeed(account):
         raise Exception(f"Không thể sử dụng proxy: {proxy['ip']}:{proxy['port']}")
 
     try:
-        manager = Browser(f"/newsfeed/{account['id']}/home",dirextension)
-        browser = manager.start()
+        try:
+            manager = Browser(f"/newsfeed/{account['id']}/home",dirextension)
+            browser = manager.start()
+        except: 
+            raise Exception(f"{account['name']} => Không thể sử dụng proxy")
         browser.get("https://facebook.com")
         newfeed = NewFeed(browser,account,dirextension)
         newfeed.handle()

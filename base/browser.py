@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 import tempfile
 import os
 
@@ -32,6 +33,7 @@ class Browser:
             chrome_options.add_argument("--headless")  # Chế độ không giao diện
             chrome_options.add_argument("--no-sandbox")  # Không sử dụng sandbox
             chrome_options.add_argument("--disable-gpu")  # Tắt GPU khi headless
+            chrome_options.add_argument("--disable-software-rasterizer") 
 
         # Tối ưu tình huống cụ thể
         chrome_options.add_argument("--disable-notifications")  # Tắt thông báo
@@ -46,7 +48,7 @@ class Browser:
         # Tăng cường bảo mật và tránh bị phát hiện sử dụng Selenium
         chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
-        service = Service('chromedriver.exe') 
+        service = Service(ChromeDriverManager.install()) 
         browser = webdriver.Chrome(service=service,options=chrome_options)
         
         return browser
