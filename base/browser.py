@@ -48,7 +48,7 @@ class Browser:
         # Tăng cường bảo mật và tránh bị phát hiện sử dụng Selenium
         chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 
-        service = Service(ChromeDriverManager.install()) 
+        service = Service(ChromeDriverManager().install()) 
         browser = webdriver.Chrome(service=service,options=chrome_options)
         
         return browser
