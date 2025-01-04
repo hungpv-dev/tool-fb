@@ -3,7 +3,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
-import tempfile
+import logging
 import os
 
 class Browser:
@@ -46,12 +46,25 @@ class Browser:
         chrome_options.add_argument("--disable-translate")  # Tắt dịch trang
         chrome_options.add_argument("--disable-infobars")  # Tắt thanh thông tin của Chrome
         chrome_options.add_argument("--disable-browser-side-navigation")  # Tắt tối ưu điều hướng
-        chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Tránh bị phát hiện Selenium
 
+        # Vô hiệu hóa proxy
+        chrome_options.add_argument("--no-proxy-server")
+        chrome_options.add_argument("--proxy-server='direct://'")
+        chrome_options.add_argument("--proxy-bypass-list=*")
+
+        # Khởi động trình duyệt với các tùy chọn đã cấu hình
+        try:
+            # Giả sử bạn có phương thức để khởi động trình duyệt
+            self.driver = self.start_browser(chrome_options)
+            logging.info("Trình duyệt đã khởi động thành công")
+            return self.driver
+        except Exception as e:
+            logging.error(f"Lỗi khi khởi động trình duyệt: {e}")
+
+    def start_browser(self, chrome_options):
         service = Service(ChromeDriverManager().install())
-        browser = webdriver.Chrome(service=service, options=chrome_options)
-        
-        return browser
+        driver = webdriver.Chrome(service=service, options=chrome_options)
+        return driver
     
     def cleanup(self):
         """Xóa thư mục tạm nếu được tạo."""

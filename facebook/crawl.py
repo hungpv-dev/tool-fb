@@ -148,7 +148,7 @@ class Crawl:
                     if selectDyamic['share'] in dyamic:
                         data['share'] = dyamic
         except Exception as e:
-            print(f"Không lấy được like, comment, share: {e}")
+            print(f"Không lấy được like, comment, share")
         # Lấy comment
         try:
             scroll = modal.find_element(By.XPATH,types['scroll'])
