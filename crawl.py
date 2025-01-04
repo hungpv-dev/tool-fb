@@ -16,7 +16,7 @@ def process_crawl():
     manager = None
     system = None
     try:
-        manager = Browser()
+        manager = Browser('/crawl')
         browser = manager.start()
         browser.get("https://facebook.com")
         info = get_system_info()
