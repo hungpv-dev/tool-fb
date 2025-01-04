@@ -28,12 +28,12 @@ class Browser:
             chrome_options.add_extension(self.dirextension)
 
         # Tắt WebGPU và các tính năng GPU
-        chrome_options.add_argument("--disable-webgpu")  # Tắt WebGPU
-        chrome_options.add_argument("--disable-gpu")  # Tắt GPU
-        chrome_options.add_argument("--disable-software-rasterizer")  # Tắt phần mềm vẽ đồ họa
-        chrome_options.add_argument("--disable-accelerated-2d-canvas")  # Tắt tăng tốc vẽ canvas 2D
-        chrome_options.add_argument("--disable-gpu-compositing")  # Tắt GPU compositing
-        chrome_options.add_argument("--disable-dev-shm-usage")  # Tắt việc sử dụng /dev/shm
+        # chrome_options.add_argument("--disable-webgpu")  # Tắt WebGPU
+        # chrome_options.add_argument("--disable-gpu")  # Tắt GPU
+        # chrome_options.add_argument("--disable-software-rasterizer")  # Tắt phần mềm vẽ đồ họa
+        # chrome_options.add_argument("--disable-accelerated-2d-canvas")  # Tắt tăng tốc vẽ canvas 2D
+        # chrome_options.add_argument("--disable-gpu-compositing")  # Tắt GPU compositing
+        # chrome_options.add_argument("--disable-dev-shm-usage")  # Tắt việc sử dụng /dev/shm
 
         # Tùy chọn chạy headless (nếu cần)
         if headless: 
@@ -42,15 +42,14 @@ class Browser:
 
         # Tối ưu tình huống cụ thể
         chrome_options.add_argument("--disable-notifications")  # Tắt thông báo
-        chrome_options.add_argument("--disable-popup-blocking")  # Tắt chặn popup
+        # chrome_options.add_argument("--disable-popup-blocking")  # Tắt chặn popup
         chrome_options.add_argument("--disable-translate")  # Tắt dịch trang
-        chrome_options.add_argument("--disable-infobars")  # Tắt thanh thông tin của Chrome
-        chrome_options.add_argument("--disable-browser-side-navigation")  # Tắt tối ưu điều hướng
+        # chrome_options.add_argument("--disable-infobars")  # Tắt thanh thông tin của Chrome
+        # chrome_options.add_argument("--disable-browser-side-navigation")  # Tắt tối ưu điều hướng
 
-        # Vô hiệu hóa proxy
-        chrome_options.add_argument("--no-proxy-server")
-        chrome_options.add_argument("--proxy-server='direct://'")
-        chrome_options.add_argument("--proxy-bypass-list=*")
+        chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+        chrome_options.add_argument("--disable-infobars")
+        chrome_options.add_argument("--start-maximized")
 
         # Khởi động trình duyệt với các tùy chọn đã cấu hình
         try:
