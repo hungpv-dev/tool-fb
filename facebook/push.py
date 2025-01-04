@@ -19,15 +19,17 @@ from io import BytesIO
 from sql.accounts import Account
 from selenium.webdriver.common.action_chains import ActionChains
 import pyautogui
+from helpers.logs import log_push
 import threading
 from PIL import Image
 from facebook.helpers import login,updateStatusAcount,updateStatusAcountCookie,updatePagePostInfo,push_list
 
 
 class Push:
-    def __init__(self,browser,account):
+    def __init__(self,browser,account,dirextension):
         self.browser = browser
         self.account = account
+        self.dirextension = dirextension
         self.crawlid_instance = CrawlId(browser)
         self.post_instance = Post()
         self.page_instance = Page()
@@ -66,7 +68,8 @@ class Push:
             try:
                 listTimes = self.browseTime()
                 if(len(listTimes) > 0):
-                    worker_thread = threading.Thread(target=push_list, args=(listTimes,self.account))
+                    log_push(self.account,'Bắt đầu đăng bài')
+                    worker_thread = threading.Thread(target=push_list, args=(listTimes,self.account,self.dirextension))
                     worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
                     worker_thread.start()
                 

@@ -12,7 +12,9 @@ import json
 from helpers.inp import terminate_processes
 from sql.accounts import Account
 from extensions.auth_proxy import create_proxy_extension
+from facebook.helpers import updateStatusAcount
 from helpers.inp import check_proxy
+from helpers.logs import log_push
 
 account_instance = Account()
 
@@ -20,22 +22,33 @@ def process_push(account):
     browser = None
     manager = None
     
-    proxy = account.get('proxy')
-    checkProxy = True
-    dirextension = None
-    if proxy:
-        checkProxy = check_proxy(proxy)
-        if checkProxy:
-            dirextension = create_proxy_extension(proxy)
+    while True:
+        checkProxy = True
+        dirextension = None
+        proxy = account.get('proxy')
+        updateStatusAcount(account['id'],2)
+        if proxy:
+            checkProxy = check_proxy(proxy)
+            if checkProxy:
+                dirextension = create_proxy_extension(proxy)
+
+        try:
+            manager = Browser(f"/push/{account['id']}/home",dirextension)
+            browser = manager.start()
+            break
+        except: 
+            print(f"Không thể khởi tạo trình duyệt với proxy: {proxy['ip']}:{proxy['port']}, thử lại sau 3 phút...")
+            updateStatusAcount(account['id'],6)
+            log_push(account,"Lỗi k dùng được cookiew")
+            sleep(180)
+            account = account_instance.find(account['id'])
     
     if checkProxy == False:
         raise Exception(f"Không thể sử dụng proxy: {proxy['ip']}:{proxy['port']}")
 
     try:
-        manager = Browser(f"/push/{account['id']}/home",dirextension)
-        browser = manager.start(False)
         browser.get("https://facebook.com")
-        crawl = Push(browser,account)
+        crawl = Push(browser,account,dirextension)
         crawl.handle()
     except Exception as e:
         print(f"Lỗi trong push: {e}")

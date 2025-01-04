@@ -12,6 +12,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from helpers.modal import closeModal
 from facebook.helpers import login,updateStatusAcount,updateStatusAcountCookie,handleCrawlNewFeed
 from urllib.parse import urlparse, parse_qs
+from helpers.logs import log_newsfeed
 from time import sleep
 from facebook.helpers import crawlNewFeed
 
@@ -54,6 +55,7 @@ class NewFeed:
                 
 
     def crawlNewFeed(self,account):
+        log_newsfeed(account,f"Thực thi lấy dữ liệu tài khoản")
         checker = PageChecker(self.browser, self.dirextension)
         checker.run(account)
         
@@ -76,7 +78,7 @@ class PageChecker:
                 profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
                 profile_button.click()
             except Exception as e:
-                print(f"Lỗi: {e}")
+                log_newsfeed(account,f"Không mở modal trang cá nhân, đóng tài khoản!")
                 self.terminate_processes(processes)  # Đóng tiến trình
                 self.listPages = set() # Xóa danh sách page
                 raise ValueError('Không thể mở trang cá nhân!')

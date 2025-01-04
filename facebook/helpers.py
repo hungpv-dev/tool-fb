@@ -11,6 +11,8 @@ from sql.pagePosts import PagePosts
 from selenium.common.exceptions import StaleElementReferenceException
 from sql.newsfeed import NewFeedModel
 from base.browser import Browser
+import uuid
+from helpers.logs import log_newsfeed
 from sql.system import System
 from sql.errors import Error
 import unicodedata
@@ -76,6 +78,7 @@ def handleCrawlNewFeed(account, name, dirextension = None):
         manager = Browser(f"/newsfeed/{account['id']}/{str(uuid.uuid4())}",dirextension)
         browser = manager.start()
         browser.get("https://facebook.com")
+        log_newsfeed(account,f"Cào page {name}")
         print(f'Chuyển hướng tới fanpage: {name}')
         cookie = login(browser,account)
         try:
@@ -95,11 +98,10 @@ def handleCrawlNewFeed(account, name, dirextension = None):
         sleep(3)
         
         listId = set() 
+        log_newsfeed(account,f"Thực thi cào fanpage {name}")
         while True: 
             listPosts = browser.find_elements(By.XPATH, types['list_posts']) 
             actions = ActionChains(browser)
-            if(len(listPosts) == 0):
-                raise ValueError("Không tìm thấy bài viết nào.")
             
             for p in listPosts:
                 try:
@@ -146,6 +148,7 @@ def handleCrawlNewFeed(account, name, dirextension = None):
                 browser.execute_script("window.scrollBy(0, 500);")
             sleep(5)
     except Exception as e:
+        log_newsfeed(account,f"Đóng fanpage {name}")
         if browser:
             browser.quit()
             manager.cleanup()
@@ -170,6 +173,7 @@ def crawlNewFeed(account,dirextension):
         from facebook.crawl import Crawl
         system_instance = System()
         newfeed_instance = NewFeedModel()
+        log_newsfeed(account,f"Thực thi bài viết vô đb")
         error_instance = Error()
         info = get_system_info()
         system = system_instance.insert({
@@ -183,6 +187,7 @@ def crawlNewFeed(account,dirextension):
         sleep(2)
         browser.get('https://facebook.com')
         crawl_instance = Crawl(browser)
+        log_newsfeed(account,f"Bắt đầu thực thi lưu bài viết")
         while True:
             try:
                 up = newfeed_instance.first({'account_id': account['id']})
@@ -233,30 +238,31 @@ def crawlNewFeed(account,dirextension):
                 sleep(2)
             except Exception as e:
                 newfeed_instance.destroy(id)
-                raise e
     except Exception as e:
         print('Đã có lỗi xảy ra: ',e) 
+        log_newsfeed(account,f"Đừng quá trình thực thi lưu bài viết vô db")
         if system:
             system_instance.update(system['id'], {'status': 2})
         if browser:
             browser.quit()
             manager.cleanup()
     
-
-
-def push_list(posts,account):
+def push_list(posts,account,dirextension):
     try:
         from base.browser import Browser
         from facebook.push import Push
-        manager = Browser()
-        browser = manager.start(False)
-        # browser.get('https://facebook.com')
-        # cookie = login(browser,account)
-        # print(f"{account['name']} đăng {len(posts)}")
+        manager = Browser(f"/push/{account['id']}/{uuid()}",dirextension)
+        browser = manager.start()
+        browser.get('https://facebook.com')
+        cookie = login(browser,account)
+        print(json.dumps(posts))
+        sleep(500000)
         sleep(5)
     except Exception as e:
         print(f'Lỗi khi xử lý đăng bài: {e}')
     finally: 
         if 'browser' in locals():
-            pass
-            # browser.quit()
+            if browser:
+                browser.quit()
+                manager.cleanup()
+        print('Kết thúc quá trình đăng bài.')

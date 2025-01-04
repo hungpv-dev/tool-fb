@@ -4,8 +4,6 @@ from rich.panel import Panel
 from rich.text import Text
 import warnings
 from terminal.action import post,newsfeed,fanpage,login
-import logging
-logging.basicConfig(level=logging.DEBUG)
 
 warnings.filterwarnings("ignore", message="Old MapAsync APIs are deprecated")
 

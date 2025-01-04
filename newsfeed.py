@@ -16,6 +16,7 @@ from extensions.auth_proxy import create_proxy_extension
 from facebook.helpers import updateStatusAcount
 from helpers.inp import check_proxy
 from sql.accounts import Account
+from helpers.logs import log_newsfeed
 
 account_instance = Account()
 
@@ -34,18 +35,19 @@ def process_newsfeed(account):
                 dirextension = create_proxy_extension(proxy)
 
         try:
-            manager = Browser(f"/newsfeed/{account['id']}/home",dirextension)
-            browser = manager.start()
-            break
-        except: 
+            if checkProxy == True:
+                manager = Browser(f"/newsfeed/{account['id']}/home",dirextension)
+                browser = manager.start()
+                break
+            else:
+                raise Exception("Proxy không hợp lệ")
+        except Exception as e:
             print(f"Không thể khởi tạo trình duyệt với proxy: {proxy['ip']}:{proxy['port']}, thử lại sau 3 phút...")
             updateStatusAcount(account['id'],6)
+            log_newsfeed(account,f"Lỗi k dùng được cookiew: { proxy['ip'] }:{ proxy['port'] }")
             sleep(180)
             account = account_instance.find(account['id'])
-    
 
-    if checkProxy == False:
-        raise Exception(f"Không thể sử dụng proxy: {proxy['ip']}:{proxy['port']}")
 
     try:
         browser.get("https://facebook.com")
