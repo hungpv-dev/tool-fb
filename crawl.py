@@ -10,24 +10,33 @@ from helpers.inp import terminate_processes
 from sql.system import System
 from helpers.system import get_system_info
 
-def process_crawl():
+def process_crawl(count):
     system_instance = System()
     browser = None
     manager = None
     system = None
+    print(f'Đang mở tab: {count}')
     try:
         manager = Browser('/crawl')
         browser = manager.start()
-        browser.get("https://facebook.com")
-        info = get_system_info()
-        system = system_instance.insert({
-            'info': info
-        })
+        while True:
+            try:
+                browser.get("https://facebook.com")
+                info = get_system_info()
+                system = system_instance.insert({
+                    'info': info
+                })
+                break
+            except:
+                print(f'Đang khởi động lại tab {count}!, chờ 10s ...')
+                sleep(10)
+
         crawl = CrawlId(browser, system)
         crawl.handle()
     except Exception as e:
         print(f"Lỗi trong Crawl: {e}")
     finally:
+        print(f'==> Đang đóng tab: {count}')
         if system:
             system_instance.update(system['id'], {'status': 2})
         if browser:
@@ -38,7 +47,7 @@ def crawl(countGet):
     try:
         processes = []
         for count in range(countGet):
-            crawl_process = multiprocessing.Process(target=process_crawl)
+            crawl_process = multiprocessing.Process(target=process_crawl,args=(count,))
             processes.append(crawl_process)
             crawl_process.start()
             sleep(2)

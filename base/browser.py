@@ -103,7 +103,8 @@ class Browser:
         firefox_options.set_preference("browser.privatebrowsing.autostart", True)  # Chế độ duyệt riêng tư luôn bật
 
         try:
-            service = FirefoxService(GeckoDriverManager().install())
+            # service = FirefoxService(GeckoDriverManager().install())
+            service = FirefoxService('C:\\Users\\ADMIN\\.wdm\\drivers\\geckodriver\\win64\\v0.35.0\\geckodriver.exe')
             if self.proxy:
                 proxy = self.proxy
                 seleniumwire_options['proxy'] = {
