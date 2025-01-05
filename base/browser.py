@@ -13,7 +13,7 @@ import os
 
 
 class Browser:
-    def __init__(self, account='/hung', proxy=None, browser_type='chrome'):
+    def __init__(self, account='/hung', proxy=None, browser_type='firefox'):
         self.account = account
         self.proxy = proxy
         self.browser_type = browser_type  # Chọn loại trình duyệt
@@ -103,8 +103,8 @@ class Browser:
         firefox_options.set_preference("browser.privatebrowsing.autostart", True)  # Chế độ duyệt riêng tư luôn bật
 
         try:
-            # service = FirefoxService(GeckoDriverManager().install())
-            service = FirefoxService('C:\\Users\\ADMIN\\.wdm\\drivers\\geckodriver\\win64\\v0.35.0\\geckodriver.exe')
+            service = FirefoxService(GeckoDriverManager().install())
+            # service = FirefoxService('C:\\Users\\ADMIN\\.wdm\\drivers\\geckodriver\\win64\\v0.35.0\\geckodriver.exe')
             if self.proxy:
                 proxy = self.proxy
                 seleniumwire_options['proxy'] = {
