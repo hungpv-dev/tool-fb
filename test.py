@@ -31,14 +31,36 @@
 
 # sleep(1000)
 
-
 from base.browser import Browser
-
-driver = Browser('/hung','./extensions/207_228_22_249.zip','edge').start(False)
 from time import sleep
 
+proxy = {
+    'ip': '207.228.20.5',
+    'port': '45774',
+    'user': 'SszaLu98T4t2h4S',
+    'pass': '703sNOIwSCHa1Wg',
+}
+
+manager = Browser('/hung',proxy)
+driver = manager.start(False)
 driver.get("https://whatismyipaddress.com")
-sleep(1000)
+sleep(10)
 driver.quit()
+
+
+
+# # Khởi tạo options cho Firefox
+# options = FirefoxOptions()
+
+# # Khởi tạo WebDriver với selenium-wire
+
+
+# # Khởi tạo Firefox WebDriver với cấu hình selenium-wire và proxy
+# driver = webdriver.Firefox(
+#     service=FirefoxService(GeckoDriverManager().install()),
+#     options=options,
+#     seleniumwire_options=seleniumwire_options
+# )
+
 
 

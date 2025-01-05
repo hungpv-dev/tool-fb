@@ -26,17 +26,14 @@ def process_newsfeed(account):
     
     while True:
         checkProxy = True
-        dirextension = None
         proxy = account.get('proxy')
         updateStatusAcount(account['id'],2)
         if proxy:
             checkProxy = check_proxy(proxy)
-            if checkProxy:
-                dirextension = create_proxy_extension(proxy)
 
         try:
             if checkProxy == True:
-                manager = Browser(f"/newsfeed/{account['id']}/home",dirextension)
+                manager = Browser(f"/newsfeed/{account['id']}/home",proxy)
                 browser = manager.start()
                 break
             else:
@@ -51,8 +48,10 @@ def process_newsfeed(account):
 
 
     try:
+        # browser.get('https://whatismyipaddress.com')
+        # sleep(10000)
         browser.get("https://facebook.com")
-        newfeed = NewFeed(browser,account,dirextension)
+        newfeed = NewFeed(browser,account,proxy)
         newfeed.handle()
         sleep(10)
     except Exception as e:

@@ -1,4 +1,4 @@
-from selenium import webdriver
+from seleniumwire import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
@@ -13,9 +13,9 @@ import os
 
 
 class Browser:
-    def __init__(self, account='/hung', dirextension=None, browser_type='edge'):
+    def __init__(self, account='/hung', proxy=None, browser_type='firefox'):
         self.account = account
-        self.dirextension = dirextension
+        self.proxy = proxy
         self.browser_type = browser_type  # Chọn loại trình duyệt
         base_profile_dir = "./profiles" + account
 
@@ -40,9 +40,6 @@ class Browser:
         if self.profile_dir != './profiles/crawl':
             chrome_options.add_argument(f"--user-data-dir={self.profile_dir}")
 
-        if self.dirextension:
-            chrome_options.add_extension(self.dirextension)
-
         if headless:
             chrome_options.add_argument("--headless=new")
             chrome_options.add_argument("--no-sandbox")
@@ -55,8 +52,16 @@ class Browser:
         chrome_options.add_argument("--disable-dev-shm-usage")
 
         try:
+            seleniumwire_options = {}
+            if self.proxy:
+                proxy = self.proxy
+                seleniumwire_options['proxy'] = {
+                    'http': f'http://{proxy["user"]}:{proxy["pass"]}@{proxy["ip"]}:{proxy["port"]}',
+                    'https': f'http://{proxy["user"]}:{proxy["pass"]}@{proxy["ip"]}:{proxy["port"]}',
+                    'no_proxy': 'localhost, 127.0.0.1'
+                }
             service = Service('chromedriver.exe')
-            driver = webdriver.Chrome(service=service, options=chrome_options)
+            driver = webdriver.Chrome(service=service, options=chrome_options,seleniumwire_options=seleniumwire_options)
             return driver
         except Exception as e:
             logging.error(f"Error starting Chrome browser: {e}")
@@ -64,23 +69,55 @@ class Browser:
 
     def start_firefox(self, headless):
         firefox_options = FirefoxOptions()
+        seleniumwire_options = {}
 
+        # Đảm bảo rằng profile là chính xác để tránh dùng profile mặc định
         if self.profile_dir and self.profile_dir != '/profiles/crawl':
             firefox_options.set_preference("browser.download.dir", self.profile_dir)
 
         if headless:
             firefox_options.add_argument("--headless")
+            firefox_options.add_argument("--disable-gpu")  # Giảm tải đồ họa
+            firefox_options.add_argument("--no-sandbox")  # Giúp Firefox chạy ổn định trong container hoặc môi trường hạn chế
 
+        # Vô hiệu hóa thông báo push và thay đổi ngôn ngữ
         firefox_options.set_preference("dom.webnotifications.enabled", False)
         firefox_options.set_preference("intl.accept_languages", "en-US, en")
 
+        # Tối ưu hóa việc duy trì kết nối lâu dài
+        firefox_options.set_preference("network.http.keep-alive", True)  # Duy trì kết nối HTTP để giảm thiểu độ trễ
+        firefox_options.set_preference("network.http.max-conns", 100)    # Giới hạn kết nối tối đa
+        firefox_options.set_preference("network.http.max-persistent-conns-per-server", 10)
+
+        # Cấu hình cache (giảm thiểu việc tải lại dữ liệu không cần thiết)
+        firefox_options.set_preference("browser.cache.disk.enable", False)
+        firefox_options.set_preference("browser.cache.memory.enable", False)
+
+        # Tắt việc lưu lịch sử trình duyệt
+        firefox_options.set_preference("places.history.enabled", False)
+        firefox_options.set_preference("browser.privatebrowsing.autostart", True)  # Chế độ duyệt riêng tư luôn bật
+
         try:
             service = FirefoxService(GeckoDriverManager().install())
-            driver = webdriver.Firefox(service=service, options=firefox_options)
-            if self.dirextension:
-                print(self.dirextension)
-                # driver.install_addon(self.dirextension)
-            logging.info("Firefox browser started successfully.")
+            if self.proxy:
+                proxy = self.proxy
+                seleniumwire_options['proxy'] = {
+                    'http': f'http://{proxy["user"]}:{proxy["pass"]}@{proxy["ip"]}:{proxy["port"]}',
+                    'https': f'http://{proxy["user"]}:{proxy["pass"]}@{proxy["ip"]}:{proxy["port"]}',
+                    'no_proxy': 'localhost, 127.0.0.1'  
+                }
+            driver = webdriver.Firefox(
+                service=service,
+                options=firefox_options,
+                seleniumwire_options=seleniumwire_options
+            )
+            # Cấu hình để duy trì session
+            driver.set_page_load_timeout(60)  # Thời gian chờ tải trang tối đa
+            driver.set_script_timeout(60)     # Thời gian chờ script chạy tối đa
+
+            # Thiết lập xử lý tự động các tình huống lỗi có thể xảy ra (timeout, mất kết nối)
+            # driver.implicitly_wait(10)  # Đợi ngầm định tối đa 10s khi truy vấn các phần tử
+
             return driver
         except Exception as e:
             logging.error(f"Error starting Firefox browser: {e}")
@@ -93,9 +130,6 @@ class Browser:
         if self.profile_dir != '/profiles/crawl':
             edge_options.add_argument(f"--user-data-dir={self.profile_dir}")
 
-        # Thêm extension nếu có
-        if self.dirextension:
-            edge_options.add_extension(self.dirextension)
 
         # Chạy ở chế độ headless nếu cần
         if headless:
@@ -115,9 +149,18 @@ class Browser:
         edge_options.add_argument("--remote-debugging-port=0")
 
         try:
+            seleniumwire_options = {}
+            if self.proxy:
+                proxy = self.proxy
+                seleniumwire_options['proxy'] = {
+                    'http': f'http://{proxy["user"]}:{proxy["pass"]}@{proxy["ip"]}:{proxy["port"]}',
+                    'https': f'http://{proxy["user"]}:{proxy["pass"]}@{proxy["ip"]}:{proxy["port"]}',
+                    'no_proxy': 'localhost, 127.0.0.1'
+                }
+                
             service = EdgeService(EdgeChromiumDriverManager().install())
             # Cài đặt và khởi tạo WebDriver cho Edge
-            driver = webdriver.Edge(service=service, options=edge_options)
+            driver = webdriver.Edge(service=service, options=edge_options,seleniumwire_options=seleniumwire_options)
             logging.info("Edge browser started successfully.")
             return driver
         except Exception as e:
