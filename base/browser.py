@@ -89,6 +89,11 @@ class Browser:
         firefox_options.set_preference("network.http.max-conns", 100)    # Giới hạn kết nối tối đa
         firefox_options.set_preference("network.http.max-persistent-conns-per-server", 10)
 
+        firefox_options.add_argument("--disable-logging")  # Tắt logging
+        firefox_options.add_argument("--disable-dev-shm-usage")  # Sử dụng bộ nhớ ảo thay vì tạo file tạm
+        firefox_options.add_argument("--disable-background-networking")  # Tắt background networking
+        firefox_options.add_argument("--disable-cache")  # Vô hiệu hóa cache
+
         # Cấu hình cache (giảm thiểu việc tải lại dữ liệu không cần thiết)
         firefox_options.set_preference("browser.cache.disk.enable", False)
         firefox_options.set_preference("browser.cache.memory.enable", False)
