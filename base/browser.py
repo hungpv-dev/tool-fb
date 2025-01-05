@@ -13,7 +13,7 @@ import os
 
 
 class Browser:
-    def __init__(self, account='/hung', proxy=None, browser_type='firefox'):
+    def __init__(self, account='/hung', proxy=None, browser_type='chrome'):
         self.account = account
         self.proxy = proxy
         self.browser_type = browser_type  # Chọn loại trình duyệt
@@ -21,6 +21,8 @@ class Browser:
         
         if not os.path.exists(base_profile_dir):
             os.makedirs(base_profile_dir, mode=0o755)
+        
+        os.chmod(base_profile_dir, 0o755)
 
         self.profile_dir = base_profile_dir
 
