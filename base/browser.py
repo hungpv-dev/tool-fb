@@ -13,7 +13,7 @@ import os
 
 
 class Browser:
-    def __init__(self, account='/hung', proxy=None, browser_type='firefox'):
+    def __init__(self, account='/hung', proxy=None, browser_type='chrome'):
         self.account = account
         self.proxy = proxy
         self.browser_type = browser_type  # Chọn loại trình duyệt

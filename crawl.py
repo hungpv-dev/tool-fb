@@ -27,8 +27,8 @@ def process_crawl(count):
                     'info': info
                 })
                 break
-            except:
-                print(f'Đang khởi động lại tab {count}!, chờ 10s ...')
+            except Exception as e:
+                print(f'=========\nĐang khởi động lại tab {count}!, chờ 10s ... \n{e}\n====================')
                 sleep(10)
 
         crawl = CrawlId(browser, system)
