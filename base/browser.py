@@ -18,9 +18,9 @@ class Browser:
         self.proxy = proxy
         self.browser_type = browser_type  # Chọn loại trình duyệt
         base_profile_dir = "./profiles" + account
-
+        
         if not os.path.exists(base_profile_dir):
-            os.makedirs(base_profile_dir)
+            os.makedirs(base_profile_dir, mode=0o755)
 
         self.profile_dir = base_profile_dir
 
