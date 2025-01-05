@@ -5,7 +5,8 @@ class HistoryCrawlPage(Model):
         super().__init__()
 
     def insert(self, data):
-        return self.post("history-crawl-page", data=data)
+        res = self.post("history-crawl-page", data=data)
+        return res
     
     def update(self, history_id, data):
             return self.put(f"history-crawl-page/{history_id}", data=data)

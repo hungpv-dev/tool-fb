@@ -33,6 +33,7 @@
 
 from base.browser import Browser
 from time import sleep
+from selenium.webdriver.common.by import By
 
 proxy = {
     'ip': '207.228.20.5',
@@ -43,24 +44,12 @@ proxy = {
 
 manager = Browser('/hung',proxy)
 driver = manager.start(False)
-driver.get("https://whatismyipaddress.com")
-sleep(10)
+driver.get("https://facebook.com")
+
+driver.find_element(By.ID,'email').send_keys('0333026322')
+driver.find_element(By.ID,'pass').send_keys('@Zthuong1994')
+
+# driver.find_element(By.NAME,'login').click()
+
+sleep(1000)
 driver.quit()
-
-
-
-# # Khởi tạo options cho Firefox
-# options = FirefoxOptions()
-
-# # Khởi tạo WebDriver với selenium-wire
-
-
-# # Khởi tạo Firefox WebDriver với cấu hình selenium-wire và proxy
-# driver = webdriver.Firefox(
-#     service=FirefoxService(GeckoDriverManager().install()),
-#     options=options,
-#     seleniumwire_options=seleniumwire_options
-# )
-
-
-
