@@ -141,7 +141,7 @@ class CrawlId:
                 name = name_page.text.strip()
                 dataUpdatePage['name'] = name
             else: 
-                return ValueError(f'Không tìm thấy name page: {page["id"]}')
+                raise ValueError(f'Không tìm thấy name page: {page["id"]}')
             
             try:
                 verified_elements = name_page.find_elements(By.XPATH, types['verify_account'])

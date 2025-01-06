@@ -16,32 +16,33 @@ def process_crawl(count):
     manager = None
     system = None
     print(f'Đang mở tab: {count}')
-    try:
-        manager = Browser('/crawl')
-        browser = manager.start()
-        while True:
-            try:
-                browser.get("https://facebook.com")
-                info = get_system_info()
-                system = system_instance.insert({
-                    'info': info
-                })
-                break
-            except Exception as e:
-                print(f'=========\nĐang khởi động lại tab {count}!, chờ 10s ... \n{e}\n====================')
-                sleep(10)
+    while True: 
+        try:
+            manager = Browser('/crawl')
+            browser = manager.start()
+            while True:
+                try:
+                    browser.get("https://facebook.com")
+                    info = get_system_info()
+                    system = system_instance.insert({
+                        'info': info
+                    })
+                    break
+                except Exception as e:
+                    print(f'=========\nĐang khởi động lại tab {count}!, chờ 10s ... \n{e}\n====================')
+                    sleep(10)
 
-        crawl = CrawlId(browser, system)
-        crawl.handle()
-    except Exception as e:
-        print(f"Lỗi trong Crawl: {e}")
-    finally:
-        print(f'==> Đang đóng tab: {count}')
-        if system:
-            system_instance.update(system['id'], {'status': 2})
-        if browser:
-            browser.quit()
-            manager.cleanup()
+            crawl = CrawlId(browser, system)
+            crawl.handle()
+        except Exception as e:
+            print(f"Lỗi trong Crawl: {e}")
+        finally:
+            print(f'==> Đang đóng tab: {count}')
+            if system:
+                system_instance.update(system['id'], {'status': 2})
+            if browser:
+                browser.quit()
+            sleep(10)
 
 def crawl(countGet):
     try:
