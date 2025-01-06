@@ -1,6 +1,7 @@
 import inquirer
 from rich.console import Console
 from rich.panel import Panel
+import subprocess
 from rich.text import Text
 import warnings
 from terminal.action import post,newsfeed,fanpage,login
@@ -16,6 +17,7 @@ def main():
         "Lấy bài viết NewsFeed",
         "Đăng bài viết",
         "Đăng nhập",
+        "Update phiên bản",
         "Thoát"
     ]
     
@@ -35,6 +37,14 @@ def main():
             post()
         elif action == "Đăng nhập": 
             login()
+        elif action == "Update phiên bản": 
+            try:
+                subprocess.run(['git','reset','--hard'],check=True)
+                subprocess.run(['git','clean','-fd'],check=True)
+                subprocess.run(['git','pull'],check=True)
+                print("Cập nhật phiên bản thành công!")
+            except subprocess.CalledProcessError as e:
+                print(f"Đã có lỗi khi thực thi lệnh git: {e}")
         else:
             console.print("Thoát chương trình.")
 
