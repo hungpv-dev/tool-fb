@@ -10,6 +10,7 @@ from push import push
 from time import sleep
 from helpers.inp import selected_proxy
 from facebook.helpers import login as loginfacebook
+from helpers.inp import check_proxy
 from newsfeed import newsfeed as newfeedhandle
 
 account = Account()
@@ -57,15 +58,23 @@ def login():
 
     selectAccount = accounts_answers['accounts']
     if selectAccount:
-        manager = Browser()
-        browser = manager.start(False)
-        browser.get("https://facebook.com")
         console.print(f"[bold yellow]Tài khoản đã chọn:[/] [bold cyan]{selectAccount}[/]")
         try:
             selected_account = next(account for account in accounts if account['name'] == selectAccount)
-            loginfacebook(browser,selected_account)
-            sleep(99999999)
-        except:        
+            checkProxy = True
+            proxy = selected_account.get('proxy')
+            if proxy:
+                checkProxy = check_proxy(proxy)
+            if checkProxy:
+                manager = Browser('/login',proxy)
+                browser = manager.start(False)
+                browser.get('https://facebook.com')
+                loginfacebook(browser,selected_account)
+                sleep(99999999)
+            else:
+               console.print(f"[bold red]Không dùng được proxy :[/] [bold cyan]{proxy['ip']}:{proxy['port']}[/]")
+        except Exception as e:
+            print(e)        
             console.print(f"[bold red]Đăng nhập thất bại :[/] [bold cyan]{selectAccount}[/]")
     else:
         console.print("Bạn đã không chọn tài khoản.")

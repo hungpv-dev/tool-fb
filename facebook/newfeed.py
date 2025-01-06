@@ -41,6 +41,7 @@ class NewFeed:
                 print('Đã duyệt xong, chờ 30s để tiếp tục...')
                 sleep(30)
             except Exception as e:
+                log_newsfeed(account,'Lỗi xảy ra, thử lại sau 5p....!')
                 print(f"Lỗi khi xử lý lấy dữ liệu!: {e}")
                 updateStatusAcount(self.account['id'],1)
                 if self.account.get('latest_cookie'): 
@@ -68,7 +69,6 @@ class PageChecker:
 
     def run(self, account):
         # Xử lý page mới
-        processes = []
         while True:
             print(f"Chuyển hướng tới trang chủ!")
             # Mở trang cá nhân
@@ -78,13 +78,10 @@ class PageChecker:
                 profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
                 profile_button.click()
             except Exception as e:
-                log_newsfeed(account,f"Không mở modal trang cá nhân, đóng tài khoản!")
-                self.terminate_processes(processes)  # Đóng tiến trình
-                self.listPages = set() # Xóa danh sách page
+                log_newsfeed(account,f"Không mở được modal trang cá nhân, đóng tài khoản (khả năng k login được)!")
                 raise ValueError('Không thể mở trang cá nhân!')
 
-            sleep(5)
-
+            sleep(15)
             # Tìm tất cả các page
             allPages = self.browser.find_elements(By.XPATH, '//div[contains(@aria-label, "Switch to")]')
             print(f'Số fanpage để lướt: {len(allPages)}')
@@ -102,9 +99,6 @@ class PageChecker:
                     process = Process(target=handleCrawlNewFeed, args=(account,name,self.dirextension))
                     process_get = Process(target=crawlNewFeed, args=(account,self.dirextension))
                     process_get_two = Process(target=crawlNewFeed, args=(account,self.dirextension))
-                    processes.append(process)
-                    processes.append(process_get)
-                    processes.append(process_get_two)
                     process.start()
                     process_get.start()
                     process_get_two.start()
@@ -114,8 +108,6 @@ class PageChecker:
 
             except Exception as e:
                 print(f"Lỗi trong quá trình xử lý: {e}")
-                self.terminate_processes(processes)
-                self.listPages = set() # Xóa danh sách page
                 raise
 
     def terminate_processes(self, processes):

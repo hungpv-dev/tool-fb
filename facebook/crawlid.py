@@ -134,14 +134,9 @@ class CrawlId:
     def updateInfoFanpage(self, page):
         dataUpdatePage = {}
         try:
-            name_pages = self.browser.find_elements(By.XPATH, '//h1')
-            
-            if name_pages:
-                name_page = name_pages[-1]
-                name = name_page.text.strip()
-                dataUpdatePage['name'] = name
-            else: 
-                raise ValueError(f'Không tìm thấy name page: {page["id"]}')
+            name_page = self.browser.find_element(By.XPATH, '(//h1)[last()]')
+            name = name_page.text.strip()
+            dataUpdatePage['name'] = name
             
             try:
                 verified_elements = name_page.find_elements(By.XPATH, types['verify_account'])

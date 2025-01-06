@@ -75,105 +75,103 @@ def handleCrawlNewFeed(account, name, dirextension = None):
     newfeed_instance = NewFeedModel()
     account_cookie_instance = AccountCookies()
     pathProfile = f"/newsfeed/{account['id']}/{str(uuid.uuid4())}"
+    manager = None
+    browser = None
     while True:
         try:
-            manager = None
-            browser = None
-            while True:
-                try:
-                    manager = Browser(pathProfile,dirextension)
-                    browser = manager.start()
-                    break
-                except Exception as e:
-                    log_newsfeed(account,f"{name} k dùng được proxy, chờ 30s để thử lại")
-                    sleep(30)
-            
-            print(f'Chuyển hướng tới fanpage: {name}')
-            while True:
-                browser.get("https://facebook.com")
-                cookie = login(browser,account)
-                sleep(2)
-                try:
-                    profile_button = browser.find_element(By.XPATH, push['openProfile'])
-                    profile_button.click()
-                except Exception as e:
-                    print(f"Không thể mở profile: {name}")
-                sleep(2)
+            manager = Browser(pathProfile,dirextension)
+            browser = manager.start()
+            break
+        except Exception as e:
+            log_newsfeed(account,f"{name} k dùng được proxy, chờ 30s để thử lại")
+            sleep(30)
 
-                try:
-                    switchPage = browser.find_element(By.XPATH, push['switchPage'](name))
-                    switchPage.click()
-                    break
-                except Exception as e:
-                    print(f"Không thể chuyển hướng tới fanpage: {name}")
-                
-                print('Chờ 30s để thử chuyển hướng lại')
-                sleep(30)
-            
-            sleep(2)
-            closeModal(1,browser)
-            pageLinkPost = f"/posts/"
-            pageLinkStory = "https://www.facebook.com/permalink.php"
-            
+    print(f'Chuyển hướng tới fanpage: {name}')
+    while True:
+        browser.get("https://facebook.com")
+        cookie = login(browser,account)
+        sleep(2)
+        try:
+            profile_button = browser.find_element(By.XPATH, push['openProfile'])
+            profile_button.click()
+            sleep(15)
+        except Exception as e:
+            print(f"Không thể mở profile: {name}")
+        sleep(1)
+        try:
+            switchPage = browser.find_element(By.XPATH, push['switchPage'](name))
+            switchPage.click()
+            sleep(10)
+            break
+        except Exception as e:
+            print(f"Không thể chuyển hướng tới fanpage: {name}")
+        
+        print('Chờ 30s để thử chuyển hướng lại')
+        sleep(30)
+    
+    sleep(2)
+    closeModal(1,browser)
+    pageLinkPost = f"/posts/"
+    pageLinkStory = "https://www.facebook.com/permalink.php"
+    
+    browser.execute_script("document.body.style.zoom='0.2';")
+    sleep(3)
+    
+    listId = set() 
+    log_newsfeed(account,f"====================Thực thi cào fanpage {name}=====================")
+    while True: 
+        listPosts = browser.find_elements(By.XPATH, types['list_posts']) 
+        actions = ActionChains(browser)
+        if len(listPosts) <= 0:
+            break
+        
+        for p in listPosts:
+            try:
+                idAreaPost = p.get_attribute('aria-posinset')
+                if idAreaPost not in listId:
+                    listId.add(idAreaPost)
+                    links = p.find_elements(By.XPATH, ".//a")
+                    for link in links:
+                            if link.is_displayed() and link.size['width'] > 0 and link.size['height'] > 0:
+                                actions.move_to_element(link).perform()
+                                href = link.get_attribute('href')
+                                post_id = ''
+                                if any(substring in href for substring in [pageLinkPost, pageLinkStory]):
+                                    if pageLinkPost in href:
+                                        post_id = href.replace(pageLinkPost, '').split('?')[0]
+                                        post_id = post_id.split('/')[-1]
+                                    elif pageLinkStory in href:
+                                        parsed_url = urlparse(href)
+                                        query_params = parse_qs(parsed_url.query)
+                                        post_id = query_params.get('story_fbid', [None])[0]
+                                    if post_id == '': continue
+
+                                    account_cookie_instance.updateCount(account['latest_cookie']['id'], 'counts')
+                                    data = {
+                                        'post_fb_id': post_id,
+                                        'post_fb_link': href,
+                                        'status': 1,
+                                        'cookie_id': cookie['id'],
+                                        'account_id': cookie['account_id'],
+                                    }
+                                    newfeed_instance.insert(data)
+            except Exception as e:
+                print("Phần tử đã không còn tồn tại, tìm lại phần tử.")
+                continue
+    
+        if len(listId) >= 20:
+            browser.refresh() 
+            sleep(2)  
+            listId.clear() 
             browser.execute_script("document.body.style.zoom='0.2';")
             sleep(3)
-            
-            listId = set() 
-            log_newsfeed(account,f"====================Thực thi cào fanpage {name}=====================")
-            while True: 
-                listPosts = browser.find_elements(By.XPATH, types['list_posts']) 
-                actions = ActionChains(browser)
-                
-                for p in listPosts:
-                    try:
-                        idAreaPost = p.get_attribute('aria-posinset')
-                        if idAreaPost not in listId:
-                            listId.add(idAreaPost)
-                            links = p.find_elements(By.XPATH, ".//a")
-                            for link in links:
-                                    if link.is_displayed() and link.size['width'] > 0 and link.size['height'] > 0:
-                                        actions.move_to_element(link).perform()
-                                        href = link.get_attribute('href')
-                                        post_id = ''
-                                        if any(substring in href for substring in [pageLinkPost, pageLinkStory]):
-                                            if pageLinkPost in href:
-                                                post_id = href.replace(pageLinkPost, '').split('?')[0]
-                                                post_id = post_id.split('/')[-1]
-                                            elif pageLinkStory in href:
-                                                parsed_url = urlparse(href)
-                                                query_params = parse_qs(parsed_url.query)
-                                                post_id = query_params.get('story_fbid', [None])[0]
-                                            if post_id == '': continue
+            print('Load lại trang!')
+        else:
+            browser.execute_script("window.scrollBy(0, 500);")
+        sleep(5)
 
-                                            account_cookie_instance.updateCount(account['latest_cookie']['id'], 'counts')
-                                            data = {
-                                                'post_fb_id': post_id,
-                                                'post_fb_link': href,
-                                                'status': 1,
-                                                'cookie_id': cookie['id'],
-                                                'account_id': cookie['account_id'],
-                                            }
-                                            newfeed_instance.insert(data)
-                    except Exception as e:
-                        print("Phần tử đã không còn tồn tại, tìm lại phần tử.")
-                        continue
-            
-                if len(listId) >= 20:
-                    browser.refresh() 
-                    sleep(2)  
-                    listId.clear() 
-                    browser.execute_script("document.body.style.zoom='0.2';")
-                    sleep(3)
-                    print('Load lại trang!')
-                else:
-                    browser.execute_script("window.scrollBy(0, 500);")
-                sleep(5)
-        except Exception as e:
-            log_newsfeed(account,f"==========================Đóng fanpage {name}================================\n{str(e)}\n=======================")
-            if browser:
-                browser.quit()
-                manager.cleanup()
-        sleep(30)
+    log_newsfeed(account,f"==========================Đóng fanpage {name}=================================")
+
 
     
 def is_valid_link(href, post):

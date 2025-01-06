@@ -25,6 +25,7 @@ error_instance = Error()
 def process_newsfeed(account):
     browser = None
     manager = None
+    proxy = account.get('proxy')
 
     print(f'=========={account["name"]}============')
     while True:
@@ -66,7 +67,6 @@ def newsfeed(ids):
     try:
         print('\n==================== Lấy bài viết NewsFeed ====================')
         fullpath = os.path.abspath(f'./profiles/newsfeed')
-        print(fullpath)
         if os.path.exists(fullpath):
             shutil.rmtree(fullpath)  
         processes = []
