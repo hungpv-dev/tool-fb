@@ -74,7 +74,7 @@ class Crawl:
             except Exception as e:
                 continue
         if not modal:
-            raise
+            return
         else:
             aria_posinset = modal.get_attribute("aria-posinset")
             if aria_posinset is not None:
