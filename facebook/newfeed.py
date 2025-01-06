@@ -65,50 +65,54 @@ class PageChecker:
     def __init__(self, browser, dirextension):
         self.browser = browser
         self.dirextension = dirextension
-        self.listPages = set() 
 
     def run(self, account):
         # Xử lý page mới
-        while True:
-            print(f"Chuyển hướng tới trang chủ!")
-            # Mở trang cá nhân
+        print(f"Chuyển hướng tới trang chủ!")
+        # Mở trang cá nhân
+        try:
+            self.browser.get('https://facebook.com')
+            sleep(2)
+            profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
+            profile_button.click()
+        except Exception as e:
+            log_newsfeed(account,f"Không mở được modal trang cá nhân, đóng tài khoản (khả năng k login được)!")
+            raise ValueError('Không thể mở trang cá nhân!')
+
+        sleep(10)
+        # Tìm tất cả các page
+        allPages = self.browser.find_elements(By.XPATH, '//div[contains(@aria-label, "Switch to")]')
+        print(f'Số fanpage để lướt: {len(allPages)}')
+
+        for page in allPages:
+            name = page.text.strip()
+            print(f'=================={name}================')
+            
+            # Khởi tạo các process
+            process = Process(target=handleCrawlNewFeed, args=(account, name, self.dirextension))
+            process_get = Process(target=crawlNewFeed, args=(account, name,self.dirextension))
+            process_get_two = Process(target=crawlNewFeed, args=(account, name,self.dirextension))
             try:
-                self.browser.get('https://facebook.com')
-                sleep(2)
-                profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
-                profile_button.click()
-            except Exception as e:
-                log_newsfeed(account,f"Không mở được modal trang cá nhân, đóng tài khoản (khả năng k login được)!")
-                raise ValueError('Không thể mở trang cá nhân!')
+                # Bắt đầu các process
+                process.start()
+                process_get.start()
+                process_get_two.start()
 
-            sleep(15)
-            # Tìm tất cả các page
-            allPages = self.browser.find_elements(By.XPATH, '//div[contains(@aria-label, "Switch to")]')
-            print(f'Số fanpage để lướt: {len(allPages)}')
-
-            new_pages = []
-            for page in allPages:
-                name = page.text.strip()
-                if name not in self.listPages:
-                    new_pages.append(name)
-                    self.listPages.add(name)
-
-            try:
-                for name in new_pages:
-                    print(f'=================={name}================')
-                    process = Process(target=handleCrawlNewFeed, args=(account,name,self.dirextension))
-                    process_get = Process(target=crawlNewFeed, args=(account,self.dirextension))
-                    process_get_two = Process(target=crawlNewFeed, args=(account,self.dirextension))
-                    process.start()
-                    process_get.start()
-                    process_get_two.start()
-
-                # Đợi 5 phút trước khi kiểm tra lại
-                sleep(300)
-
+                # Đợi các process hoàn thành
+                process.join()
+                process_get.join()
+                process_get_two.join()
             except Exception as e:
                 print(f"Lỗi trong quá trình xử lý: {e}")
-                raise
+            finally:
+                # Đảm bảo process được dừng nếu gặp lỗi
+                if process.is_alive():
+                    process.terminate()
+                if process_get.is_alive():
+                    process.terminate()
+                if process_get_two.is_alive():
+                    process.terminate()
+
 
     def terminate_processes(self, processes):
         """Hàm đóng tất cả tiến trình"""
