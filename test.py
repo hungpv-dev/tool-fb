@@ -44,10 +44,10 @@ proxy = {
 
 manager = Browser('/hung',proxy)
 driver = manager.start(False)
-driver.get("https://facebook.com")
+driver.get("https://ipecho.net")
 
-driver.find_element(By.ID,'email').send_keys('0333026322')
-driver.find_element(By.ID,'pass').send_keys('@Zthuong1994')
+# driver.find_element(By.ID,'email').send_keys('0333026322')
+# driver.find_element(By.ID,'pass').send_keys('@Zthuong1994')
 
 # driver.find_element(By.NAME,'login').click()
 

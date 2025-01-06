@@ -25,7 +25,8 @@ error_instance = Error()
 def process_newsfeed(account):
     browser = None
     manager = None
-    
+
+    print(f'=========={account["name"]}============')
     while True:
         checkProxy = True
         proxy = account.get('proxy')
@@ -42,7 +43,7 @@ def process_newsfeed(account):
                 raise Exception("Proxy không hợp lệ")
         except Exception as e:
             error_instance.insertContent(e)
-            print(f"Không thể khởi tạo trình duyệt, thử lại sau 30s phút...")
+            print(f"Không thể khởi tạo trình duyệt, thử lại sau 30s...")
             updateStatusAcount(account['id'],6)
             sleep(30)
             account = account_instance.find(account['id'])
@@ -64,6 +65,10 @@ def process_newsfeed(account):
 def newsfeed(ids):
     try:
         print('\n==================== Lấy bài viết NewsFeed ====================')
+        fullpath = os.path.abspath(f'./profiles/newsfeed')
+        print(fullpath)
+        if os.path.exists(fullpath):
+            shutil.rmtree(fullpath)  
         processes = []
         for id in ids:
             account = account_instance.find(id)

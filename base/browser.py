@@ -40,12 +40,15 @@ class Browser:
         chrome_options = Options()
         
         if self.profile_dir != './profiles/crawl':
-            chrome_options.add_argument(f"--user-data-dir={self.profile_dir}")
+            full_path = os.path.abspath(self.profile_dir)
+            chrome_options.add_argument(f"--user-data-dir={full_path}")
+            pass
 
         if headless:
             chrome_options.add_argument("--headless=new")
             chrome_options.add_argument("--no-sandbox")
 
+        chrome_options.add_argument("--remote-debugging-port=9222")
         chrome_options.add_argument("--disable-notifications")
         chrome_options.add_argument("--disable-translate")
         chrome_options.add_argument("--disable-blink-features=AutomationControlled")
