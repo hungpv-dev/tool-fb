@@ -16,6 +16,7 @@ from helpers.logs import log_newsfeed
 from sql.system import System
 from sql.errors import Error
 import unicodedata
+import os
 from sql.account_cookies import AccountCookies
 from urllib.parse import urlparse, parse_qs
 from helpers.system import get_system_info
@@ -74,8 +75,8 @@ def updateStatusAcount(account_id, status):
 def handleCrawlNewFeed(account, name, dirextension = None):
     newfeed_instance = NewFeedModel()
     account_cookie_instance = AccountCookies()
-    account_id = account.get('id', 'unknown_id')  
-    pathProfile = f"/newsfeed/{account_id}/{uuid.uuid4()}"
+    account_id = account.get('id', 'default_id')
+    pathProfile = os.path.join("./profiles/newsfeed", str(account_id), str(uuid.uuid4()))
     manager = None
     browser = None
     while True:
@@ -189,8 +190,8 @@ def remove_accents(input_str):
     return ''.join([c for c in nfkd_form if not unicodedata.combining(c)])
 
 def crawlNewFeed(account,dirextension):
-    account_id = account.get('id', 'unknown_id')  
-    pathProfile = f"/newsfeed/{account_id}/{uuid.uuid4()}"
+    account_id = account.get('id', 'default_id')
+    pathProfile = os.path.join("./profiles/newsfeed", str(account_id), str(uuid.uuid4()))
     account_cookie_instance = AccountCookies()
     while True:
         try:
@@ -278,6 +279,8 @@ def crawlNewFeed(account,dirextension):
                     newfeed_instance.destroy(id)
         except Exception as e:
             log_newsfeed(account,f"==========> Dừng quá trình thực thi")
+            break
+        finally:
             if system:
                 system_instance.update(system['id'], {'status': 2})
             if browser:

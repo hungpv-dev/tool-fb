@@ -56,7 +56,7 @@ def process_newsfeed(account):
         # browser.get('https://whatismyipaddress.com')
         # sleep(10000)
         browser.get("https://facebook.com")
-        newfeed = NewFeed(browser,account,proxy)
+        newfeed = NewFeed(browser,account,extension)
         newfeed.handle()
         sleep(10)
     except Exception as e:
