@@ -41,6 +41,7 @@ class Browser:
         
         if self.profile_dir != './profiles/crawl':
             full_path = os.path.abspath(self.profile_dir)
+            print(full_path)
             chrome_options.add_argument(f"--user-data-dir={full_path}")
             pass
 
