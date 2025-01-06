@@ -11,7 +11,6 @@ from sql.pagePosts import PagePosts
 from selenium.common.exceptions import StaleElementReferenceException
 from sql.newsfeed import NewFeedModel
 from base.browser import Browser
-import uuid
 from helpers.logs import log_newsfeed
 from sql.system import System
 from sql.errors import Error
@@ -174,8 +173,6 @@ def handleCrawlNewFeed(account, name, dirextension = None):
 
     log_newsfeed(account,f"==========================Đóng fanpage {name}=================================")
 
-
-    
 def is_valid_link(href, post):
     """
     Kiểm tra xem URL có hợp lệ hay không:
@@ -288,16 +285,39 @@ def crawlNewFeed(account,dirextension):
                 manager.cleanup()
         sleep(30)
     
+
 def push_list(posts,account,dirextension):
+    from sql.pagePosts import PagePosts
+    page_post_instance = PagePosts()
+    error_instance = Error()
+    from facebook.push import Push
     try:
-        from base.browser import Browser
-        from facebook.push import Push
-        manager = Browser(f"/push/{account['id']}/{uuid()}",dirextension)
+        manager = Browser(f"/push/{account['id']}/{str(uuid.uuid4())}",dirextension)
         browser = manager.start()
+        sleep(3)
         browser.get('https://facebook.com')
         cookie = login(browser,account)
-        print(json.dumps(posts))
-        sleep(500000)
+        push = Push(browser,account,dirextension)
+        print(f"{account.get('name')} => đăng: {len(posts)} bài viết")
+        for post in posts:
+            try:
+                page = post.get('page')
+                name = push.switchPage(page)
+                push.push(page,post,name)
+                page_post_instance.update_status(post['id'],{
+                    'status':2,
+                    'cookie_id': cookie['id']
+                })
+                awaitSleep = int(post.get('await', 0)) * 60 * 60
+                print(f'=====>{name}: cần đợi {awaitSleep}s để đănb bài tiếp theo!')
+                sleep(awaitSleep)
+            except Exception as e:
+                print(e)
+                error_instance.insertContent(e)
+                page_post_instance.update_status(post['id'],{
+                    'status':4,
+                    'cookie_id': cookie['id']
+                })
         sleep(5)
     except Exception as e:
         print(f'Lỗi khi xử lý đăng bài: {e}')

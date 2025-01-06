@@ -47,16 +47,19 @@ class Push:
                     raise ValueError('Không tìm thấy tài khoản')
                 self.account = account
                 cookie = login(self.browser,self.account)
+                updateStatusAcountCookie(cookie['id'], 2)
+                print(f'==================Đăng bài ({account["name"]})================')
                 updateStatusAcount(self.account['id'],4) # Đang đăng bài
                 self.handleData(cookie);          
             except Exception as e:
+                log_push(account,'Lỗi xảy ra, thử lại sau 5p....!')
                 print(f"Lỗi khi xử lý đăng bài!: {e}")
                 updateStatusAcount(self.account['id'],1)
                 if self.account.get('latest_cookie'): 
                     updateStatusAcountCookie(self.account['latest_cookie']['id'], 1)
                 self.error_instance.insertContent(e)
-                print("Thử lại sau 5 phút...")
-                sleep(300)
+                print("Thử lại sau 1 phút...")
+                sleep(60)
             except KeyboardInterrupt: 
                 if self.account.get('latest_cookie'): 
                     updateStatusAcountCookie(self.account['latest_cookie']['id'], 2)
@@ -72,6 +75,8 @@ class Push:
                     worker_thread = threading.Thread(target=push_list, args=(listTimes,self.account,self.dirextension))
                     worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
                     worker_thread.start()
+                else:
+                    print(f"{self.account.get('name')} chưa có bài nào cần đăng trong khung giờ này!")
                 
                 # self.browseFanpage(cookie)
             except Exception as e:
@@ -113,6 +118,7 @@ class Push:
             print(f"Lỗi trong quá trình crawl: {e}")
             raise e
         
+    
     def getListPage(self):
         while True:
             try:
@@ -133,9 +139,20 @@ class Push:
 
             sleep(300)
 
-    def showPage(self, name):
+
+
+    # Xử lý đăng
+    def switchPage(self, page):
+        name = page['name']
+        try:
+            self.browser.get(page['link'])
+            sleep(2)
+            name = self.crawlid_instance.updateInfoFanpage(page)
+        except Exception as e:
+            pass
         print('-> Mở popup thông tin cá nhân!')
         profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
+        sleep(5)
         profile_button.click()
         sleep(3)
         try:
@@ -144,8 +161,11 @@ class Push:
         except Exception as e:
             print("-> Không tìm thấy nút chuyển hướng tới trang quản trị!")
         sleep(3)
+        return name
         
-    def push(self,page, up, name):
+    def push(self,page,post,name):
+        self.browser.get(page['link'])
+        sleep(2)
         self.browser.execute_script("document.body.style.zoom='0.4';")
         sleep(2)
         try:
@@ -170,8 +190,8 @@ class Push:
             sleep(1)
             input_element = self.browser.switch_to.active_element
             print('- Gán nội dung bài viết!')
-            input_element.send_keys(up['content'])
-            media = up['media']
+            input_element.send_keys(post['content'])
+            media = post['media']
             if media is not None: 
                 images = media['images']
                 if images is not None and len(images) > 0:
@@ -193,8 +213,8 @@ class Push:
             except:
                 pass
             sleep(10)
-            self.afterUp(page,up,name) # Lấy link bài viết vừa đăng
-            sleep(3)
+            self.afterUp(page,post,name) # Lấy link bài viết vừa đăng
+            sleep(2)
             print('\n--------- Đăng bài thành công ---------\n')
         except Exception as e:
             raise e
@@ -205,7 +225,7 @@ class Push:
         # self.browser.get(page['link'])
         # sleep(2)
         # self.browser.execute_script("document.body.style.zoom='0.4';")
-        sleep(5)
+        sleep(2)
         pageLinkPost = f"{page['link']}/posts/"
         pageLinkStory = "https://www.facebook.com/permalink.php"
         link_up = ''
@@ -239,9 +259,9 @@ class Push:
             self.error_instance.insertContent(e)
             print(f"Không tìm thấy bài viết vừa đăng! {e}")
         
+        print('Đã lấy được link up')
         updatePagePostInfo(up['id'],{'link_up': link_up}) # Cập nhật trạng thái đã đăng
         sleep(2)
-
         
         comments = up.get('comments', [])
         if comments and len(comments) > 0:
@@ -259,9 +279,6 @@ class Push:
                     self.comment_instance.update_pp(comment['id'],{'status': 2})
             except Exception as e:
                 print(f"Lỗi khi xử lý comment: {e}")
-        else:
-            self.browser.get('https://www.facebook.com')  
-            sleep(3)
                 
                 
         

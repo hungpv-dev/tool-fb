@@ -15,8 +15,10 @@ from extensions.auth_proxy import create_proxy_extension
 from facebook.helpers import updateStatusAcount
 from helpers.inp import check_proxy
 from helpers.logs import log_push
+from sql.errors import Error
 
 account_instance = Account()
+error_instance = Error()
 
 def process_push(account):
     browser = None
@@ -33,20 +35,19 @@ def process_push(account):
                 dirextension = create_proxy_extension(proxy)
 
         try:
-            manager = Browser(f"/push/{account['id']}/home",dirextension)
-            browser = manager.start()
-            break
+            if checkProxy == True:
+                manager = Browser(f"/push/{account['id']}/home",dirextension)
+                browser = manager.start()
+                break
+            else:
+                raise Exception("Proxy không hợp lệ")
         except Exception as e:
-            print(e) 
-            print(f"Không thể khởi tạo trình duyệt với proxy: {proxy['ip']}:{proxy['port']}, thử lại sau 3 phút...")
+            error_instance.insertContent(e)
+            print(f"Không thể khởi tạo trình duyệt, thử lại sau 30s...")
             updateStatusAcount(account['id'],6)
-            log_push(account,"Lỗi k dùng được cookiew")
-            sleep(180)
+            sleep(30)
             account = account_instance.find(account['id'])
     
-    if checkProxy == False:
-        raise Exception(f"Không thể sử dụng proxy: {proxy['ip']}:{proxy['port']}")
-
     try:
         browser.get("https://facebook.com")
         crawl = Push(browser,account,dirextension)
@@ -60,6 +61,10 @@ def process_push(account):
 
 def push(ids):
     try:
+        print('\n==================== Đăng bài viết ====================')
+        fullpath = os.path.abspath(f'./profiles/push')
+        if os.path.exists(fullpath):
+            shutil.rmtree(fullpath)  
         processes = []
         for id in ids:
             account = account_instance.find(id)
