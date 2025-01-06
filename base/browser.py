@@ -50,6 +50,8 @@ class Browser:
             chrome_options.add_argument("--no-sandbox")
             chrome_options.add_argument("--disable-gpu")
             chrome_options.add_argument("--enable-unsafe-swiftshader")
+            chrome_options.add_argument("--disable-webgl")
+            chrome_options.add_argument("--use-gl=swiftshader")
 
         chrome_options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36')
         chrome_options.add_argument("--disable-notifications")
