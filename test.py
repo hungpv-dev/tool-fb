@@ -28,22 +28,28 @@
 # crawl.likePost()
 
 # # print(json.dumps(data,indent=4))
+
 # sleep(1000)
 
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
+from base.browser import Browser
 from time import sleep
+from selenium.webdriver.common.by import By
 
+proxy = {
+    'ip': '207.228.20.5',
+    'port': '45774',
+    'user': 'SszaLu98T4t2h4S',
+    'pass': '703sNOIwSCHa1Wg',
+}
 
-chrome_options = Options()
-chrome_options.add_extension("extensions/62_164_255_151.zip")
+manager = Browser('/hung',proxy)
+driver = manager.start(False)
+driver.get("https://facebook.com")
 
-service = Service(ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service, options=chrome_options)
-driver.get("https://whatismyipaddress.com")
+driver.find_element(By.ID,'email').send_keys('0333026322')
+driver.find_element(By.ID,'pass').send_keys('@Zthuong1994')
+
+# driver.find_element(By.NAME,'login').click()
+
 sleep(1000)
 driver.quit()
-
-

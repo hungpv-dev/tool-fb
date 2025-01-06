@@ -36,7 +36,8 @@ def process_push(account):
             manager = Browser(f"/push/{account['id']}/home",dirextension)
             browser = manager.start()
             break
-        except: 
+        except Exception as e:
+            print(e) 
             print(f"Không thể khởi tạo trình duyệt với proxy: {proxy['ip']}:{proxy['port']}, thử lại sau 3 phút...")
             updateStatusAcount(account['id'],6)
             log_push(account,"Lỗi k dùng được cookiew")

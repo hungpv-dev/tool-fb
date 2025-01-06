@@ -55,7 +55,7 @@ class NewFeed:
                 
 
     def crawlNewFeed(self,account):
-        log_newsfeed(account,f"Thực thi lấy dữ liệu tài khoản")
+        log_newsfeed(account,f"**********************************")
         checker = PageChecker(self.browser, self.dirextension)
         checker.run(account)
         

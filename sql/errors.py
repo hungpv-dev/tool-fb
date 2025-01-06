@@ -13,10 +13,11 @@ class Error(Model):
             "error_type": type(e).__name__,  # Lấy tên loại lỗi (vd: TypeError)
             "traceback": traceback.format_exc()  # Ngữ cảnh lỗi đầy đủ (tuỳ chọn)
         }
-        # Insert vào database
-        self.insert({
-            'content': str(content)  # Lưu dạng chuỗi
-        })
+        if e:
+            # Insert vào database
+            self.insert({
+                'content': str(content)  # Lưu dạng chuỗi
+            })
         return str(content)
     
     def update(self, history_id, data):

@@ -41,7 +41,7 @@ def login(browser, account):
             browser.find_element(By.XPATH, types['form-logout'])
         except Exception as e:
             updateStatusAcountCookie(last_cookie['id'],1)
-            raise ValueError("Cookie không đăng nhập được.")
+            raise ValueError(f"{account['name']} không đăng nhập được.")
         print(f"Login {account['name']} thành công")
         return last_cookie
     except Exception as e:
@@ -74,95 +74,106 @@ def updateStatusAcount(account_id, status):
 def handleCrawlNewFeed(account, name, dirextension = None):
     newfeed_instance = NewFeedModel()
     account_cookie_instance = AccountCookies()
-    try:
-        manager = Browser(f"/newsfeed/{account['id']}/{str(uuid.uuid4())}",dirextension)
-        browser = manager.start()
-        log_newsfeed(account,f"Cào page {name}")
-        print(f'Chuyển hướng tới fanpage: {name}')
-        while True:
-            browser.get("https://facebook.com")
-            cookie = login(browser,account)
-            sleep(2)
-            try:
-                profile_button = browser.find_element(By.XPATH, push['openProfile'])
-                profile_button.click()
-            except Exception as e:
-                print(f"Không thể mở profile: {name}")
-            sleep(2)
-
-            try:
-                switchPage = browser.find_element(By.XPATH, push['switchPage'](name))
-                switchPage.click()
-                break
-            except Exception as e:
-                print(f"Không thể chuyển hướng tới fanpage: {name}")
-            
-            print('Chờ 30s để thử chuyển hướng lại')
-            sleep(30)
-        
-        sleep(2)
-        closeModal(1,browser)
-        pageLinkPost = f"/posts/"
-        pageLinkStory = "https://www.facebook.com/permalink.php"
-        
-        browser.execute_script("document.body.style.zoom='0.2';")
-        sleep(3)
-        
-        listId = set() 
-        log_newsfeed(account,f"================================Thực thi cào fanpage {name}==================================")
-        while True: 
-            listPosts = browser.find_elements(By.XPATH, types['list_posts']) 
-            actions = ActionChains(browser)
-            
-            for p in listPosts:
+    pathProfile = f"/newsfeed/{account['id']}/{str(uuid.uuid4())}"
+    while True:
+        try:
+            manager = None
+            browser = None
+            while True:
                 try:
-                    idAreaPost = p.get_attribute('aria-posinset')
-                    if idAreaPost not in listId:
-                        listId.add(idAreaPost)
-                        links = p.find_elements(By.XPATH, ".//a")
-                        for link in links:
-                                if link.is_displayed() and link.size['width'] > 0 and link.size['height'] > 0:
-                                    actions.move_to_element(link).perform()
-                                    href = link.get_attribute('href')
-                                    post_id = ''
-                                    if any(substring in href for substring in [pageLinkPost, pageLinkStory]):
-                                        if pageLinkPost in href:
-                                            post_id = href.replace(pageLinkPost, '').split('?')[0]
-                                            post_id = post_id.split('/')[-1]
-                                        elif pageLinkStory in href:
-                                            parsed_url = urlparse(href)
-                                            query_params = parse_qs(parsed_url.query)
-                                            post_id = query_params.get('story_fbid', [None])[0]
-                                        if post_id == '': continue
+                    manager = Browser(pathProfile,dirextension)
+                    browser = manager.start()
+                    break
+                except Exception as e:
+                    log_newsfeed(account,f"{name} k dùng được proxy, chờ 30s để thử lại")
+                    sleep(30)
+            
+            print(f'Chuyển hướng tới fanpage: {name}')
+            while True:
+                browser.get("https://facebook.com")
+                cookie = login(browser,account)
+                sleep(2)
+                try:
+                    profile_button = browser.find_element(By.XPATH, push['openProfile'])
+                    profile_button.click()
+                except Exception as e:
+                    print(f"Không thể mở profile: {name}")
+                sleep(2)
 
-                                        account_cookie_instance.updateCount(account['latest_cookie']['id'], 'counts')
-                                        data = {
-                                            'post_fb_id': post_id,
-                                            'post_fb_link': href,
-                                            'status': 1,
-                                            'cookie_id': cookie['id'],
-                                            'account_id': cookie['account_id'],
-                                        }
-                                        newfeed_instance.insert(data)
-                except StaleElementReferenceException:
-                    print("Phần tử đã không còn tồn tại, tìm lại phần tử.")
-                    continue
-        
-            if len(listId) >= 20:
-                browser.refresh() 
-                sleep(2)  
-                listId.clear() 
-                browser.execute_script("document.body.style.zoom='0.2';")
-                sleep(3)
-                print('Load lại trang!')
-            else:
-                browser.execute_script("window.scrollBy(0, 500);")
-            sleep(5)
-    except Exception as e:
-        log_newsfeed(account,f"==========================Đóng fanpage {name}================================\n{str(e)}\n=======================")
-        if browser:
-            browser.quit()
-            manager.cleanup()
+                try:
+                    switchPage = browser.find_element(By.XPATH, push['switchPage'](name))
+                    switchPage.click()
+                    break
+                except Exception as e:
+                    print(f"Không thể chuyển hướng tới fanpage: {name}")
+                
+                print('Chờ 30s để thử chuyển hướng lại')
+                sleep(30)
+            
+            sleep(2)
+            closeModal(1,browser)
+            pageLinkPost = f"/posts/"
+            pageLinkStory = "https://www.facebook.com/permalink.php"
+            
+            browser.execute_script("document.body.style.zoom='0.2';")
+            sleep(3)
+            
+            listId = set() 
+            log_newsfeed(account,f"====================Thực thi cào fanpage {name}=====================")
+            while True: 
+                listPosts = browser.find_elements(By.XPATH, types['list_posts']) 
+                actions = ActionChains(browser)
+                
+                for p in listPosts:
+                    try:
+                        idAreaPost = p.get_attribute('aria-posinset')
+                        if idAreaPost not in listId:
+                            listId.add(idAreaPost)
+                            links = p.find_elements(By.XPATH, ".//a")
+                            for link in links:
+                                    if link.is_displayed() and link.size['width'] > 0 and link.size['height'] > 0:
+                                        actions.move_to_element(link).perform()
+                                        href = link.get_attribute('href')
+                                        post_id = ''
+                                        if any(substring in href for substring in [pageLinkPost, pageLinkStory]):
+                                            if pageLinkPost in href:
+                                                post_id = href.replace(pageLinkPost, '').split('?')[0]
+                                                post_id = post_id.split('/')[-1]
+                                            elif pageLinkStory in href:
+                                                parsed_url = urlparse(href)
+                                                query_params = parse_qs(parsed_url.query)
+                                                post_id = query_params.get('story_fbid', [None])[0]
+                                            if post_id == '': continue
+
+                                            account_cookie_instance.updateCount(account['latest_cookie']['id'], 'counts')
+                                            data = {
+                                                'post_fb_id': post_id,
+                                                'post_fb_link': href,
+                                                'status': 1,
+                                                'cookie_id': cookie['id'],
+                                                'account_id': cookie['account_id'],
+                                            }
+                                            newfeed_instance.insert(data)
+                    except Exception as e:
+                        print("Phần tử đã không còn tồn tại, tìm lại phần tử.")
+                        continue
+            
+                if len(listId) >= 20:
+                    browser.refresh() 
+                    sleep(2)  
+                    listId.clear() 
+                    browser.execute_script("document.body.style.zoom='0.2';")
+                    sleep(3)
+                    print('Load lại trang!')
+                else:
+                    browser.execute_script("window.scrollBy(0, 500);")
+                sleep(5)
+        except Exception as e:
+            log_newsfeed(account,f"==========================Đóng fanpage {name}================================\n{str(e)}\n=======================")
+            if browser:
+                browser.quit()
+                manager.cleanup()
+        sleep(30)
 
     
 def is_valid_link(href, post):
@@ -179,84 +190,100 @@ def remove_accents(input_str):
     return ''.join([c for c in nfkd_form if not unicodedata.combining(c)])
 
 def crawlNewFeed(account,dirextension):
+    pathProfile = f"/newsfeed/{account['id']}/{str(uuid.uuid4())}"
     account_cookie_instance = AccountCookies()
-    try:
-        from facebook.crawl import Crawl
-        system_instance = System()
-        newfeed_instance = NewFeedModel()
-        log_newsfeed(account,f"Thực thi bài viết vô đb")
-        error_instance = Error()
-        info = get_system_info()
-        system = system_instance.insert({
-            'info': info
-        })
-        manager = Browser(f"/newsfeed/{account['id']}/{str(uuid.uuid4())}",dirextension)
-        browser = manager.start()
-        browser.get('https://facebook.com')
-        sleep(1)
-        login(browser,account)
-        sleep(2)
-        browser.get('https://facebook.com')
-        crawl_instance = Crawl(browser)
-        log_newsfeed(account,f"Bắt đầu thực thi lưu bài viết")
-        while True:
-            try:
-                up = newfeed_instance.first({'account_id': account['id']})
-                if up is None:
-                    print('Hiện chưa có bài viết nào cần lấy! chờ 1p để tiếp tục...')
-                    sleep(60)
-                    continue
-                id = up['id']
-                browser.get(up['post_fb_link'])
-                up['newfeed'] = 1
-                up['id'] = up['post_fb_id']
-                up['link'] = up['post_fb_link']
+    while True:
+        try:
+            from facebook.crawl import Crawl
+            system_instance = System()
+            newfeed_instance = NewFeedModel()
+            error_instance = Error()
+            info = get_system_info()
+            system = system_instance.insert({
+                'info': info
+            })
+            browser = None
+            manager = None
+            while True:
                 try:
-                    data = crawl_instance.crawlContentPost({},up,{},True)
+                    manager = Browser(pathProfile,dirextension)
+                    browser = manager.start()
+                    break
                 except Exception as e:
-                    newfeed_instance.destroy(id)
-                    continue
+                    log_newsfeed(account,f"Khi cào lưu db k dùng đc, chờ 30s để thử lại")
+                    sleep(30)
+            browser.get('https://facebook.com')
+            while True:
+                try:
+                    sleep(1)
+                    login(browser,account)
+                    sleep(2)
+                    break
+                except Exception as e:
+                    log_newsfeed(account,f"Không thể đăng nhập tài khoản: {account['name']}")
+                    sleep(30)
 
-                keywords = up.get('keywords') or []
-                check = False
-                
-                post = data.get('post')
-                comments = data.get('comments')
-                post['keywords'] = keywords
-                
-                post_content_no_accents = remove_accents(post['content'].lower())
-                if any(remove_accents(keyword.lower()) in post_content_no_accents for keyword in keywords):
-                    check = True
+            browser.get('https://facebook.com')
+            crawl_instance = Crawl(browser)
+            log_newsfeed(account,f"=> Lưu bài viết <=")
+            while True:
+                try:
+                    up = newfeed_instance.first({'account_id': account['id']})
+                    if up is None:
+                        print('Hiện chưa có bài viết nào cần lấy! chờ 1p để tiếp tục...')
+                        sleep(60)
+                        continue
+                    id = up['id']
+                    browser.get(up['post_fb_link'])
+                    up['newfeed'] = 1
+                    up['id'] = up['post_fb_id']
+                    up['link'] = up['post_fb_link']
+                    try:
+                        data = crawl_instance.crawlContentPost({},up,{},True)
+                    except Exception as e:
+                        newfeed_instance.destroy(id)
+                        continue
 
-                for cm in comments:
-                    comment_content_no_accents = remove_accents(cm['content'].lower())
-                    if any(remove_accents(keyword.lower()) in comment_content_no_accents for keyword in keywords):
+                    keywords = up.get('keywords') or []
+                    check = False
+                    
+                    post = data.get('post')
+                    comments = data.get('comments')
+                    post['keywords'] = keywords
+                    
+                    post_content_no_accents = remove_accents(post['content'].lower())
+                    if any(remove_accents(keyword.lower()) in post_content_no_accents for keyword in keywords):
                         check = True
 
-                if keywords is None or len(keywords) == 0:
-                    if 'media' in post and 'images' in post['media'] and 'videos' in post['media']:
-                        if len(post['media']['images']) > 0 or len(post['media']['videos']) > 0:
+                    for cm in comments:
+                        comment_content_no_accents = remove_accents(cm['content'].lower())
+                        if any(remove_accents(keyword.lower()) in comment_content_no_accents for keyword in keywords):
                             check = True
 
+                    if keywords is None or len(keywords) == 0:
+                        if 'media' in post and 'images' in post['media'] and 'videos' in post['media']:
+                            if len(post['media']['images']) > 0 or len(post['media']['videos']) > 0:
+                                check = True
 
-                if check:
-                    crawl_instance.likePost()
-                    system_instance.update_count(system['id'])
-                    account_cookie_instance.updateCount(account['latest_cookie']['id'], 'count_get')
-                    crawl_instance.insertPostAndComment(post,comments,{},id)
-                else:
+
+                    if check:
+                        crawl_instance.likePost()
+                        system_instance.update_count(system['id'])
+                        account_cookie_instance.updateCount(account['latest_cookie']['id'], 'count_get')
+                        crawl_instance.insertPostAndComment(post,comments,{},id)
+                    else:
+                        newfeed_instance.destroy(id)
+                    sleep(2)
+                except Exception as e:
                     newfeed_instance.destroy(id)
-                sleep(2)
-            except Exception as e:
-                newfeed_instance.destroy(id)
-    except Exception as e:
-        print('Đã có lỗi xảy ra: ',e) 
-        log_newsfeed(account,f"==========> Dừng quá trình thực thi lưu bài viết vô db")
-        if system:
-            system_instance.update(system['id'], {'status': 2})
-        if browser:
-            browser.quit()
-            manager.cleanup()
+        except Exception as e:
+            log_newsfeed(account,f"==========> Dừng quá trình thực thi")
+            if system:
+                system_instance.update(system['id'], {'status': 2})
+            if browser:
+                browser.quit()
+                manager.cleanup()
+        sleep(30)
     
 def push_list(posts,account,dirextension):
     try:

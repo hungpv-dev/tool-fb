@@ -4,6 +4,9 @@ class Page(Model):
     def __init__(self):
         super().__init__()
 
+    def insert(self, data=None):
+        return self.post("pages/insert", data=data)
+
     def get_pages(self, params=None):
         return self.get("pages", params=params)
 

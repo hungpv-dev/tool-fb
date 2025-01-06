@@ -1,7 +1,7 @@
 from io import BytesIO
-from PIL import Image
+# from PIL import Image
 import requests
-import win32clipboard 
+# import win32clipboard 
 
 def copy_image_to_clipboard(image_path_or_url):
     if image_path_or_url.startswith("http"):
@@ -19,7 +19,7 @@ def copy_image_to_clipboard(image_path_or_url):
     output.close()
 
     # Đưa ảnh vào clipboard
-    win32clipboard.OpenClipboard()
-    win32clipboard.EmptyClipboard()
-    win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
-    win32clipboard.CloseClipboard()
+    # win32clipboard.OpenClipboard()
+    # win32clipboard.EmptyClipboard()
+    # win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
+    # win32clipboard.CloseClipboard()
