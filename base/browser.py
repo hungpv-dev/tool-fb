@@ -188,3 +188,4 @@ class Browser:
         if hasattr(self, 'profile_dir') and self.profile_dir:
             import shutil
             shutil.rmtree(self.profile_dir, ignore_errors=True)
+

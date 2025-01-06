@@ -4,6 +4,7 @@ from rich.panel import Panel
 import subprocess
 from rich.text import Text
 import warnings
+from helpers.inp import periodic_cleanup
 from terminal.action import post,newsfeed,fanpage,login
 
 warnings.filterwarnings("ignore", message="Old MapAsync APIs are deprecated")
@@ -17,6 +18,7 @@ def main():
         "Lấy bài viết NewsFeed",
         "Đăng bài viết",
         "Đăng nhập",
+        "Dọn dẹp bộ nhớ",
         "Update phiên bản",
         "Thoát"
     ]
@@ -37,14 +39,22 @@ def main():
             post()
         elif action == "Đăng nhập": 
             login()
+        elif action == "Dọn dẹp bộ nhớ": 
+            periodic_cleanup()
         elif action == "Update phiên bản": 
-            try:
-                subprocess.run(['git','reset','--hard'],check=True)
-                subprocess.run(['git','clean','-fd'],check=True)
-                subprocess.run(['git','pull'],check=True)
-                print("Cập nhật phiên bản thành công!")
-            except subprocess.CalledProcessError as e:
-                print(f"Đã có lỗi khi thực thi lệnh git: {e}")
+            console = Console()
+            questions = [inquirer.Confirm('confirm', message="Bạn có chắc chắn muốn cập nhật phiên bản?", default=True)]
+            answers = inquirer.prompt(questions)
+            if answers and answers['confirm']: 
+                try:
+                    subprocess.run(['git','reset','--hard'], check=True)
+                    subprocess.run(['git','clean','-fd'], check=True)
+                    subprocess.run(['git','pull'], check=True)
+                    console.print("Cập nhật phiên bản thành công!", style="bold green")
+                except subprocess.CalledProcessError as e:
+                    console.print(f"Đã có lỗi khi thực thi lệnh git: {e}", style="bold red")
+            else:
+                console.print("Thoát chương trình.", style="bold yellow")
         else:
             console.print("Thoát chương trình.")
 

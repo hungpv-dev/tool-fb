@@ -119,3 +119,26 @@ def selected_proxy():
 
     return select
 
+import os
+import shutil
+import time
+def periodic_cleanup(interval=300):
+    while True:
+        clear_temp()
+        print("[INFO] Đã dọn dẹp thư mục Temp.chờ 5p để tiếp tục")
+        time.sleep(interval)
+def clear_temp():
+    temp_dir = os.getenv('TEMP')
+    if not temp_dir:
+        return
+    print(f"Thư mục TEMP hiện tại: {temp_dir}")
+    
+    for item in os.listdir(temp_dir):
+        item_path = os.path.join(temp_dir, item)
+        try:
+            if os.path.isdir(item_path):
+                shutil.rmtree(item_path)  # Xóa thư mục
+            else:
+                os.remove(item_path)  # Xóa file
+        except Exception as e:
+            print(f"Không thể xóa {item_path}: {e}")

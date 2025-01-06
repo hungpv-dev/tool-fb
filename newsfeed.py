@@ -71,7 +71,7 @@ def newsfeed(ids):
         print('\n==================== Lấy bài viết NewsFeed ====================')
         fullpath = os.path.abspath(f'./profiles/newsfeed')
         if os.path.exists(fullpath):
-            shutil.rmtree(fullpath)  
+            shutil.rmtree(fullpath,ignore_errors=True)  
         processes = []
         for id in ids:
             account = account_instance.find(id)
