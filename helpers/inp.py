@@ -125,8 +125,9 @@ import time
 def periodic_cleanup(interval=300):
     while True:
         clear_temp()
-        print("[INFO] Đã dọn dẹp thư mục Temp.chờ 5p để tiếp tục")
+        print("[INFO] Đã dọn dẹp thư mục Temp. Chờ 5p để tiếp tục.")
         time.sleep(interval)
+
 def clear_temp():
     temp_dir = os.getenv('TEMP')
     if not temp_dir:
@@ -136,9 +137,11 @@ def clear_temp():
     for item in os.listdir(temp_dir):
         item_path = os.path.join(temp_dir, item)
         try:
-            if os.path.isdir(item_path):
+            if os.path.isdir(item_path):  # Kiểm tra xem có phải thư mục không
                 shutil.rmtree(item_path)  # Xóa thư mục
+                print(f"Đã xóa thư mục: {item_path}")
             else:
-                os.remove(item_path)  # Xóa file
+                # Không làm gì với file, chỉ xóa thư mục
+                pass
         except Exception as e:
             print(f"Không thể xóa {item_path}: {e}")
