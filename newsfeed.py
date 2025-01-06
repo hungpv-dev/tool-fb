@@ -30,14 +30,17 @@ def process_newsfeed(account):
     print(f'=========={account["name"]}============')
     while True:
         checkProxy = True
+        extension = None
         proxy = account.get('proxy')
         updateStatusAcount(account['id'],2)
         if proxy:
             checkProxy = check_proxy(proxy)
+            if checkProxy :
+                extension = create_proxy_extension(proxy)
 
         try:
             if checkProxy == True:
-                manager = Browser(f"/newsfeed/{account['id']}/home",proxy)
+                manager = Browser(f"/newsfeed/{account['id']}/home",extension)
                 browser = manager.start()
                 break
             else:

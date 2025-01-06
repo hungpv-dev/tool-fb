@@ -62,11 +62,14 @@ def login():
         try:
             selected_account = next(account for account in accounts if account['name'] == selectAccount)
             checkProxy = True
+            extension = None
             proxy = selected_account.get('proxy')
             if proxy:
                 checkProxy = check_proxy(proxy)
+                if checkProxy :
+                    extension = create_proxy_extension(proxy)
             if checkProxy:
-                manager = Browser('/login',proxy)
+                manager = Browser('/login',extension)
                 browser = manager.start(False)
                 browser.get('https://facebook.com')
                 loginfacebook(browser,selected_account)

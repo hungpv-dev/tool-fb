@@ -133,46 +133,52 @@ class CrawlId:
         sleep(3)
     def updateInfoFanpage(self, page):
         dataUpdatePage = {}
-        try:
-            name_page = self.browser.find_element(By.XPATH, '(//h1)[last()]')
-            name = name_page.text.strip()
-            dataUpdatePage['name'] = name
-            
+        while True: 
             try:
-                verified_elements = name_page.find_elements(By.XPATH, types['verify_account'])
-                # Kiểm tra tích xanh
-                if verified_elements:
-                    dataUpdatePage['verified'] = 1
-                else:
-                    dataUpdatePage['verified'] = 0
-            except:
-                dataUpdatePage['verified'] = 0
-                pass
-            
-            try: # Lấy lượt like
-                likes = self.browser.find_element(By.CSS_SELECTOR, types['friends_likes'])
-                dataUpdatePage['like_counts'] = likes.text
-            except:
-                pass
-            
-            try: # Lấy follows
-                follows = self.browser.find_element(By.CSS_SELECTOR, types['followers'])
-                dataUpdatePage['follow_counts'] = follows.text
-            except:
-                pass
-            
-            try: # Lấy followning
-                following = self.browser.find_element(By.CSS_SELECTOR, types['following'])
-                dataUpdatePage['following_counts'] = following.text
-            except:
-                pass
+                name_page = self.browser.find_element(By.XPATH, '(//h1)[last()]')
+                name = name_page.text.strip()
+                dataUpdatePage['name'] = name
 
-            dataUpdatePage['status'] = 1
-            self.page_instance.update_page(page['id'],dataUpdatePage)
-            return name
-        except Exception as e:
-            self.page_instance.update_page(page['id'], {'status': 3})  # Không thể truy cập
-            raise e
+                if name == 'This site can’t be reached':
+                    print('Không load được trang đợi 30s,....')
+                    sleep(30)
+                    self.browser.refresh() 
+                
+                try:
+                    verified_elements = name_page.find_elements(By.XPATH, types['verify_account'])
+                    # Kiểm tra tích xanh
+                    if verified_elements:
+                        dataUpdatePage['verified'] = 1
+                    else:
+                        dataUpdatePage['verified'] = 0
+                except:
+                    dataUpdatePage['verified'] = 0
+                    pass
+                
+                try: # Lấy lượt like
+                    likes = self.browser.find_element(By.CSS_SELECTOR, types['friends_likes'])
+                    dataUpdatePage['like_counts'] = likes.text
+                except:
+                    pass
+                
+                try: # Lấy follows
+                    follows = self.browser.find_element(By.CSS_SELECTOR, types['followers'])
+                    dataUpdatePage['follow_counts'] = follows.text
+                except:
+                    pass
+                
+                try: # Lấy followning
+                    following = self.browser.find_element(By.CSS_SELECTOR, types['following'])
+                    dataUpdatePage['following_counts'] = following.text
+                except:
+                    pass
+
+                dataUpdatePage['status'] = 1
+                self.page_instance.update_page(page['id'],dataUpdatePage)
+                return name
+            except Exception as e:
+                self.page_instance.update_page(page['id'], {'status': 3})  # Không thể truy cập
+                raise e
         
    
     
