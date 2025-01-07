@@ -318,16 +318,14 @@ def crawlNewFeed(account,name,dirextension):
             log_newsfeed(account,'Lỗi khi cào lưu db, thử lại sau 30s')
             sleep(30)
 
-    
-
 def push_list(posts,account,dirextension):
     from sql.pagePosts import PagePosts
     page_post_instance = PagePosts()
     error_instance = Error()
     from facebook.push import Push
     try:
-        manager = Browser(f"/push/{account['id']}/{str(uuid.uuid4())}",dirextension)
-        browser = manager.start()
+        manager = Browser(f"/push/{account['id']}/{str(uuid.uuid4())}",dirextension,'chrome',False,True)
+        browser = manager.start(False)
         sleep(3)
         browser.get('https://facebook.com')
         cookie = login(browser,account)
@@ -342,7 +340,7 @@ def push_list(posts,account,dirextension):
                     'status':2,
                     'cookie_id': cookie['id']
                 })
-                awaitSleep = int(post.get('await', 0)) * 60 * 60
+                awaitSleep = int(post.get('await', 0)) * 60
                 print(f'=====>{name}: cần đợi {awaitSleep}s để đănb bài tiếp theo!')
                 sleep(awaitSleep)
             except Exception as e:
@@ -361,3 +359,6 @@ def push_list(posts,account,dirextension):
                 browser.quit()
                 manager.cleanup()
         print('Kết thúc quá trình đăng bài.')
+
+def push_page(page,account):
+    print('HEEELoo')

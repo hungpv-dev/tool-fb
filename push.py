@@ -28,7 +28,7 @@ def process_push(account):
         checkProxy = True
         dirextension = None
         proxy = account.get('proxy')
-        updateStatusAcount(account['id'],2)
+        updateStatusAcount(account['id'],4)
         if proxy:
             checkProxy = check_proxy(proxy)
             if checkProxy:
@@ -52,6 +52,7 @@ def process_push(account):
         browser.get("https://facebook.com")
         crawl = Push(browser,account,dirextension)
         crawl.handle()
+        sleep(10)
     except Exception as e:
         print(f"Lỗi trong push: {e}")
     finally:

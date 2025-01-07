@@ -52,12 +52,22 @@ from time import sleep
 # sleep(1000)
 # driver.quit()
 
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+# from io import BytesIO
+# import win32clipboard
+# from PIL import Image
 
-service = Service(ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service)
-driver.get('https://facebook.com')
-sleep(5)
-driver.quit()
+# def send_to_clipboard(clip_type, data):
+#     win32clipboard.OpenClipboard()
+#     win32clipboard.EmptyClipboard()
+#     win32clipboard.SetClipboardData(clip_type, data)
+#     win32clipboard.CloseClipboard()
+
+# filepath = 'image.png'
+# image = Image.open(filepath)
+
+# output = BytesIO()
+# image.convert("RGB").save(output, "BMP")
+# data = output.getvalue()[14:]
+# output.close()
+
+# send_to_clipboard(win32clipboard.CF_DIB, data)

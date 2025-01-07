@@ -13,9 +13,10 @@ import os
 
 
 class Browser:
-    def __init__(self, account='/hung', proxy=None, browser_type='chrome',anonymous=False):
+    def __init__(self, account='/hung', proxy=None, browser_type='chrome',anonymous=False,loadContent = False):
         self.account = account
         self.anonymous = anonymous
+        self.loadContent = loadContent
         self.proxy = proxy
         self.browser_type = browser_type  # Chọn loại trình duyệt
         base_profile_dir = "./profiles" + account
@@ -53,16 +54,17 @@ class Browser:
             chrome_options.add_argument("--enable-unsafe-swiftshader")
             chrome_options.add_argument("--disable-webgl")
             chrome_options.add_argument("--use-gl=swiftshader")
-
-        prefs = {
-            "profile.managed_default_content_settings.images": 2,  # Tắt tải ảnh
-            "profile.managed_default_content_settings.plugins": 2,  # Tắt tải video
-            "profile.managed_default_content_settings.video": 2,  # Tắt tải video
-            "disk-cache-size": 4096,  # Giới hạn kích thước cache
-            "browser.cache.disk.enable": False,  # Tắt cache
-            "browser.cache.memory.enable": False,  # Tắt cache trong bộ nhớ
-        }
-        chrome_options.add_experimental_option("prefs", prefs)
+        
+        if self.loadContent == False:
+            prefs = {
+                "profile.managed_default_content_settings.images": 2,  # Tắt tải ảnh
+                "profile.managed_default_content_settings.plugins": 2,  # Tắt tải video
+                "profile.managed_default_content_settings.video": 2,  # Tắt tải video
+                "disk-cache-size": 4096,  # Giới hạn kích thước cache
+                "browser.cache.disk.enable": False,  # Tắt cache
+                "browser.cache.memory.enable": False,  # Tắt cache trong bộ nhớ
+            }
+            chrome_options.add_experimental_option("prefs", prefs)
         chrome_options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36')
         chrome_options.add_argument("--disable-notifications")
         chrome_options.add_argument('--ignore-certificate-errors')

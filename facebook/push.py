@@ -22,7 +22,7 @@ import pyautogui
 from helpers.logs import log_push
 import threading
 from PIL import Image
-from facebook.helpers import login,updateStatusAcount,updateStatusAcountCookie,updatePagePostInfo,push_list
+from facebook.helpers import login,updateStatusAcount,updateStatusAcountCookie,updatePagePostInfo,push_list,push_page
 
 
 class Push:
@@ -52,7 +52,7 @@ class Push:
                 updateStatusAcount(self.account['id'],4) # Đang đăng bài
                 self.handleData(cookie);          
             except Exception as e:
-                log_push(account,'Lỗi xảy ra, thử lại sau 5p....!')
+                log_push(account,'Login in không thành công, thử lại sau 5p....!')
                 print(f"Lỗi khi xử lý đăng bài!: {e}")
                 updateStatusAcount(self.account['id'],1)
                 if self.account.get('latest_cookie'): 
@@ -67,7 +67,15 @@ class Push:
 
     def handleData(self,cookie):    
         print('Bắt đầu xử lý dữ liệu')
+        listPages = set()
         while True: 
+            try:
+                profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
+            except Exception as e:
+                log_push(self.account,'==> Bị thoát login!!!')
+                updateStatusAcount(self.account['id'],1)
+                raise ValueError('==> Bị thoát login!!!')
+
             try:
                 listTimes = self.browseTime()
                 if(len(listTimes) > 0):
@@ -78,45 +86,31 @@ class Push:
                 else:
                     print(f"{self.account.get('name')} chưa có bài nào cần đăng trong khung giờ này!")
                 
-                # self.browseFanpage(cookie)
+                awaitListPage = self.getAwaitListPage()
+                for pot in awaitListPage:
+                    if pot and 'id' in pot:
+                        log_push(self.account,f'=======Theo dõi: {pot.get("name")}')
+                        print(f'=======Theo dõi: {pot.get("name")}')
+                        page_id = pot.get('id')  
+                        worker_thread = threading.Thread(target=push_page, args=(pot,self.account))
+                        worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
+                        worker_thread.start()
+                        listPages.add(page_id)
             except Exception as e:
-                raise e
+                print(e)
             
             print('Chờ 60s để tiếp tục...')
             sleep(60)
+            
     
     def browseTime(self):
         listPosts = self.pagePosts_instance.get_post_time({'account_id': self.account['id']})
         return listPosts
         
 
-    def browseFanpage(self,cookie):
-        print('Duyệt danh sách fanpage')
-        try:
-            listPages = self.getListPage()
-            for page in listPages:
-                try:
-                    print(f'==================={page["name"]}==================')
-                    pp = self.pagePosts_instance.first({'page_id': page['id']})
-                    if pp is None:
-                        print('==> Fanpage này không có bài viết nào cần đăng!')
-                        continue
-                    
-                    self.account_cookie_instance.updateCount(pp['id'],'counts')
-                    updatePagePostInfo(pp['id'],{'status': 3, 'cookie_id': cookie['id']}) # Đang thực thi
-                    self.browser.get(page['link'])
-                    sleep(1)
-                    name = self.crawlid_instance.updateInfoFanpage(page)
-                    self.showPage(name) # Hiển thị ra fanpage
-                    self.push(page, pp, name)
-                    updatePagePostInfo(pp['id'],{'status': 2}) # Đã thực thi
-                except Exception as e:
-                    updatePagePostInfo(pp['id'],{'status': 4}) # Gặp lỗi
-                    print(f"Lỗi khi xử lý page {page['name']}: {e}")
-                    self.error_instance.insertContent(e)
-        except Exception as e:
-            print(f"Lỗi trong quá trình crawl: {e}")
-            raise e
+    def getAwaitListPage(self):
+        listPosts = self.pagePosts_instance.get_post_list({'user_id': self.account['id']})
+        return listPosts
         
     
     def getListPage(self):
