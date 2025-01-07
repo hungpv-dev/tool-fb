@@ -8,6 +8,7 @@ from multiprocessing import Process
 from sql.account_cookies import AccountCookies
 from sql.accounts import Account
 import json
+from threading import Thread
 from selenium.webdriver.common.action_chains import ActionChains
 from helpers.modal import closeModal
 from facebook.helpers import login,updateStatusAcount,updateStatusAcountCookie,handleCrawlNewFeed
@@ -61,6 +62,22 @@ class NewFeed:
         checker.run(account)
         
 
+def process_fanpage(account, name, dirextension):
+    # Tạo các threads để chạy đồng thời
+    threads = [
+        Thread(target=handleCrawlNewFeed, args=(account, name, dirextension)),
+        Thread(target=crawlNewFeed, args=(account, name, dirextension)),
+        Thread(target=crawlNewFeed, args=(account, name, dirextension))
+    ]
+
+    # Khởi chạy các threads
+    for thread in threads:
+        thread.start()
+
+    # Đợi các threads hoàn thành
+    for thread in threads:
+        thread.join()
+
 class PageChecker:
     def __init__(self, browser, dirextension):
         self.browser = browser
@@ -83,35 +100,23 @@ class PageChecker:
         # Tìm tất cả các page
         allPages = self.browser.find_elements(By.XPATH, '//div[contains(@aria-label, "Switch to")]')
         print(f'Số fanpage để lướt: {len(allPages)}')
+        processes = []
 
         for page in allPages:
             name = page.text.strip()
             print(f'=================={name}================')
-            
             # Khởi tạo các process
-            process = Process(target=handleCrawlNewFeed, args=(account, name, self.dirextension))
-            process_get = Process(target=crawlNewFeed, args=(account, name,self.dirextension))
-            process_get_two = Process(target=crawlNewFeed, args=(account, name,self.dirextension))
-            try:
-                # Bắt đầu các process
-                process.start()
-                process_get.start()
-                process_get_two.start()
+            process = Process(target=process_fanpage, args=(account, name, self.dirextension))
+            processes.append(process)
+            sleep(2)
 
-                # Đợi các process hoàn thành
-                process.join()
-                process_get.join()
-                process_get_two.join()
-            except Exception as e:
-                print(f"Lỗi trong quá trình xử lý: {e}")
-            finally:
-                # Đảm bảo process được dừng nếu gặp lỗi
-                if process.is_alive():
-                    process.terminate()
-                if process_get.is_alive():
-                    process.terminate()
-                if process_get_two.is_alive():
-                    process.terminate()
+        for process in processes:
+            process.start()
+
+        # Đợi tất cả tiến trình hoàn thành
+        for process in processes:
+            process.join()
+
 
 
     def terminate_processes(self, processes):

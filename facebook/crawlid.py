@@ -55,9 +55,7 @@ class CrawlId:
             except KeyboardInterrupt:
                 self.history_instance.update(his['id'], {'status': 2})
             except Exception as e:
-                print(f"Lỗi trong quá trình xử lý: {e}")
                 self.history_instance.update(his['id'], {'status': 2})
-                self.error_instance.insertContent(str(e))
                 raise e
         
     def crawlIdFanpage(self, page, his):
@@ -68,7 +66,10 @@ class CrawlId:
         sleep(1)
         closeModal(0,self.browser)
         sleep(5)
-        name = self.updateInfoFanpage(page)
+        try:
+            name = self.updateInfoFanpage(page)
+        except Exception as e:
+            raise ValueError(f'Page {page["id"]} không thể truy cập!')
         print(f'====== {name} ======')
         
         pageLinkPost = f"{page['link']}/posts/"

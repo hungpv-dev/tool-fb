@@ -1,7 +1,4 @@
-import signal
-import multiprocessing
-import os
-import shutil
+import sys
 from selenium.common.exceptions import WebDriverException
 from base.browser import Browser
 from facebook.crawlid import CrawlId
@@ -9,6 +6,7 @@ from time import sleep
 from helpers.inp import terminate_processes
 from sql.system import System
 from helpers.system import get_system_info
+import threading
 
 def process_crawl(count):
     system_instance = System()
@@ -18,7 +16,7 @@ def process_crawl(count):
     print(f'Đang mở tab: {count}')
     while True: 
         try:
-            manager = Browser('/crawl')
+            manager = Browser('/crawl',None,'chrome',True)
             browser = manager.start()
             while True:
                 try:
@@ -46,17 +44,23 @@ def process_crawl(count):
 
 def crawl(countGet):
     try:
-        processes = []
+        threads = []
         for count in range(countGet):
-            crawl_process = multiprocessing.Process(target=process_crawl,args=(count,))
-            processes.append(crawl_process)
-            crawl_process.start()
-            sleep(2)
+            thread = threading.Thread(target=process_crawl, args=(count,))
+            threads.append(thread)
+            thread.start()
+            sleep(1)
 
-        for process in processes:
-            process.join()
+
+        for thread in threads:
+            thread.join()
+
         print("Tất cả các tài khoản đã được xử lý.")
     except Exception as e:
         print(f"Lỗi không mong muốn: {e}")
     finally:
-        terminate_processes(processes)
+        print("Đang đóng tất cả tài nguyên...")
+        for thread in threads:
+            print(f"Đang dừng thread {thread}")
+        sys.exit(0)
+

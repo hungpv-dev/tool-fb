@@ -77,7 +77,7 @@ def handleCrawlNewFeed(account, name, dirextension = None):
     error_instance = Error()
     account_cookie_instance = AccountCookies()
     account_id = account.get('id', 'default_id')
-    pathProfile = f"./profiles/newsfeed/{str(account_id)}/{str(uuid.uuid4())}"
+    pathProfile = f"/newsfeed/{str(account_id)}/{str(uuid.uuid4())}"
     while True:
         try:
             manager = None
@@ -85,8 +85,8 @@ def handleCrawlNewFeed(account, name, dirextension = None):
             while True:
                 try:
                     manager = Browser(pathProfile,dirextension)
-                    browser = manager.start()
-                    sleep(3)
+                    browser = manager.start(False)
+                    sleep(5)
                     break
                 except Exception as e:
                     log_newsfeed(account,f"{name} k dùng được proxy, chờ 30s để thử lại")
@@ -134,7 +134,6 @@ def handleCrawlNewFeed(account, name, dirextension = None):
                 actions = ActionChains(browser)
                 
                 listPosts = browser.find_elements(By.XPATH, types['list_posts']) 
-                log_newsfeed(account,'=> Đang cào <=')
                 
                 for p in listPosts:
                     try:
@@ -160,7 +159,6 @@ def handleCrawlNewFeed(account, name, dirextension = None):
                                         if post_id == '': continue
 
                                         account_cookie_instance.updateCount(account['latest_cookie']['id'], 'counts')
-                                        log_newsfeed(account,'* 1 đường dẫn *')
                                         data = {
                                             'post_fb_id': post_id,
                                             'post_fb_link': href,
@@ -168,7 +166,9 @@ def handleCrawlNewFeed(account, name, dirextension = None):
                                             'cookie_id': cookie['id'],
                                             'account_id': cookie['account_id'],
                                         }
-                                        newfeed_instance.insert(data)
+                                        res = newfeed_instance.insert(data)
+                                        log_newsfeed(account, f"* +1 đường dẫn * {str(res.get('data', {}).get('id', 'Không có id'))}")
+
                     except Exception as e:
                         print("Phần tử đã không còn tồn tại, tìm lại phần tử.")
                         continue
@@ -204,7 +204,7 @@ def remove_accents(input_str):
 
 def crawlNewFeed(account,name,dirextension):
     account_id = account.get('id', 'default_id')
-    pathProfile = f"./profiles/newsfeed/{str(account_id)}/{str(uuid.uuid4())}"
+    pathProfile = f"/newsfeed/{str(account_id)}/{str(uuid.uuid4())}"
     account_cookie_instance = AccountCookies()
     from facebook.crawl import Crawl
     system_instance = System()
@@ -222,7 +222,7 @@ def crawlNewFeed(account,name,dirextension):
                 try:
                     manager = Browser(pathProfile,dirextension)
                     browser = manager.start()
-                    sleep(3)
+                    sleep(5)
                     break
                 except Exception as e:
                     log_newsfeed(account,f"Khi cào lưu db k dùng đc, chờ 30s để thử lại")
@@ -248,7 +248,7 @@ def crawlNewFeed(account,name,dirextension):
 
             browser.get('https://facebook.com')
             crawl_instance = Crawl(browser)
-            log_newsfeed(account,f"=> Lưu bài viết <=")
+            log_newsfeed(account,f"==> Lưu bài viết <==")
             while True:
                 try:
                     profile_button = browser.find_element(By.XPATH, push['openProfile'])
@@ -264,6 +264,8 @@ def crawlNewFeed(account,name,dirextension):
 
                 try:
                     up = newfeed_instance.first({'account_id': account['id']})
+                    log_newsfeed(account,'=> * sử lí lưu đb *')
+
                     if up is None:
                         print('Hiện chưa có bài viết nào cần lấy! chờ 1p để tiếp tục...')
                         sleep(60)
