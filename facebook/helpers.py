@@ -85,7 +85,7 @@ def handleCrawlNewFeed(account, name, dirextension = None):
             while True:
                 try:
                     manager = Browser(pathProfile,dirextension)
-                    browser = manager.start(False)
+                    browser = manager.start()
                     sleep(5)
                     break
                 except Exception as e:
