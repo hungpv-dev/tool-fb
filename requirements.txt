@@ -1,7 +1,5 @@
 webdriver-manager
 selenium
-blinker==1.7.0
-selenium-wire
 dateparser
 requests
 pillow

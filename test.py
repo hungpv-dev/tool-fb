@@ -9,8 +9,6 @@
 #     print(f"Original: {original} -> Converted for DB: {converted}")
 
 
-
-
 # from facebook.crawl import Crawl
 # from base.browser import Browser
 # import json
@@ -31,25 +29,35 @@
 
 # sleep(1000)
 
-from base.browser import Browser
+# from base.browser import Browser
 from time import sleep
-from selenium.webdriver.common.by import By
+# from selenium.webdriver.common.by import By
 
-proxy = {
-    'ip': '207.228.20.5',
-    'port': '45774',
-    'user': 'SszaLu98T4t2h4S',
-    'pass': '703sNOIwSCHa1Wg',
-}
+# proxy = {
+#     'ip': '207.228.20.5',
+#     'port': '45774',
+#     'user': 'SszaLu98T4t2h4S',
+#     'pass': '703sNOIwSCHa1Wg',
+# }
 
-manager = Browser('/hung',proxy)
-driver = manager.start(False)
-driver.get("https://ipecho.net")
+# manager = Browser('/hung',proxy)
+# driver = manager.start(False)
+# driver.get("https://ipecho.net")
 
 # driver.find_element(By.ID,'email').send_keys('0333026322')
 # driver.find_element(By.ID,'pass').send_keys('@Zthuong1994')
 
 # driver.find_element(By.NAME,'login').click()
 
-sleep(1000)
+# sleep(1000)
+# driver.quit()
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
+driver.get('https://facebook.com')
+sleep(5)
 driver.quit()

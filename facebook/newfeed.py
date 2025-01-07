@@ -41,7 +41,7 @@ class NewFeed:
                 print('Đã duyệt xong, chờ 30s để tiếp tục...')
                 sleep(30)
             except Exception as e:
-                log_newsfeed(account,'Lỗi xảy ra, thử lại sau 5p....!')
+                log_newsfeed(account,'Login in không thành công, thử lại sau 5p....!')
                 print(f"Lỗi khi xử lý lấy dữ liệu!: {e}")
                 updateStatusAcount(self.account['id'],1)
                 if self.account.get('latest_cookie'): 
