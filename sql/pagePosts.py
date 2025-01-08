@@ -21,3 +21,9 @@ class PagePosts(Model):
     
     def get_post_list(self, params=None):
         return self.get(f"page-posts-list-page", params=params)
+    
+    def get_page_up(self, params=None):
+        return self.get(f"page-posts-up", params=params)
+    
+    def update_next(self, data=None):
+        return self.post(f"page-posts-up", data=data)

@@ -86,16 +86,17 @@ class Push:
                 else:
                     print(f"{self.account.get('name')} chưa có bài nào cần đăng trong khung giờ này!")
                 
-                awaitListPage = self.getAwaitListPage()
-                for pot in awaitListPage:
-                    if pot and 'id' in pot:
-                        log_push(self.account,f'=======Theo dõi: {pot.get("name")}')
-                        print(f'=======Theo dõi: {pot.get("name")}')
-                        page_id = pot.get('id')  
-                        worker_thread = threading.Thread(target=push_page, args=(pot,self.account))
-                        worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
-                        worker_thread.start()
-                        listPages.add(page_id)
+                # awaitListPage = self.getAwaitListPage()
+                # for pot in awaitListPage:
+                #     if pot and 'id' in pot:
+                #         page_id = pot.get('id')  
+                #         if page_id not in listPages:
+                #             log_push(self.account,f'=======Theo dõi: {pot.get("name")}')
+                #             print(f'=======Theo dõi: {pot.get("name")}')
+                #             worker_thread = threading.Thread(target=push_page, args=(pot,self.account,self.dirextension))
+                #             worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
+                #             worker_thread.start()
+                #             listPages.add(page_id)
             except Exception as e:
                 print(e)
             
@@ -159,8 +160,8 @@ class Push:
         
     def push(self,page,post,name):
         self.browser.get(page['link'])
-        sleep(2)
-        self.browser.execute_script("document.body.style.zoom='0.4';")
+        # sleep(2)
+        # self.browser.execute_script("document.body.style.zoom='0.4';")
         sleep(2)
         try:
             print('==> Bắt đầu đăng bài')
@@ -203,6 +204,7 @@ class Push:
             parent_form.submit()
             sleep(10)
             try:
+                pass
                 closeModal(1,self.browser)
             except:
                 pass

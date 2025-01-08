@@ -69,7 +69,8 @@ def login():
                 if checkProxy :
                     extension = create_proxy_extension(proxy)
             if checkProxy:
-                manager = Browser('/login',extension)
+                print('hndleLogin')
+                manager = Browser('/login',extension,'chrome',False,True)
                 browser = manager.start(False)
                 browser.get('https://facebook.com')
                 loginfacebook(browser,selected_account)

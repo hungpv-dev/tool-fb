@@ -325,7 +325,7 @@ def push_list(posts,account,dirextension):
     from facebook.push import Push
     try:
         manager = Browser(f"/push/{account['id']}/{str(uuid.uuid4())}",dirextension,'chrome',False,True)
-        browser = manager.start(False)
+        browser = manager.start()
         sleep(3)
         browser.get('https://facebook.com')
         cookie = login(browser,account)
@@ -341,7 +341,7 @@ def push_list(posts,account,dirextension):
                     'cookie_id': cookie['id']
                 })
                 awaitSleep = int(post.get('await', 0)) * 60
-                print(f'=====>{name}: cần đợi {awaitSleep}s để đănb bài tiếp theo!')
+                print(f'=====>{name}: cần đợi {awaitSleep}s để đăng bài tiếp theo!')
                 sleep(awaitSleep)
             except Exception as e:
                 print(e)
@@ -360,5 +360,55 @@ def push_list(posts,account,dirextension):
                 manager.cleanup()
         print('Kết thúc quá trình đăng bài.')
 
-def push_page(page,account):
-    print('HEEELoo')
+def push_page(page,account,dirextension):
+    from sql.pagePosts import PagePosts
+    from sql.errors import Error
+    from facebook.push import Push
+    from sql.account_cookies import AccountCookies
+    error_instance = Error()
+    page_post_instance = PagePosts()
+    account_instance = AccountCookies()
+    manager = Browser(f"/push/{account['id']}/{str(uuid.uuid4())}",dirextension,'chrome',False,True)
+    browser = manager.start()
+    sleep(5)
+    push_instance = Push(browser,account,dirextension)
+    sleep(3)
+    browser.get('https://facebook.com')
+    cookie = login(browser,account)
+    while True:
+
+        try:
+            profile_button = browser.find_element(By.XPATH, push['openProfile'])
+        except Exception as e:
+            updateStatusAcount(account['id'],1)
+            break
+        
+        pageUP = page_post_instance.get_page_up({'page_id': page["id"],'account_id':account['id']})
+        if pageUP:
+            try:
+                res = account_instance.updateCount(cookie.get('id'),'counts')
+                name = push_instance.switchPage(page)
+                push_instance.push(page,pageUP,name)
+                page_post_instance.update_status(pageUP['id'],{
+                    'status':2,
+                    'cookie_id': cookie['id']
+                })
+                awaitSleep = int(pageUP.get('await', 0)) * 60
+                print(f'=====>{name}: cần đợi {pageUP.get("await", 0)}p để đăng bài tiếp theo!')
+                sleep(awaitSleep)
+            except Exception as e:
+                error_instance.insertContent(e)
+                page_post_instance.update_status(pageUP['id'],{
+                    'status':4,
+                    'cookie_id': cookie['id']
+                })
+                sleep(5)
+        else: 
+            print('Chưa có bài viết nào trong hàng chờ, chờ 1p để tiếp tục....')
+            sleep(60)
+    
+    if 'browser' in locals():
+        if browser:
+            browser.quit()
+            manager.cleanup()
+    print('Kết thúc quá trình đăng bài.')
