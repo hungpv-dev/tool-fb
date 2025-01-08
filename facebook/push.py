@@ -205,7 +205,7 @@ class Push:
             sleep(10)
             try:
                 pass
-                closeModal(1,self.browser)
+                closeModal(1,self.browser,True)
             except:
                 pass
             sleep(10)

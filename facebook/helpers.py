@@ -325,7 +325,7 @@ def push_list(posts,account,dirextension):
     from facebook.push import Push
     try:
         manager = Browser(f"/push/{account['id']}/{str(uuid.uuid4())}",dirextension,'chrome',False,True)
-        browser = manager.start()
+        browser = manager.start(False)
         sleep(3)
         browser.get('https://facebook.com')
         cookie = login(browser,account)

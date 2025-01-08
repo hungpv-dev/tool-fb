@@ -1,14 +1,22 @@
-from imap_tools import MailBox, AND
+from facebook.mail import MailTool
 
-# Thông tin tài khoản Outlook
-email = 'kartyati697181@hotmail.com'
-password = 'ohJKbfX558'
+# Sử dụng lớp MailTool để kết nối và lấy email
+mail = MailTool(outlook=True)
 
-# Kết nối đến máy chủ IMAP của Outlook
-with MailBox('outlook.office365.com').login(email, password, 'INBOX') as mailbox:
-    # Lấy danh sách email
-    for msg in mailbox.fetch(AND(seen=False)):  # fetch các email chưa đọc
-        print(f"From: {msg.from_}")
-        print(f"Subject: {msg.subject}")
-        print(f"Date: {msg.date}")
-        print(f"Body: {msg.text}")
+# Lấy các email từ "facebook.com", chỉ lấy 1 email đầu tiên
+messages = mail.get_mail("facebook.com", limit=1)
+
+# Chỉ in thông tin của email đầu tiên
+for msg in messages:
+    print("From:", msg.from_)
+    print("Subject:", msg.subject)
+    print("Date:", msg.date)
+    
+    # In ra nội dung văn bản (text body)
+    print("Text body:", msg.text)  # Nội dung email dưới dạng văn bản
+    
+    # In ra nội dung HTML (nếu có)
+    if msg.html:
+        print("HTML body:", msg.html)  # Nội dung email dưới dạng HTML (nếu có)
+    
+    print("-" * 50)

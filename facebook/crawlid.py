@@ -54,8 +54,10 @@ class CrawlId:
                 self.page_instance.update_page(page['id'],{'status':1}) # Đang hoạt động
             except KeyboardInterrupt:
                 self.history_instance.update(his['id'], {'status': 2})
+                self.page_instance.update_page(page['id'],{'status':1}) # Đang hoạt động
             except Exception as e:
                 self.history_instance.update(his['id'], {'status': 2})
+                self.page_instance.update_page(page['id'],{'status':1}) # Đang hoạt động
                 raise e
         
     def crawlIdFanpage(self, page, his):
