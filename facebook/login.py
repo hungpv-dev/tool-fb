@@ -214,8 +214,7 @@ class HandleLogin:
             self.account_instance.update_account(self.account.get('id'),dataUpdate)
             check = True
         except NoSuchElementException as e:
-            res = self.account_instance.update_account(self.account.get('id'),{'status_login':1})
-            print(f"{self.account.get('name')}: {res}")
+            self.account_instance.update_account(self.account.get('id'),{'status_login':1})
             print('Login thất bại, tôi thất bại rồi!')
         return check
 

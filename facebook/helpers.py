@@ -102,6 +102,8 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
                         break
                     account = loginInstance.getAccount()
 
+                updateStatusAcount(account.get('id'),3)
+
                 sleep(2)
                 try:
                     profile_button = browser.find_element(By.XPATH, push['openProfile'])
@@ -195,7 +197,6 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
                     manager.cleanup()
 
     except Exception as e:
-        print(f"E: {e}")
         error_instance.insertContent(e)
     finally:
         log_newsfeed(account,f"==========================Đóng fanpage {name}=================================")
@@ -251,6 +252,8 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                     else:
                         break
                     account = loginInstance.getAccount()
+
+                updateStatusAcount(account.get('id'),3)
 
                 sleep(2)
                 try:
@@ -342,7 +345,6 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
         print(e)
         error_instance.insertContent(e)
     finally:
-        print(stop_event.is_set())
         log_newsfeed(account,f"========> Đóng cào lưu đb {name} <=============")
 
 
