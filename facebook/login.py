@@ -66,6 +66,7 @@ class HandleLogin:
                         code = self.loginEmailAndGetCode() # Lấy code
                         check = self.pushCode(code)
                     except:
+                        self.account_instance.update_account(self.account.get('id'),{'status':1})
                         print(f'{self.account.get("name")} lấy mã từ Audio (chiu)')
                         pass
         except Exception as e:
@@ -205,13 +206,16 @@ class HandleLogin:
         try:
             self.driver.find_element(By.XPATH, push['openProfile'])
             cookies = self.driver.get_cookies()
+            dataUpdate = {
+                'status': 2
+            }
             if saveCookie:
-                self.account_instance.update_account(self.account.get('id'),{'cookie':cookies})
+                dataUpdate['cookie'] = cookies
+            self.account_instance.update_account(self.account.get('id'),dataUpdate)
             check = True
         except NoSuchElementException as e:
             self.account_instance.update_account(self.account.get('id'),{'status':1})
             print('Login thất bại, tôi thất bại rồi!')
-        
         return check
 
 

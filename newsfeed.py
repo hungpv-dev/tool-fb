@@ -32,7 +32,6 @@ def process_newsfeed(account):
         checkProxy = True
         extension = None
         proxy = account.get('proxy')
-        updateStatusAcount(account['id'],3)
         if proxy:
             checkProxy = check_proxy(proxy)
             if checkProxy :

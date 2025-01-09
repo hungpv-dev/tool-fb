@@ -439,7 +439,7 @@ def push_page(page,account,dirextension):
                     profile_button = browser.find_element(By.XPATH, push['openProfile'])
                 except Exception as e:
                     raise e
-                
+                cookie = account.get('latest_cookie')
                 pageUP = page_post_instance.get_page_up({'page_id': page["id"],'account_id':account['id']})
                 if pageUP:
                     try:
