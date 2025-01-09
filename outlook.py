@@ -1,4 +1,4 @@
-from facebook.mail import MailTool
+from facebook.login import MailTool
 
  # Gmail
 # user = "azhung08102004@gmail.com"

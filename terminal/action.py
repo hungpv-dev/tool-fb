@@ -5,13 +5,16 @@ from rich.panel import Panel
 from rich.text import Text
 from base.browser import Browser
 from crawl import crawl
+import os
 from extensions.auth_proxy import create_proxy_extension
 from push import push
 from time import sleep
+from facebook.login import HandleLogin
 from helpers.inp import selected_proxy
 from facebook.helpers import login as loginfacebook
 from helpers.inp import check_proxy
 from newsfeed import newsfeed as newfeedhandle
+import shutil
 
 account = Account()
 console = Console()
@@ -69,12 +72,19 @@ def login():
                 if checkProxy :
                     extension = create_proxy_extension(proxy)
             if checkProxy:
-                print('hndleLogin')
+                fullpath = os.path.abspath(f'./profiles/login')
+                if os.path.exists(fullpath):
+                    shutil.rmtree(fullpath,ignore_errors=True)  
+
                 manager = Browser('/login',extension,'chrome',False,True)
                 browser = manager.start(False)
-                browser.get('https://facebook.com')
-                loginfacebook(browser,selected_account)
-                sleep(99999999)
+
+                try:
+                    login = HandleLogin(browser,selected_account)
+                    login.loginFacebook()
+                    sleep(99999999)
+                except:
+                    raise ValueError('Không login được')
             else:
                console.print(f"[bold red]Không dùng được proxy :[/] [bold cyan]{proxy['ip']}:{proxy['port']}[/]")
         except Exception as e:

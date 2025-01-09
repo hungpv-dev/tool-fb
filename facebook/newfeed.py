@@ -8,11 +8,12 @@ from multiprocessing import Process
 from sql.account_cookies import AccountCookies
 from sql.accounts import Account
 import json
-from threading import Thread
+from threading import Thread, Event
 from selenium.webdriver.common.action_chains import ActionChains
 from helpers.modal import closeModal
 from facebook.helpers import login,updateStatusAcount,updateStatusAcountCookie,handleCrawlNewFeed
 from urllib.parse import urlparse, parse_qs
+from facebook.login import HandleLogin
 from helpers.logs import log_newsfeed
 from time import sleep
 from facebook.helpers import crawlNewFeed
@@ -28,33 +29,27 @@ class NewFeed:
         self.account_instance = Account()
 
     def handle(self):
+        loginInstance = HandleLogin(self.browser,self.account)
         while True:
             try:
-                account = self.account_instance.find(self.account['id'])
-                if account is None or 'id' not in account:
-                    raise ValueError('Không tìm thấy tài khoản')
+                log_newsfeed(self.account,f'* Bắt đầu ({self.account["name"]}) *')
+                print(f'==================Newsfeed ({self.account["name"]})================')
+                checkLogin = loginInstance.loginFacebook()
+                if checkLogin == False:
+                    print('Đợi 5p rồi thử login lại!')
+                    sleep(300)
+                    continue
+                account = loginInstance.getAccount()
                 self.account = account
-                cookie = login(self.browser,self.account)
-                updateStatusAcountCookie(cookie['id'], 2)
-                print(f'==================Newsfeed ({account["name"]})================')
                 updateStatusAcount(self.account['id'],3) # Đang lấy
                 self.crawlNewFeed(account) # Bắt đầu quá trình crawl
                 print('Đã duyệt xong, chờ 30s để tiếp tục...')
                 sleep(30)
             except Exception as e:
-                log_newsfeed(account,'Login in không thành công, thử lại sau 5p....!')
                 print(f"Lỗi khi xử lý lấy dữ liệu!: {e}")
-                updateStatusAcount(self.account['id'],1)
-                if self.account.get('latest_cookie'): 
-                    updateStatusAcountCookie(self.account['latest_cookie']['id'], 1)
                 self.error_instance.insertContent(e)
                 print("Thử lại sau 5 phút...")
-                sleep(300)
-            except KeyboardInterrupt: 
-                if self.account.get('latest_cookie'): 
-                    updateStatusAcountCookie(self.account['latest_cookie']['id'], 2)
-                updateStatusAcount(self.account['id'],2)
-                
+                sleep(300)                
 
     def crawlNewFeed(self,account):
         log_newsfeed(account,f"**********************************")
@@ -63,11 +58,14 @@ class NewFeed:
         
 
 def process_fanpage(account, name, dirextension):
+
+    stop_event = Event()
+
     # Tạo các threads để chạy đồng thời
     threads = [
-        Thread(target=handleCrawlNewFeed, args=(account, name, dirextension)),
-        Thread(target=crawlNewFeed, args=(account, name, dirextension)),
-        Thread(target=crawlNewFeed, args=(account, name, dirextension))
+        Thread(target=handleCrawlNewFeed, args=(account, name, dirextension,stop_event)),
+        Thread(target=crawlNewFeed, args=(account, name, dirextension,stop_event)),
+        Thread(target=crawlNewFeed, args=(account, name, dirextension,stop_event))
     ]
 
     # Khởi chạy các threads
@@ -81,47 +79,63 @@ def process_fanpage(account, name, dirextension):
 class PageChecker:
     def __init__(self, browser, dirextension):
         self.browser = browser
+        self.error_instance = Error()
         self.dirextension = dirextension
 
     def run(self, account):
-        # Xử lý page mới
-        print(f"Chuyển hướng tới trang chủ!")
-        # Mở trang cá nhân
-        try:
-            self.browser.get('https://facebook.com')
-            sleep(2)
-            profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
-            profile_button.click()
-        except Exception as e:
-            log_newsfeed(account,f"Không mở được modal trang cá nhân, đóng tài khoản (khả năng k login được)!")
-            raise ValueError('Không thể mở trang cá nhân!')
-
-        sleep(10)
-        # Tìm tất cả các page
-        allPages = self.browser.find_elements(By.XPATH, '//div[contains(@aria-label, "Switch to")]')
-        print(f'Số fanpage để lướt: {len(allPages)}')
         processes = []
+        processed_pages = set()
+        loginInstance = HandleLogin(self.browser,account)
+        while True:
+            try:
+                print(f"Chuyển hướng tới trang chủ!")
+                while True:
+                    checkLogin = loginInstance.loginFacebook()
+                    if checkLogin == False:
+                        print('Đợi 5p rồi thử login lại!')
+                        sleep(300)
+                    else:
+                        break
+                    account = loginInstance.getAccount()
 
-        for page in allPages:
-            name = page.text.strip()
-            print(f'=================={name}================')
-            # Khởi tạo các process
-            process = Process(target=process_fanpage, args=(account, name, self.dirextension))
-            processes.append(process)
-            sleep(2)
+                try:
+                    profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
+                    profile_button.click()
+                except Exception as e:
+                    raise e
 
-        for process in processes:
-            process.start()
+                sleep(10)
+                # Tìm tất cả các page
+                allPages = self.browser.find_elements(By.XPATH, '//div[contains(@aria-label, "Switch to")]')
+                print(f'Số fanpage để lướt: {len(allPages)}')
 
-        # Đợi tất cả tiến trình hoàn thành
-        for process in processes:
-            process.join()
+                for page in allPages:
+                    name = page.text.strip()
+                    if name in processed_pages:
+                        # Bỏ qua page đã xử lý
+                        continue
+                    print(f'=================={name}================')
+                    processed_pages.add(name)
+                    # Khởi tạo các process
+                    process = Process(target=process_fanpage, args=(account, name, self.dirextension))
+                    processes.append(process)
+                    process.start()
+                    sleep(2)
 
+                processes = [p for p in processes if p.is_alive()]
+                print("Chờ 5 phút trước khi kiểm tra các page mới...")
+                sleep(300)  # Chờ 5 phút trước khi lặp lại
+            except Exception as e:
+                processed_pages.clear()
+                self.stop_all_processes(processes)
+                self.error_instance.insertContent(e)
+                log_newsfeed(account,'Lỗi khi xử lý newfeed, thử lại sau 50s')
+                sleep(30)
 
-
-    def terminate_processes(self, processes):
-        """Hàm đóng tất cả tiến trình"""
+    def stop_all_processes(processes):
+        """Dừng tất cả các tiến trình đang chạy."""
         for process in processes:
             if process.is_alive():
+                print(f"Dừng process {process.pid}")
                 process.terminate()
-                print(f"Đã dừng process: {process.pid}")
+        processes.clear()  
