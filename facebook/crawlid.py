@@ -32,16 +32,16 @@ class CrawlId:
             try:
                 self.crawl() 
             except Exception as e:
-                print(f"Lỗi khi xử lý lấy dữ liệu!: {e}")
                 self.error_instance.insertContent(e)
                 print("Thử lại sau 3s...")
                 sleep(3)
           
     def crawl(self):
         while True:
+            his = None
+            page = None
             try:
                 page = self.page_instance.page_old()
-                self.page_instance.update_page(page['id'],{'status':2}) # Đang lấy
                 his = self.history_instance.insert({
                     'status': 1,
                     'page_id': page['id']
@@ -50,15 +50,18 @@ class CrawlId:
                 link = page['link']
                 self.browser.get(link)
                 self.crawlIdFanpage(page,his)
-                self.history_instance.update(his['id'], {'status': 2})
-                self.page_instance.update_page(page['id'],{'status':1}) # Đang hoạt động
-            except KeyboardInterrupt:
-                self.history_instance.update(his['id'], {'status': 2})
-                self.page_instance.update_page(page['id'],{'status':1}) # Đang hoạt động
             except Exception as e:
-                self.history_instance.update(his['id'], {'status': 2})
-                self.page_instance.update_page(page['id'],{'status':1}) # Đang hoạt động
+                if page:
+                    self.page_instance.update_page(page['id'],{'status':1}) # Đang hoạt động
+                if his:
+                    self.history_instance.update(his['id'], {'status': 2})
                 raise e
+            finally:
+                if page:
+                    self.page_instance.update_page(page['id'],{'status':1}) # Đang hoạt động
+                if his:
+                    self.history_instance.update(his['id'], {'status': 2})
+
         
     def crawlIdFanpage(self, page, his):
         from facebook.crawl import Crawl
