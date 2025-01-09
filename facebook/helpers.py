@@ -99,10 +99,10 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
                         print('Đợi 5p rồi thử login lại!')
                         sleep(300)
                     else:
+                        account = loginInstance.getAccount()
                         break
-                    account = loginInstance.getAccount()
 
-                updateStatusAcount(account.get('id'),3)
+                updateStatusAcount(account.get('id'),{'status_login': 3})
 
                 sleep(2)
                 try:
@@ -250,11 +250,10 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                         print('Đợi 5p rồi thử login lại!')
                         sleep(300)
                     else:
+                        account = loginInstance.getAccount()
                         break
-                    account = loginInstance.getAccount()
 
-                updateStatusAcount(account.get('id'),3)
-
+                updateStatusAcount(account.get('id'),{'status_login': 3})
                 sleep(2)
                 try:
                     profile_button = browser.find_element(By.XPATH, push['openProfile'])
@@ -365,9 +364,10 @@ def push_list(posts,account,dirextension):
                 print('Đợi 5p rồi thử login lại!')
                 sleep(300)
             else:
+                account = loginInstance.getAccount()
                 break
-            account = loginInstance.getAccount()
         sleep(2)
+        updateStatusAcount(account['id'],4)
         
         push = Push(browser,account,dirextension)
         print(f"{account.get('name')} => đăng: {len(posts)} bài viết")
@@ -380,8 +380,7 @@ def push_list(posts,account,dirextension):
                     'status':2,
                     'cookie_id': account['latest_cookie']['id']
                 })
-                awaitSleep = int(post.get('await', 0)) * 60
-                print(f'=====>{name}: cần đợi {awaitSleep}s để đăng bài tiếp theo!')
+                sleep(2)
             except Exception as e:
                 print(e)
                 error_instance.insertContent(e)
@@ -400,51 +399,53 @@ def push_list(posts,account,dirextension):
         print('Kết thúc quá trình đăng bài.')
 
 def push_page(page,account,dirextension):
-    try:
-        from sql.pagePosts import PagePosts
-        from sql.errors import Error
-        from facebook.push import Push
-        from sql.account_cookies import AccountCookies
-        error_instance = Error()
-        page_post_instance = PagePosts()
-        pathProfile = f"/push/{account['id']}/{str(uuid.uuid4())}"
-        account_instance = AccountCookies()
+    from sql.pagePosts import PagePosts
+    from sql.errors import Error
+    from facebook.push import Push
+    from sql.account_cookies import AccountCookies
+    error_instance = Error()
+    page_post_instance = PagePosts()
+    pathProfile = f"/push/{account['id']}/{str(uuid.uuid4())}"
+    account_instance = AccountCookies()
+    while True:
         try:
             manager = None
             browser = None
             while True:
                 try:
                     manager = Browser(pathProfile,dirextension,'chrome',False,True)
-                    browser = manager.start()
+                    browser = manager.start(False)
                     sleep(5)
                     break
                 except Exception as e:
                     log_newsfeed(account,f"Khi cào lưu db k dùng đc, chờ 30s để thử lại")
                     sleep(30)
-                loginInstance = HandleLogin(browser,account)
+            loginInstance = HandleLogin(browser,account)
             while True:
-                    checkLogin = loginInstance.loginFacebook()
-                    if checkLogin == False:
-                        print('Đợi 5p rồi thử login lại!')
-                        sleep(300)
-                    else:
-                        break
+                checkLogin = loginInstance.loginFacebook()
+                if checkLogin == False:
+                    print('Đợi 5p rồi thử login lại!')
+                    sleep(300)
+                else:
                     account = loginInstance.getAccount()
-                    
-            
+                    break
+                
             sleep(2)
             push_instance = Push(browser,account,dirextension)
             sleep(3)
-            browser.get('https://facebook.com')
             while True:
                 try:
+                    browser.get('https://facebook.com')
+                    sleep(3)
                     profile_button = browser.find_element(By.XPATH, push['openProfile'])
                 except Exception as e:
                     raise e
+                
                 cookie = account.get('latest_cookie')
                 pageUP = page_post_instance.get_page_up({'page_id': page["id"],'account_id':account['id']})
                 if pageUP:
                     try:
+                        updateStatusAcount(account['id'],4)
                         res = account_instance.updateCount(cookie.get('id'),'counts')
                         name = push_instance.switchPage(page)
                         push_instance.push(page,pageUP,name)
@@ -467,14 +468,11 @@ def push_page(page,account,dirextension):
                     sleep(60)
         except Exception as e:
             error_instance.insertContent(e)
-            print(f'Lỗi khi theo dõi bài viết {page.get("name")} 30s')
-            log_push(account,f'Lỗi khi theo dõi bài viết {page.get("name")} 30s')
-            sleep(30)
-        finally: 
-            if browser:
-                browser.quit()
-        print('Kết thúc quá trình đăng bài.')
-    except Exception as e:
-        error_instance.insertContent(e)
-    finally:
-        log_push(f'** => Dừng theo dõi page: {page.get("name")}')
+            print(f'Lỗi khi theo dõi page: {e}')
+        finally:
+            if 'browser' in locals():
+                if browser:
+                    browser.quit()
+                    manager.cleanup()
+            log_push(account,f'** => Dừng theo dõi page: {page.get("name")}, chờ 5p để tiếp tục')
+            sleep(300)

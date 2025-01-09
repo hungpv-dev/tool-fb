@@ -22,6 +22,7 @@ import pyautogui
 from helpers.logs import log_push
 import threading
 from PIL import Image
+from facebook.login import HandleLogin
 from facebook.helpers import login,updateStatusAcount,updateStatusAcountCookie,updatePagePostInfo,push_list,push_page
 
 
@@ -40,68 +41,69 @@ class Push:
         self.pagePosts_instance = PagePosts()
         
     def handle(self):
+        loginInstance = HandleLogin(self.browser,self.account)
         while True:
             try:
-                account = self.account_instance.find(self.account['id'])
-                if account is None or 'id' not in account:
-                    raise ValueError('Không tìm thấy tài khoản')
+                log_push(self.account,f'* Bắt đầu ({self.account["name"]}) *')
+                print(f'==================Push ({self.account["name"]})================')
+                checkLogin = loginInstance.loginFacebook()
+                if checkLogin == False:
+                    print('Đợi 5p rồi thử login lại!')
+                    sleep(300)
+                    continue
+                account = loginInstance.getAccount()
                 self.account = account
-                cookie = login(self.browser,self.account)
-                updateStatusAcountCookie(cookie['id'], 2)
-                print(f'==================Đăng bài ({account["name"]})================')
-                updateStatusAcount(self.account['id'],4) # Đang đăng bài
-                self.handleData(cookie);          
+                self.handleData();          
             except Exception as e:
-                log_push(account,'Login in không thành công, thử lại sau 5p....!')
-                print(f"Lỗi khi xử lý đăng bài!: {e}")
-                updateStatusAcount(self.account['id'],1)
-                if self.account.get('latest_cookie'): 
-                    updateStatusAcountCookie(self.account['latest_cookie']['id'], 1)
+                print(f"Lỗi khi xử lý đăng bài viết!: {e}")
                 self.error_instance.insertContent(e)
-                print("Thử lại sau 1 phút...")
-                sleep(60)
-            except KeyboardInterrupt: 
-                if self.account.get('latest_cookie'): 
-                    updateStatusAcountCookie(self.account['latest_cookie']['id'], 2)
-                updateStatusAcount(self.account['id'],2)
+                print("Thử lại sau 5 phút...")
+                sleep(300)
 
-    def handleData(self,cookie):    
+    def handleData(self):    
+        loginInstance = HandleLogin(self.browser,self.account)
         print('Bắt đầu xử lý dữ liệu')
         listPages = set()
-        while True: 
+        while True:
             try:
-                profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
-            except Exception as e:
-                log_push(self.account,'==> Bị thoát login!!!')
-                updateStatusAcount(self.account['id'],1)
-                raise ValueError('==> Bị thoát login!!!')
+                checkLogin = loginInstance.loginFacebook()
+                if checkLogin == False:
+                    print("Chưa đăng nhập, tiếp tục kiểm tra...")
+                    sleep(300)
+                    continue
 
-            try:
-                listTimes = self.browseTime()
-                if(len(listTimes) > 0):
-                    log_push(self.account,'Bắt đầu đăng bài')
-                    worker_thread = threading.Thread(target=push_list, args=(listTimes,self.account,self.dirextension))
-                    worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
-                    worker_thread.start()
-                else:
-                    print(f"{self.account.get('name')} chưa có bài nào cần đăng trong khung giờ này!")
-                
-                # awaitListPage = self.getAwaitListPage()
-                # for pot in awaitListPage:
-                #     if pot and 'id' in pot:
-                #         page_id = pot.get('id')  
-                #         if page_id not in listPages:
-                #             log_push(self.account,f'=======Theo dõi: {pot.get("name")}')
-                #             print(f'=======Theo dõi: {pot.get("name")}')
-                #             worker_thread = threading.Thread(target=push_page, args=(pot,self.account,self.dirextension))
-                #             worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
-                #             worker_thread.start()
-                #             listPages.add(page_id)
+                while True: 
+                    try:
+                        listTimes = self.browseTime()
+                        if(len(listTimes) > 0):
+                            log_push(self.account,'Bắt đầu đăng bài')
+                            worker_thread = threading.Thread(target=push_list, args=(listTimes,self.account,self.dirextension))
+                            worker_thread.daemon = True  
+                            worker_thread.start()
+                        else:
+                            print(f"{self.account.get('name')} chưa có bài nào cần đăng trong khung giờ này!")
+                        
+                        awaitListPage = self.getAwaitListPage()
+                        for pot in awaitListPage:
+                            if pot and 'id' in pot:
+                                page_id = pot.get('id')  
+                                if page_id not in listPages:
+                                    log_push(self.account,f'=======Theo dõi: {pot.get("name")}')
+                                    print(f'=======Theo dõi: {pot.get("name")}')
+                                    worker_thread = threading.Thread(target=push_page, args=(pot,self.account,self.dirextension))
+                                    worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
+                                    worker_thread.start()
+                                    listPages.add(page_id)
+                    except Exception as e:
+                        print(e)
+                    print('Chờ 60s để tiếp tục...')
+                    sleep(60)
+   
             except Exception as e:
-                print(e)
-            
-            print('Chờ 60s để tiếp tục...')
-            sleep(60)
+                print(f'Lỗi khi push: {e}')
+                print('Chờ 5 phút trước khi thử lại...')
+                sleep(300)
+
             
     
     def browseTime(self):

@@ -28,7 +28,8 @@ def process_push(account):
         checkProxy = True
         dirextension = None
         proxy = account.get('proxy')
-        updateStatusAcount(account['id'],4)
+
+        print(f'=========={account["name"]}============')
         if proxy:
             checkProxy = check_proxy(proxy)
             if checkProxy:
@@ -61,12 +62,12 @@ def process_push(account):
             manager.cleanup()
 
 def push(ids):
-    processes = []
     try:
         print('\n==================== Đăng bài viết ====================')
         fullpath = os.path.abspath(f'./profiles/push')
         if os.path.exists(fullpath):
             shutil.rmtree(fullpath)  
+        processes = []
         for id in ids:
             account = account_instance.find(id)
             if 'id' not in account:
