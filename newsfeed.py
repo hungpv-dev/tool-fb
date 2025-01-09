@@ -41,7 +41,7 @@ def process_newsfeed(account):
         try:
             if checkProxy == True:
                 manager = Browser(f"/newsfeed/{account['id']}/home",extension)
-                browser = manager.start(False)
+                browser = manager.start()
                 break
             else:
                 raise Exception("Proxy không hợp lệ")
