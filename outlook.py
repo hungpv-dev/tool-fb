@@ -1,22 +1,21 @@
 from facebook.mail import MailTool
 
-# Sử dụng lớp MailTool để kết nối và lấy email
-mail = MailTool(outlook=True)
+ # Gmail
+# user = "azhung08102004@gmail.com"
+# pwd = "kylsioybcnxgflex"  # Mật khẩu ứng dụng
 
-# Lấy các email từ "facebook.com", chỉ lấy 1 email đầu tiên
-messages = mail.get_mail("facebook.com", limit=1)
+# Outlook
+user = "leneavepjz407413@hotmail.com"
+pwd = "kkfsxxavznqhrqnm"  # Mật khẩu ứng dụng
 
-# Chỉ in thông tin của email đầu tiên
-for msg in messages:
-    print("From:", msg.from_)
-    print("Subject:", msg.subject)
-    print("Date:", msg.date)
-    
-    # In ra nội dung văn bản (text body)
-    print("Text body:", msg.text)  # Nội dung email dưới dạng văn bản
-    
-    # In ra nội dung HTML (nếu có)
-    if msg.html:
-        print("HTML body:", msg.html)  # Nội dung email dưới dạng HTML (nếu có)
-    
-    print("-" * 50)
+mail = MailTool(user, pwd)
+emails = mail.fetch_mail("facebook", limit=1)  # Tìm email từ Facebook
+
+for msg in emails:
+    print(f"Subject: {msg['subject']}")
+    if msg.is_multipart():
+        for part in msg.walk():
+            if part.get_content_type() == "text/plain":
+                print(f"Body: {part.get_payload(decode=True).decode()}")
+    else:
+        print(f"Body: {msg.get_payload(decode=True).decode()}")

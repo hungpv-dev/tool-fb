@@ -158,41 +158,46 @@ class Browser:
     def start_edge(self, headless):
         edge_options = EdgeOptions()
 
-        # Thêm tùy chọn cho profile người dùng nếu cần
-        if self.profile_dir != '/profiles/crawl':
-            edge_options.add_argument(f"--user-data-dir={self.profile_dir}")
+        if self.profile_dir != './profiles/crawl':
+            full_path = os.path.abspath(self.profile_dir)
+            edge_options.add_argument(f"--user-data-dir={full_path}")
+            pass
+        if self.anonymous:
+            edge_options.add_argument("--incognito")
 
-
-        # Chạy ở chế độ headless nếu cần
         if headless:
-            edge_options.add_argument("--headless")
+            edge_options.add_argument("--headless=new")
             edge_options.add_argument("--no-sandbox")
-
-        # Thêm các tùy chọn để giảm thiểu thông báo DevTools và lỗi
+            edge_options.add_argument("--disable-gpu")
+            edge_options.add_argument("--enable-unsafe-swiftshader")
+            edge_options.add_argument("--disable-webgl")
+            edge_options.add_argument("--use-gl=swiftshader")
+        
+        if self.loadContent == False:
+            prefs = {
+                "profile.managed_default_content_settings.images": 2,  # Tắt tải ảnh
+                "profile.managed_default_content_settings.plugins": 2,  # Tắt tải video
+                "profile.managed_default_content_settings.video": 2,  # Tắt tải video
+                "disk-cache-size": 4096,  # Giới hạn kích thước cache
+                "browser.cache.disk.enable": False,  # Tắt cache
+                "browser.cache.memory.enable": False,  # Tắt cache trong bộ nhớ
+            }
+            edge_options.add_experimental_option("prefs", prefs)
+        edge_options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36')
         edge_options.add_argument("--disable-notifications")
+        edge_options.add_argument('--ignore-certificate-errors')
+        edge_options.add_argument('--ignore-ssl-errors')
+        edge_options.add_argument('--disable-application-cache')
         edge_options.add_argument("--disable-translate")
         edge_options.add_argument("--disable-blink-features=AutomationControlled")
         edge_options.add_argument("--disable-infobars")
         edge_options.add_argument("--start-maximized")
         edge_options.add_argument("--disable-dev-shm-usage")
 
-        # Tắt DevTools Protocol và các lỗi liên quan đến rendering
-        edge_options.add_argument("--disable-features=VizDisplayCompositor")
-        edge_options.add_argument("--remote-debugging-port=0")
-
         try:
-            seleniumwire_options = {}
-            if self.proxy:
-                proxy = self.proxy
-                seleniumwire_options['proxy'] = {
-                    'http': f'http://{proxy["user"]}:{proxy["pass"]}@{proxy["ip"]}:{proxy["port"]}',
-                    'https': f'http://{proxy["user"]}:{proxy["pass"]}@{proxy["ip"]}:{proxy["port"]}',
-                    'no_proxy': 'localhost, 127.0.0.1'
-                }
-                
-            service = EdgeService(EdgeChromiumDriverManager().install())
+            service = EdgeService(executable_path="./msedgedriver")
             # Cài đặt và khởi tạo WebDriver cho Edge
-            driver = webdriver.Edge(service=service, options=edge_options,seleniumwire_options=seleniumwire_options)
+            driver = webdriver.Edge(service=service, options=edge_options)
             logging.info("Edge browser started successfully.")
             return driver
         except Exception as e:

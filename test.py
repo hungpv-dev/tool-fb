@@ -29,45 +29,91 @@
 
 # sleep(1000)
 
-# from base.browser import Browser
+from base.browser import Browser
 from time import sleep
-# from selenium.webdriver.common.by import By
+from selenium.webdriver.common.by import By
 
-# proxy = {
-#     'ip': '207.228.20.5',
-#     'port': '45774',
-#     'user': 'SszaLu98T4t2h4S',
-#     'pass': '703sNOIwSCHa1Wg',
-# }
+def clickText(driver,text):
+    driver.find_element(By.XPATH, f"//*[contains(text(), '{text}')]").click()
+    
 
-# manager = Browser('/hung',proxy)
-# driver = manager.start(False)
-# driver.get("https://ipecho.net")
+manager = Browser('/hung',None,'edge')
+driver = manager.start(False)
+driver.get("https://facebook.com")
+sleep(1)
+pwdMail = "EP69rcdPQ5"
+mail = "starowitzshm702517@hotmail.com"
+user = "100015926137182"
+pwd = "A@!Aurae"
 
-# driver.find_element(By.ID,'email').send_keys('0333026322')
-# driver.find_element(By.ID,'pass').send_keys('@Zthuong1994')
+driver.find_element(By.ID,'email').send_keys(user)
+driver.find_element(By.ID,'pass').send_keys(pwd)
 
-# driver.find_element(By.NAME,'login').click()
+driver.find_element(By.NAME,'login').click()
 
-# sleep(1000)
-# driver.quit()
+sleep(10000)
 
-# from io import BytesIO
-# import win32clipboard
-# from PIL import Image
+clickText(driver,'Try another way')
 
-# def send_to_clipboard(clip_type, data):
-#     win32clipboard.OpenClipboard()
-#     win32clipboard.EmptyClipboard()
-#     win32clipboard.SetClipboardData(clip_type, data)
-#     win32clipboard.CloseClipboard()
+sleep(5)
 
-# filepath = 'image.png'
-# image = Image.open(filepath)
+clickText(driver,'Email')
 
-# output = BytesIO()
-# image.convert("RGB").save(output, "BMP")
-# data = output.getvalue()[14:]
-# output.close()
+sleep(2)
 
-# send_to_clipboard(win32clipboard.CF_DIB, data)
+clickText(driver,'Continue')
+
+sleep(3)
+
+driver.execute_script("window.open('https://outlook.office.com/login','_blank')")
+driver.switch_to.window(driver.window_handles[1])
+
+sleep(5)
+
+driver.find_element(By.CSS_SELECTOR, 'input[type="email"]').send_keys(mail)
+driver.find_element(By.CSS_SELECTOR,'[type="submit"]').click()
+
+sleep(5)
+
+driver.find_element(By.CSS_SELECTOR,'input[type="password"]').send_keys(pwdMail)
+driver.find_element(By.CSS_SELECTOR,'[type="submit"]').click()
+
+sleep(5)
+
+from selenium.common.exceptions import NoSuchElementException
+try:
+    driver.find_element(By.CSS_SELECTOR,'[type="submit"]').click()
+except NoSuchElementException as e:
+    print("Không cần chuyển tiếp")
+
+sleep(5)
+
+messages = driver.find_elements(By.XPATH, '//*[@aria-posinset]')
+for mess in messages:
+    try:
+        facebook_element = mess.find_element(By.XPATH, './/*[@aria-label="Facebook"]')
+        facebook_element.click()
+        break
+    except NoSuchElementException:
+        print("Không phải thẻ có thuộc tính facebook")
+
+sleep(3)
+
+import re
+
+code = None
+spans = driver.find_elements(By.XPATH, '//span')
+for span in spans:
+    span_text = span.text.strip()
+    if re.match(r'^\d+$', span_text):  
+        code = span_text
+
+if code:
+    handles = driver.window_handles
+    # driver.close()
+    driver.switch_to.window(handles[0])
+    driver.find_element(By.NAME,'email').send_keys(code)
+    clickText(driver,'Continue')
+
+sleep(10000)
+driver.quit()
