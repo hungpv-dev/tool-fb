@@ -354,7 +354,7 @@ def push_list(posts,account,dirextension):
     from facebook.push import Push
     try:
         manager = Browser(f"/push/{account['id']}/{str(uuid.uuid4())}",dirextension,'chrome',False,True)
-        browser = manager.start(False)
+        browser = manager.start()
         loginInstance = HandleLogin(browser,account)
         sleep(3)
         browser.get('https://facebook.com')
@@ -414,7 +414,7 @@ def push_page(page,account,dirextension):
             while True:
                 try:
                     manager = Browser(pathProfile,dirextension,'chrome',False,True)
-                    browser = manager.start(False)
+                    browser = manager.start()
                     sleep(5)
                     break
                 except Exception as e:

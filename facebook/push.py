@@ -10,7 +10,8 @@ from sql.pages import Page
 from helpers.modal import closeModal
 from sql.errors import Error
 import json
-from helpers.image import copy_image_to_clipboard
+import uuid
+from helpers.image import delete_image,download_image
 import requests
 from facebook.crawlid import CrawlId
 from sql.comment import Comment
@@ -188,21 +189,27 @@ class Push:
             input_element = self.browser.switch_to.active_element
             print('- Gán nội dung bài viết!')
             input_element.send_keys(post['content'])
+            parent_form = input_element.find_element(By.XPATH, "./ancestor::form")
             media = post['media']
+            listLinkTemps = []
             if media is not None: 
-                images = media['images']
-                if images is not None and len(images) > 0:
-                    print('- Copy và dán hình ảnh')
-                    for src in images:
-                        sleep(1)
-                        # Copy hình ảnh vào clipboard
-                        copy_image_to_clipboard(src)
-                        sleep(2)
-                        input_element.send_keys(Keys.CONTROL, 'v')
-                        sleep(2)
+                photo_video_element = parent_form.find_element(By.XPATH, './/div[@aria-label="Photo/video"]')
+                photo_video_element.click()
+                try:
+                    images = media['images']
+                    if images is not None and len(images) > 0:
+                        print('- Copy và dán hình ảnh')
+                        for src in images:
+                            temp_image_path = download_image(src, temp_file=f"image_{uuid.uuid4()}.png")
+                            listLinkTemps.append(temp_image_path)
+                            sleep(1)
+                            file_input = self.browser.find_elements(By.XPATH, '//input[@type="file"]')[-1]
+                            file_input.send_keys(temp_image_path)
+                            sleep(3)
+                except Exception as e:
+                    print(f'Lỗi khi thêm hình ảnh: {e}')
             sleep(5)
             print('Đăng bài')
-            parent_form = input_element.find_element(By.XPATH, "./ancestor::form")
             parent_form.submit()
             sleep(10)
             try:
@@ -211,6 +218,9 @@ class Push:
             except:
                 pass
             sleep(10)
+            for file in listLinkTemps:
+                # Bước 3: Xóa file tạm sau khi gửi
+                delete_image(file)
             self.afterUp(page,post,name) # Lấy link bài viết vừa đăng
             sleep(2)
             print('\n--------- Đăng bài thành công ---------\n')
