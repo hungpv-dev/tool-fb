@@ -115,7 +115,7 @@ class HandleLogin:
 
         self.driver.get('https://outlook.office.com/login')
 
-        sleep(5)
+        sleep(10)
 
         self.driver.find_element(By.CSS_SELECTOR, 'input[type="email"]').send_keys(self.email)
         self.driver.find_element(By.CSS_SELECTOR,'[type="submit"]').click()
@@ -125,13 +125,16 @@ class HandleLogin:
         self.driver.find_element(By.CSS_SELECTOR,'input[type="password"]').send_keys(self.pwdEmail)
         self.driver.find_element(By.CSS_SELECTOR,'[type="submit"]').click()
 
-        sleep(5)
+        # try:
+        #     self.driver.find_element(By.CSS_SELECTOR, '[aria-posinset="1"]').click()
+        # except NoSuchElementException as e:
+        #     print("Không cần chuyển tiếp")
 
         try:
             self.driver.find_element(By.CSS_SELECTOR,'[type="submit"]').click()
         except NoSuchElementException as e:
             print("Không cần chuyển tiếp")
-        
+
         sleep(5)
         print(f'{self.account.get("name")} Đăng nhập outlook thành công, mở inbox')
 
