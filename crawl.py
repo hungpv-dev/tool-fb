@@ -33,7 +33,8 @@ def process_crawl(count):
             crawl = CrawlId(browser, system)
             crawl.handle()
         except Exception as e:
-            print(f"Lỗi trong Crawl: {e}")
+            print(f"Lỗi trong Crawl, khởi động lại sau 10s: {e}")
+            sleep(10)
         finally:
             print(f'==> Đang đóng tab: {count}')
             if system:

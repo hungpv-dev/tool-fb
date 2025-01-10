@@ -35,6 +35,7 @@ class CrawlId:
                 self.error_instance.insertContent(e)
                 print("Thử lại sau 3s...")
                 sleep(3)
+                raise e
           
     def crawl(self):
         while True:
