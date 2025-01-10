@@ -43,6 +43,7 @@ class HandleLogin:
                 login(self.driver,self.account)
             except:
                 pass
+
             check = self.saveLogin(False)
             if check == False:
                 self.driver.get("https://facebook.com/login")
@@ -214,6 +215,18 @@ class HandleLogin:
             print('Không tìm thấy mã code')
         sleep(10)
         return self.saveLogin()
+
+    def checkCurrent(self):
+        self.driver.get('https://facebook.com')
+        sleep(3)
+        check = False
+        try:
+            self.driver.find_element(By.XPATH, push['openProfile'])
+            check = True
+        except Exception:
+            print('Login thất bại, tôi thất bại rồi!')
+        return check
+
 
     def saveLogin(self,saveCookie = True):
         check = False

@@ -47,11 +47,13 @@ class Push:
             try:
                 log_push(self.account,f'* Bắt đầu ({self.account["name"]}) *')
                 print(f'==================Push ({self.account["name"]})================')
-                checkLogin = loginInstance.loginFacebook()
-                if checkLogin == False:
-                    print('Đợi 5p rồi thử login lại!')
-                    sleep(300)
-                    continue
+                checkCurrent = loginInstance.checkCurrent()
+                if checkCurrent == False:
+                    checkLogin = loginInstance.loginFacebook()
+                    if checkLogin == False:
+                        print('Đợi 5p rồi thử login lại!')
+                        sleep(300)
+                        continue
                 account = loginInstance.getAccount()
                 self.account = account
                 self.handleData();          
@@ -67,11 +69,13 @@ class Push:
         listPages = set()
         while True:
             try:
-                checkLogin = loginInstance.loginFacebook()
-                if checkLogin == False:
-                    print("Chưa đăng nhập, tiếp tục kiểm tra...")
-                    sleep(300)
-                    continue
+                checkCurrent = loginInstance.checkCurrent()
+                if checkCurrent == False:
+                    checkLogin = loginInstance.loginFacebook()
+                    if checkLogin == False:
+                        print("Chưa đăng nhập, tiếp tục kiểm tra...")
+                        sleep(300)
+                        continue
 
                 while True: 
                     try:

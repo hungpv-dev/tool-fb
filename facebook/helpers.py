@@ -113,13 +113,15 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
                 
 
                 while not stop_event.is_set():
-                    checkLogin = loginInstance.loginFacebook()
-                    if checkLogin == False:
-                        print('Đợi 5p rồi thử login lại!')
-                        sleep(300)
-                    else:
-                        account = loginInstance.getAccount()
-                        break
+                    checkCurrent = loginInstance.checkCurrent()
+                    if checkCurrent == False:
+                        checkLogin = loginInstance.loginFacebook()
+                        if checkLogin == False:
+                            print('Đợi 5p rồi thử login lại!')
+                            sleep(300)
+                        else:
+                            account = loginInstance.getAccount()
+                            break
 
                 updateStatusAcount(account.get('id'),{'status_login': 3})
 
@@ -264,13 +266,15 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                 loginInstance = HandleLogin(browser,account)
 
                 while not stop_event.is_set():
-                    checkLogin = loginInstance.loginFacebook()
-                    if checkLogin == False:
-                        print('Đợi 5p rồi thử login lại!')
-                        sleep(300)
-                    else:
-                        account = loginInstance.getAccount()
-                        break
+                    checkCurrent = loginInstance.checkCurrent()
+                    if checkCurrent == False:
+                        checkLogin = loginInstance.loginFacebook()
+                        if checkLogin == False:
+                            print('Đợi 5p rồi thử login lại!')
+                            sleep(300)
+                        else:
+                            account = loginInstance.getAccount()
+                            break
 
                 updateStatusAcount(account.get('id'),{'status_login': 3})
                 sleep(2)
@@ -378,13 +382,15 @@ def push_list(posts,account,dirextension):
         sleep(3)
         browser.get('https://facebook.com')
         while True:
-            checkLogin = loginInstance.loginFacebook()
-            if checkLogin == False:
-                print('Đợi 5p rồi thử login lại!')
-                sleep(300)
-            else:
-                account = loginInstance.getAccount()
-                break
+            checkCurrent = loginInstance.checkCurrent()
+            if checkCurrent == False:
+                checkLogin = loginInstance.loginFacebook()
+                if checkLogin == False:
+                    print('Đợi 5p rồi thử login lại!')
+                    sleep(300)
+                else:
+                    account = loginInstance.getAccount()
+                    break
         sleep(2)
         updateStatusAcount(account['id'],4)
         
@@ -433,7 +439,7 @@ def push_page(page,account,dirextension):
             while True:
                 try:
                     manager = Browser(pathProfile,dirextension,'chrome',False,True)
-                    browser = manager.start()
+                    browser = manager.start(False)
                     sleep(5)
                     break
                 except Exception as e:
@@ -441,14 +447,16 @@ def push_page(page,account,dirextension):
                     sleep(30)
             loginInstance = HandleLogin(browser,account)
             while True:
-                checkLogin = loginInstance.loginFacebook()
-                if checkLogin == False:
-                    print('Đợi 5p rồi thử login lại!')
-                    sleep(300)
-                else:
-                    account = loginInstance.getAccount()
-                    break
-                
+                checkCurrent = loginInstance.checkCurrent()
+                if checkCurrent == False:
+                    checkLogin = loginInstance.loginFacebook()
+                    if checkLogin == False:
+                        print('Đợi 5p rồi thử login lại!')
+                        sleep(300)
+                    else:
+                        account = loginInstance.getAccount()
+                        break
+                    
             sleep(2)
             push_instance = Push(browser,account,dirextension)
             sleep(3)
