@@ -78,10 +78,19 @@ def login():
 
                 manager = Browser('/login',extension,'chrome',False,True)
                 browser = manager.start(False)
+                from selenium.webdriver.common.by import By
+                from selenium.webdriver.support.ui import WebDriverWait
+                from selenium.webdriver.support import expected_conditions as EC
+
 
                 try:
                     login = HandleLogin(browser,selected_account)
                     login.loginFacebook()
+                    browser.find_element(By.XPATH, '//*[@aria-label="Your profile"]')
+                    WebDriverWait(browser, 600).until(
+                        EC.presence_of_element_located((By.XPATH, '//*[@aria-label="Your profile"]'))
+                    )
+                    login.saveLogin()
                     sleep(99999999)
                 except:
                     raise ValueError('Không login được')

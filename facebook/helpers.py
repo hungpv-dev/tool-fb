@@ -24,25 +24,44 @@ from helpers.system import get_system_info
 
 def login(browser, account):
     try:
-        if not account['latest_cookie']:
+        if 'latest_cookie' not in account:
             raise ValueError("Không có cookie để đăng nhập.")
+        
+        print(1)
 
-        last_cookie = account['latest_cookie']  
-        try:
-            cookies = last_cookie['cookies']
-            for cookie in cookies:
+        last_cookie = account['latest_cookie']
+        
+        if 'cookies' not in last_cookie:
+            raise ValueError("Không có thông tin cookies trong latest_cookie.")
+        
+        cookies = last_cookie['cookies']
+
+        if not isinstance(cookies, list):
+            raise ValueError("Dữ liệu cookies không hợp lệ. Nó phải là một danh sách.")
+
+        for cookie in cookies:
+            try:
                 browser.add_cookie(cookie)
-        except Exception as e:
-            raise ValueError("Không thể thêm cookie vào trình duyệt.")
+            except Exception as e:
+                raise ValueError(f"Không thể thêm cookie {cookie} vào trình duyệt: {e}")
+        
+        print(2)
         
         sleep(1)
         browser.get('https://facebook.com')
-        updateStatusAcountCookie(last_cookie.get('id'),2)
+
+        updateStatusAcountCookie(last_cookie.get('id'), 2)
+
         sleep(1)
-    except Exception as e:
+
+    except ValueError as ve:
+        print(f"Lỗi giá trị: {ve}")
         if 'latest_cookie' in account and 'id' in account['latest_cookie']:
             updateStatusAcountCookie(account['latest_cookie']['id'], 1)
+    except Exception as e:
         print(f"Lỗi login {account.get('name')}: {e}")
+        if 'latest_cookie' in account and 'id' in account['latest_cookie']:
+            updateStatusAcountCookie(account['latest_cookie']['id'], 1)
     
 def updateStatusAcountCookie(cookie_id, status):
         # 1: Chết cookie

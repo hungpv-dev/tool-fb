@@ -38,8 +38,11 @@ class HandleLogin:
                 sleep(2)
             except Exception as e:
                 pass
-
-            login(self.driver,self.account)
+            
+            try:
+                login(self.driver,self.account)
+            except:
+                pass
             check = self.saveLogin(False)
             if check == False:
                 self.driver.get("https://facebook.com/login")
