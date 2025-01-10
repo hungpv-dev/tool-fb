@@ -38,7 +38,7 @@ def process_push(account):
         try:
             if checkProxy == True:
                 manager = Browser(f"/push/{account['id']}/home",dirextension)
-                browser = manager.start()
+                browser = manager.start(False)
                 break
             else:
                 raise Exception("Proxy không hợp lệ")

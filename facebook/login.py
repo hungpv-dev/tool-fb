@@ -52,26 +52,28 @@ class HandleLogin:
                 sleep(1)
                 self.driver.find_element(By.NAME,'login').click()
                 sleep(5)
-                try:
-                    authenapp = self.driver.find_element(
-                        By.XPATH, "//*[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'authentication app')]"
-                    )
-                    print(f'{self.account.get("name")} lấy mã xác thực App Authenticate')
-                    authenapp.click()
-                    self.clickText('Continue')
-                    code = self.getCode2Fa()
-                    check = self.pushCode(code)
-                except NoSuchElementException as e:
+                check = self.saveLogin()
+                if check == False:
                     try:
-                        self.driver.find_element(By.NAME,'email')
-                        print(f'{self.account.get("name")} lấy mã từ Outlook')
-                        self.toggleEmail() # Chuyển sang nhận mã từ email
-                        code = self.loginEmailAndGetCode() # Lấy code
+                        authenapp = self.driver.find_element(
+                            By.XPATH, "//*[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'authentication app')]"
+                        )
+                        print(f'{self.account.get("name")} lấy mã xác thực App Authenticate')
+                        authenapp.click()
+                        self.clickText('Continue')
+                        code = self.getCode2Fa()
                         check = self.pushCode(code)
-                    except:
-                        self.account_instance.update_account(self.account.get('id'),{'status_login':1})
-                        print(f'{self.account.get("name")} lấy mã từ Audio (chiu)')
-                        pass
+                    except NoSuchElementException as e:
+                        try:
+                            self.driver.find_element(By.NAME,'email')
+                            print(f'{self.account.get("name")} lấy mã từ Outlook')
+                            self.toggleEmail() # Chuyển sang nhận mã từ email
+                            code = self.loginEmailAndGetCode() # Lấy code
+                            check = self.pushCode(code)
+                        except:
+                            self.account_instance.update_account(self.account.get('id'),{'status_login':1})
+                            print(f'{self.account.get("name")} lấy mã từ Audio (chiu)')
+                            pass
         except Exception as e:
             print(f'Lỗi login: {e}')
             check = False
@@ -225,6 +227,7 @@ class HandleLogin:
                 dataUpdate['cookie'] = cookies
             self.account_instance.update_account(self.account.get('id'),dataUpdate)
             check = True
+            print('Login thành công')
         except NoSuchElementException as e:
             self.account_instance.update_account(self.account.get('id'),{'status_login':1})
             print('Login thất bại, tôi thất bại rồi!')
