@@ -82,9 +82,12 @@ class HandleLogin:
     def getCode2Fa(self):
         print(f'{self.account.get("name")} Mở web lấy mã')
 
-        self.driver.execute_script("window.open('https://2fa.live','_blank')")
+
+        self.driver.execute_script("window.open('about:blank', '_blank');")
+        sleep(1)
         self.driver.switch_to.window(self.driver.window_handles[1])
-        sleep(3)
+        self.driver.get("https://2fa.live")
+        sleep(5)
         self.driver.find_element(By.ID,'listToken').send_keys(self.account.get('keyword_2fa'))
         sleep(1)
         self.driver.find_element(By.ID,'submit').click()
@@ -106,8 +109,11 @@ class HandleLogin:
 
     def loginEmailAndGetCode(self):
         print(f'{self.account.get("name")} Mờ outlook')
-        self.driver.execute_script("window.open('https://outlook.office.com/login','_blank')")
+        self.driver.execute_script("window.open('about:blank', '_blank');")
+        sleep(1)
         self.driver.switch_to.window(self.driver.window_handles[1])
+
+        self.driver.get('https://outlook.office.com/login')
 
         sleep(5)
 
