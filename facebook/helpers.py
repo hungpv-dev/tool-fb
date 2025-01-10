@@ -439,7 +439,7 @@ def push_page(page,account,dirextension):
             while True:
                 try:
                     manager = Browser(pathProfile,dirextension,'chrome',False,True)
-                    browser = manager.start(False)
+                    browser = manager.start()
                     sleep(5)
                     break
                 except Exception as e:

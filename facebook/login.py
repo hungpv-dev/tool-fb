@@ -238,7 +238,9 @@ class HandleLogin:
             }
             if saveCookie:
                 dataUpdate['cookie'] = cookies
-            self.account_instance.update_account(self.account.get('id'),dataUpdate)
+                dataUpdate['type_edit'] = 2
+
+            res = self.account_instance.update_account(self.account.get('id'),dataUpdate)
             check = True
             print('Login thành công')
         except NoSuchElementException as e:
