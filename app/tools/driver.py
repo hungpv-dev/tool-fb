@@ -87,7 +87,8 @@ class Browser:
                 #     'https': f'http://{proxy["user"]}:{proxy["pass"]}@{proxy["ip"]}:{proxy["port"]}',
                 #     'no_proxy': 'localhost, 127.0.0.1'
                 # }
-            service = Service('./tools/chromedriver.exe')
+            # service = Service('./tools/chromedriver.exe')
+            service = Service('./tools/chromedriver')
             driver = webdriver.Chrome(service=service, options=chrome_options)
             return driver
         except Exception as e:

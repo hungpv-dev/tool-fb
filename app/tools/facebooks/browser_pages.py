@@ -27,18 +27,18 @@ class BrowserFanpage:
         self.history_instance = HistoryCrawlPage()
         self.account_instance = Account()
 
-    def handle(self,tab_id):
-        while True:
+    def handle(self,tab_id,stop_event):
+        while not stop_event.is_set():
             try:
-                self.crawl(tab_id) 
+                self.crawl(tab_id,stop_event) 
             except Exception as e:
                 self.error_instance.insertContent(e)
                 print("Thử lại sau 3s...")
                 sleep(3)
                 raise e
           
-    def crawl(self,tab_id):
-        while True:
+    def crawl(self,tab_id,stop_event):
+        while stop_event.is_set():
             his = None
             page = None
             try:

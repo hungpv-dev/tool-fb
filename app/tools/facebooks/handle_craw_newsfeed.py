@@ -15,8 +15,7 @@ from helpers.time import convert_to_db_format
 from helpers.modal import closeModal
 from helpers.system import get_system_info
 
-def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
-    print('Crawl id')
+def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None, managerDriver = {}):
     try:
         newfeed_instance = NewFeedModel()
         error_instance = Error()
@@ -25,44 +24,47 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
         pathProfile = f"/newsfeed/{str(account_id)}/{str(uuid.uuid4())}"
         print(f'Chuyển hướng tới fanpage: {name}')
 
-        manager = None
-        browser = None
+        manager = managerDriver.get('manager')
+        browser = managerDriver.get('browser')
 
         while not stop_event.is_set():
             try:
-                while not stop_event.is_set():
-                    try:
-                        manager = Browser(pathProfile,dirextension)
-                        browser = manager.start(False)
-                        sleep(5)
-                        break
-                    except Exception as e:
-                        # log_newsfeed(account,f"{name} k dùng được proxy, chờ 30s để thử lại")
-                        sleep(30)
-                loginInstance = HandleLogin(browser,account)
-                
-
-                while not stop_event.is_set():
-                    checkCurrent = loginInstance.checkCurrent()
-                    if checkCurrent == False:
-                        checkLogin = loginInstance.loginFacebook()
-                        if checkLogin == False:
-                            print('Đợi 5p rồi thử login lại!')
-                            sleep(300)
-                        else:
-                            account = loginInstance.getAccount()
+                if not isinstance(manager,Browser):
+                    while not stop_event.is_set():
+                        try:
+                            manager = Browser(pathProfile,dirextension)
+                            browser = manager.start()
+                            sleep(5)
                             break
+                        except Exception as e:
+                            # log_newsfeed(account,f"{name} k dùng được proxy, chờ 30s để thử lại")
+                            sleep(30)
+                    
+                    loginInstance = HandleLogin(browser,account)
 
+                    while not stop_event.is_set():
+                        checkCurrent = loginInstance.checkCurrent()
+                        if checkCurrent == False:
+                            checkLogin = loginInstance.loginFacebook()
+                            if checkLogin == False:
+                                print('Đợi 5p rồi thử login lại!')
+                                sleep(300)
+                            else:
+                                account = loginInstance.getAccount()
+                                break
+                    sleep(2)
+                    try:
+                        profile_button = browser.find_element(By.XPATH, push['openProfile'])
+                        profile_button.click()
+                        sleep(10)
+                    except Exception as e:
+                        print(f"Không thể mở profile: {name}")
+                    sleep(1)
+
+                else:
+                    loginInstance = HandleLogin(browser,account)
                 loginInstance.updateStatusAcount(account.get('id'),{'status_login': 3})
-
-                sleep(2)
-                try:
-                    profile_button = browser.find_element(By.XPATH, push['openProfile'])
-                    profile_button.click()
-                    sleep(10)
-                except Exception as e:
-                    print(f"Không thể mở profile: {name}")
-                sleep(1)
+                
                 try:
                     switchPage = browser.find_element(By.XPATH, push['switchPage'](name))
                     switchPage.click()
@@ -144,8 +146,10 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
             finally:
                 if browser:  # Kiểm tra lại trước khi gọi quit()
                     browser.quit()
+                    browser = None
                 if manager:
                     manager.cleanup()
+                    manager = None
 
     except Exception as e:
         error_instance.insertContent(e)
@@ -154,13 +158,11 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
         # log_newsfeed(account,f"==========================Đóng fanpage {name}=================================")
 
 def crawlNewFeed(account,name,dirextension,stop_event=None):
-    print('Crawl db')
-
     try:
         account_id = account.get('id', 'default_id')
         pathProfile = f"/newsfeed/{str(account_id)}/{str(uuid.uuid4())}"
         account_cookie_instance = AccountCookies()
-        from facebook.crawl import Crawl
+        from tools.facebooks.crawl_content_post import CrawlContentPost
         system_instance = System()
         newfeed_instance = NewFeedModel()
         error_instance = Error()
@@ -176,7 +178,7 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                 while not stop_event.is_set():
                     try:
                         manager = Browser(pathProfile,dirextension)
-                        browser = manager.start(False)
+                        browser = manager.start()
                         sleep(5)
                         break
                     except Exception as e:
@@ -214,7 +216,7 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
 
                 browser.get('https://facebook.com')
                 sleep(2)
-                crawl_instance = Crawl(browser)
+                crawl_instance = CrawlContentPost(browser)
                 # log_newsfeed(account,f"==> Lưu bài viết <==")
                 while not stop_event.is_set():
                     try:
@@ -262,13 +264,15 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                                 if len(post['media']['images']) > 0 or len(post['media']['videos']) > 0:
                                     check = True
 
-
+                        # print(post.get('content'))
                         if check:
+                            print('Đã lấy được 1 bài lưu db')
                             crawl_instance.likePost()
                             system_instance.update_count(system['id'])
                             account_cookie_instance.updateCount(account['latest_cookie']['id'], 'count_get')
                             crawl_instance.insertPostAndComment(post,comments,{},id)
                         else:
+                            print('Bài này k thỏa mã yêu cầu!')
                             newfeed_instance.destroy(id)
                         sleep(2)
                     except Exception as e:
@@ -282,7 +286,9 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                     system_instance.update(system['id'], {'status': 2})
                 if browser:
                     browser.quit()
+                    browser = None
                     manager.cleanup()
+                    manager = None
     except Exception as e:
         print(e)
         error_instance.insertContent(e)

@@ -5,9 +5,13 @@ from time import sleep
 from extensions.auth_proxy import create_proxy_extension,check_proxy
 from sql.accounts import Account
 from sql.errors import Error
+from main.newsfeed import get_newsfeed_process_instance
+
 
 account_instance = Account()
 error_instance = Error()
+newsfeed_process_instance = get_newsfeed_process_instance()
+
 
 def process_newsfeed(account, stop_event):
     browser = None
@@ -22,16 +26,19 @@ def process_newsfeed(account, stop_event):
             checkProxy = check_proxy(proxy)
             if checkProxy :
                 extension = create_proxy_extension(proxy)
+                newsfeed_process_instance.update_process(account.get('id'),'Đã tạo proxy')
 
         try:
             if checkProxy == True:
                 manager = Browser(f"/newsfeed/home/{account['id']}",extension)
-                browser = manager.start(False)
+                browser = manager.start()
+                newsfeed_process_instance.update_process(account.get('id'),'Đã khởi tạo trình duyệt')
                 break
             else:
                 raise Exception("Proxy không hợp lệ")
         except Exception as e:
             error_instance.insertContent(e)
+            newsfeed_process_instance.update_process(account.get('id'),'Không thể khơi tạo trình duyệt, đợi 30s...')
             print(f"Không thể khởi tạo trình duyệt, thử lại sau 30s...")
             sleep(30)
             account = account_instance.find(account['id'])
@@ -40,7 +47,7 @@ def process_newsfeed(account, stop_event):
         # browser.get('https://whatismyipaddress.com')
         # sleep(10000)
         browser.get("https://facebook.com")
-        newfeed = CrawContentNewsfeed(browser,account,extension)
+        newfeed = CrawContentNewsfeed(browser,account,extension,manager)
         newfeed.handle(stop_event)
         sleep(3)
     except Exception as e:

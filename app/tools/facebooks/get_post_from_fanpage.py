@@ -31,7 +31,7 @@ def process_crawl(id, stop_event):
                 'info': info
             })
             crawl = BrowserFanpage(browser, system)
-            crawl.handle(id)
+            crawl.handle(id,stop_event)
         except Exception as e:
             print(f"Lỗi trong Crawl, khởi động lại sau 10s: {e}")
             sleep(10)

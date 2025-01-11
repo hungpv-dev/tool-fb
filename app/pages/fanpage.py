@@ -10,7 +10,6 @@ import uuid
 fanpage_process_instance = get_fanpage_process_instance()
 
 def submit_page_count(page_input_entry, progress_list):
-    from helpers.base import redirect
     countPage = page_input_entry.get()
     try:
         countPage = int(countPage)

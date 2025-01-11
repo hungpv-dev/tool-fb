@@ -5,10 +5,11 @@ from sql.accounts import Account
 import re
 from selenium.common.exceptions import NoSuchElementException
 class HandleLogin:
-    def __init__(self,driver,acc):
+    def __init__(self,driver,acc,main_model = None):
         self.driver = driver
         self.account_instance = Account()
         self.account = acc
+        self.main_model = main_model
 
     def getAccount(self):
         return self.account
@@ -20,6 +21,10 @@ class HandleLogin:
         self.user = self.account.get('login_account')
         self.pwd = self.account.get('login_password')
         self.account = account
+
+    def updateMainModel(self,text):
+        if self.main_model:
+            self.main_model.update_process(self.account.get('id'),text)
     
 
     def loginFacebook(self):
@@ -38,11 +43,13 @@ class HandleLogin:
                 pass
             
             try:
-                self.login(self.driver,self.account)
+                self.updateMainModel('Login với cookie')
+                self.login()
             except:
                 pass
 
             check = self.saveLogin(False)
+            sleep(2)
             if check == False:
                 self.driver.get("https://facebook.com/login")
                 self.driver.find_element(By.ID,'email').send_keys(self.user)
@@ -54,6 +61,8 @@ class HandleLogin:
                 except: 
                     self.driver.find_element(By.ID,'loginbutton').click()
                 sleep(5)
+
+                self.updateMainModel('Login với username, password')
                 check = self.saveLogin()
                 if check == False:
                     try:
@@ -61,21 +70,26 @@ class HandleLogin:
                             By.XPATH, "//*[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'authentication app')]"
                         )
                         print(f'{self.account.get("name")} lấy mã xác thực App Authenticate')
+                        self.updateMainModel('Login với 2fa')
                         authenapp.click()
                         self.clickText('Continue')
                         code = self.getCode2Fa()
+                        self.updateMainModel(f'Code là: {code}')
                         check = self.pushCode(code)
                     except NoSuchElementException as e:
                         try:
                             self.driver.find_element(By.NAME,'email')
                             print(f'{self.account.get("name")} lấy mã từ Outlook')
+                            self.updateMainModel('Login với Outlook')
                             self.toggleEmail() # Chuyển sang nhận mã từ email
                             code = self.loginEmailAndGetCode() # Lấy code
+                            self.updateMainModel(f'Code là: {code}')
                             check = self.pushCode(code)
                         except:
                             self.account_instance.update_account(self.account.get('id'),{'status_login':1})
                             print(f'{self.account.get("name")} lấy mã từ Audio (chiu)')
                             pass
+            
         except Exception as e:
             print(f'Lỗi login: {e}')
             check = False
@@ -85,7 +99,6 @@ class HandleLogin:
         
     def getCode2Fa(self):
         print(f'{self.account.get("name")} Mở web lấy mã')
-
 
         self.driver.execute_script("window.open('about:blank', '_blank');")
         sleep(1)
@@ -211,15 +224,15 @@ class HandleLogin:
             except: 
                 pass
 
-            sleep(3)
+            sleep(5)
             try:
                 self.clickText('Dismiss')
             except:
                 pass
-            sleep(10)
+            sleep(5)
         else:
             print('Không tìm thấy mã code')
-        sleep(10)
+        sleep(5)
         return self.saveLogin()
 
     def checkCurrent(self):
@@ -246,9 +259,10 @@ class HandleLogin:
                 dataUpdate['cookie'] = cookies
                 dataUpdate['type_edit'] = 2
 
+            sleep(1)
             res = self.account_instance.update_account(self.account.get('id'),dataUpdate)
             check = True
-            print(f'Login thành công: {res}')
+            self.updateMainModel(f'Login thành công!')
         except NoSuchElementException as e:
             self.account_instance.update_account(self.account.get('id'),{'status_login':1})
             print('Login thất bại, tôi thất bại rồi!')
@@ -268,8 +282,6 @@ class HandleLogin:
             if 'latest_cookie' not in account:
                 raise ValueError("Không có cookie để đăng nhập.")
             
-            print(1)
-
             last_cookie = account['latest_cookie']
             
             if 'cookies' not in last_cookie:
@@ -286,14 +298,10 @@ class HandleLogin:
                 except Exception as e:
                     raise ValueError(f"Không thể thêm cookie {cookie} vào trình duyệt: {e}")
             
-            print(2)
-            
             sleep(1)
             self.driver.get('https://facebook.com')
-
-            self.updateStatusAcountCookie(last_cookie.get('id'), 2)
-
             sleep(1)
+
 
         except ValueError as ve:
             print(f"Lỗi giá trị: {ve}")

@@ -16,6 +16,8 @@ def newfeedhandle(selected_accounts):
             thread = threading.Thread(target=process_newsfeed, args=(account, stop_event))
             thread.start()
             account['stop_event'] = stop_event
+            account['tasks'] = [thread]
+            account['status_process'] = 1 # 1: Hoạt động, 2: Đã đóng
             newsfeed_process_instance.add_process(account)
     except Exception as e:
         print(f"Lỗi không mong muốn: {e}")
@@ -33,6 +35,7 @@ def newsfeed_page():
         if search_keyword:
             params['name'] = search_keyword
         accounts = account_sql.get_accounts(params)['data']
+
 
         # Xóa tất cả các checkbox hiện tại
         for widget in checkbutton_frame.winfo_children():
@@ -77,8 +80,10 @@ def newsfeed_page():
         selected_accounts = [data["account_data"] for account_id, data in checkboxes.items() if data["checkbox_var"].get()]
         if selected_accounts:
             newfeedhandle(selected_accounts)
-            fetch_and_display_accounts()
-            update_process_count()
+            redirect('newsfeed_page_list')
+            return
+            # fetch_and_display_accounts()
+            # update_process_count()
         else:
             print("Bạn đã không chọn tài khoản.")
 
@@ -102,8 +107,7 @@ def newsfeed_page():
 
 
 def close_process(account, process_frame):
-    newsfeed_process_instance.stop_process(account.get('id'))
-    process_frame.destroy()
+    newsfeed_process_instance.stop_process(account.get('id'),process_frame)
 
 def newsfeed_page_list():
     root = get_root()
@@ -133,6 +137,9 @@ def newsfeed_page_list():
         header_label1 = tk.Label(header, text="Tài khoản", font=("Segoe UI", 12, 'bold'), width=25)
         header_label1.pack(side="left", padx=5)
 
+        header_label1 = tk.Label(header, text="Tổng số tiến trình", font=("Segoe UI", 12, 'bold'), width=25)
+        header_label1.pack(side="left", padx=5)
+
         header_label2 = tk.Label(header, text="Trạng thái", font=("Segoe UI", 12, 'bold'), width=25)
         header_label2.pack(side="left", padx=5)
 
@@ -140,18 +147,29 @@ def newsfeed_page_list():
         header_label3.pack(side="right", padx=5)
 
         # Hiển thị các tiến trình
-        for account in accounts:
+        for account_id, account in accounts.items():
             row = tk.Frame(table)
             row.pack(fill="x", pady=5)
 
             account_label = tk.Label(row, text=account["name"], font=("Segoe UI", 12), width=25)
             account_label.pack(side="left", padx=5)
 
-            status_label = tk.Label(row, text=account["status_login"], font=("Segoe UI", 12), width=25)
+            task_label = tk.Label(row, text=len(account.get('tasks')), font=("Segoe UI", 12), width=25)
+            task_label.pack(side="left", padx=5)
+
+            status_label = tk.Label(row, text="Đang xử lý", font=("Segoe UI", 12), width=25)
             status_label.pack(side="left", padx=5)
 
-            close_button = ttk.Button(row, text="Đóng", style="Custom.TButton", command=lambda account=account,row=row: close_process(account,row))
+            account['status_label'] = status_label
+            account['task_label'] = task_label
+            
+            if account.get('status_process') == 1:
+                close_button = ttk.Button(row, text="Đóng", style="Custom.TButton", command=lambda account=account,row=row: close_process(account,row))
+            else:
+                close_button = ttk.Button(row, text="Đang đóng...",state="disabled", style="Custom.TButton", command=lambda account=account,row=row: close_process(account,row))
             close_button.pack(side="right", padx=5)
+            account['close_button'] = close_button
+
 
         table.update_idletasks()
     else:

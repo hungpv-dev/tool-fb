@@ -18,6 +18,7 @@ types = {
     
     'modal': [
         '/html/body/div[1]/div/div[1]/div/div[5]/div/div/div[2]/div/div/div/div',
+        '//*[@role="dialog" and @aria-labelledby]',
         '//*[@aria-posinset="1"]'
     ],
     'content': './/*[@data-ad-rendering-role="story_message"]',

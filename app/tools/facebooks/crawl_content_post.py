@@ -6,6 +6,7 @@ import re
 from helpers.time import convert_to_db_format
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import StaleElementReferenceException
 from sql.posts import Post
 from helpers.modal import closeModal
 from sql.pages import Page
@@ -62,48 +63,50 @@ class CrawlContentPost:
         modal = None # Xử lý lấy ô bài viết
         for modalXPath in types['modal']:
             try:
-                # Chờ cho modal xuất hiện
+                print(modalXPath)
                 modal = self.browser.find_element(By.XPATH, modalXPath)
                 break
             except Exception as e:
                 continue
+
         if not modal:
-            return
+            print('Không tìm thấy modal')
+            raise ValueError('Không tìm thấy modal')        
         else:
             aria_posinset = modal.get_attribute("aria-posinset")
-            if aria_posinset is not None:
-                closeModal(0, self.browser)
-            else:
+            if aria_posinset is None:
                 closeModal(2, self.browser)
+            else:
+                closeModal(0, self.browser)
 
-        # Lấy thời gian đăng
         timeUp = None
-        linkTimeUp = modal.find_elements(By.XPATH, ".//a[@attributionsrc]")
-        if linkTimeUp and len(linkTimeUp) > 0:
-            for link in linkTimeUp:
-                rect = link.rect
-                if rect['width'] > 0 and rect['height'] > 0:
-                    # Xử lý text của thẻ
-                    href_text = link.text.strip()
-                    cleaned_text = re.sub(r'[^a-zA-Z0-9 ]', '', href_text)
-                    formatted_time = convert_to_db_format(cleaned_text)
-                    if formatted_time:
-                        timeUp = formatted_time
-                        break
-
+        try:
+            linkTimeUp = WebDriverWait(modal, 5).until(
+                EC.presence_of_all_elements_located((By.XPATH, ".//a[@attributionsrc]"))
+            )
+            if linkTimeUp and len(linkTimeUp) > 0:
+                for link in linkTimeUp:
+                    try:
+                        rect = link.rect
+                        if rect['width'] > 0 and rect['height'] > 0:
+                            # Xử lý text của thẻ
+                            href_text = link.text.strip()
+                            cleaned_text = re.sub(r'[^a-zA-Z0-9 ]', '', href_text)
+                            formatted_time = convert_to_db_format(cleaned_text)
+                            if formatted_time:
+                                timeUp = formatted_time
+                    except StaleElementReferenceException:
+                        print("Element no longer in the DOM, retrying...")
+                        sleep(1)
+                        continue
+        except StaleElementReferenceException:
+            print("The element is stale and cannot be accessed.")
+        
         data['time_up'] = timeUp
 
         self.modal = modal
 
-        try:
-            content = modal.find_element(By.XPATH, types['content'])
-            contentText = content.text
-            for string in removeString:
-                contentText = contentText.replace(string, '')
-            data['content'] = contentText.strip()
-        except:
-            print(f'Bài viết k có content')
-            data['content'] = ''
+        data['content'] = extract_facebook_content(modal)
 
         # Lấy ảnh và video
         media = None
@@ -147,13 +150,13 @@ class CrawlContentPost:
         try:
             scroll = modal.find_element(By.XPATH,types['scroll'])
             self.browser.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", scroll)
+            print('Cuộn chuột xuống')
         except: 
             self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         sleep(3)
         
         try:
             comments = modal.find_elements(By.XPATH, types['comments'])
-            print(f"Lấy được: {len(comments)} bình luận!")
             
             # Click vào các từ xem thêm
             for cm in comments:
@@ -312,3 +315,15 @@ class CrawlContentPost:
         except Exception as e:
             print(e)
             raise e
+
+
+def extract_facebook_content(modal):
+    try:
+        content = modal.find_element(By.XPATH, types['content'])
+        contentText = content.text
+        for string in removeString:
+            contentText = contentText.replace(string, '')
+        return contentText.strip()
+    except Exception as e:
+        print(f'Khong có bài viết! {e}')
+        return ''

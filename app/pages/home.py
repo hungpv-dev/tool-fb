@@ -20,7 +20,7 @@ def main_page():
     button2 = ttk.Button(main_frame, text="Lấy bài viết NewsFeed", style="Custom.TButton", command=lambda: redirect('newsfeed'))
     button2.pack(fill=tk.X, pady=5, expand=True)
 
-    button3 = ttk.Button(main_frame, text="Đăng bài viết", style="Custom.TButton")
+    button3 = ttk.Button(main_frame, text="Đăng bài viết", style="Custom.TButton", command=lambda: redirect('push-posts'))
     button3.pack(fill=tk.X, pady=5, expand=True)
 
     button4 = ttk.Button(main_frame, text="Đăng nhập", style="Custom.TButton")
