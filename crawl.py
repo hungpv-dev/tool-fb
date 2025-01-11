@@ -17,7 +17,7 @@ def process_crawl(count):
     while True: 
         try:
             manager = Browser('/crawl',None,'chrome',True)
-            browser = manager.start()
+            browser = manager.start(False)
             while True:
                 try:
                     browser.get("https://facebook.com")
