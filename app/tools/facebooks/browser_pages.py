@@ -10,6 +10,7 @@ from urllib.parse import urlparse, parse_qs
 from tools.types import types
 from sql.history import HistoryCrawlPage
 from time import sleep
+from helpers.fb import clean_url_keep_params
 from helpers.time import convert_to_db_format
 from sql.system import System
 from main.fanpage import get_fanpage_process_instance
@@ -93,6 +94,7 @@ class BrowserFanpage:
                     if link.size['width'] > 0 and link.size['height'] > 0:
                         actions.move_to_element(link).perform() # Hover vào danh sách thẻ a
                         href = link.get_attribute('href')
+                        href = clean_url_keep_params(href)
                         time = link.text.strip()
                         if any(substring in href for substring in [pageLinkPost, pageLinkStory]):
                             post_links.append({

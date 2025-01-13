@@ -4,35 +4,33 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from facebook.type import types,push
+from tools.types import push
 from sql.pagePosts import PagePosts
 from sql.pages import Page
 from helpers.modal import closeModal
 from sql.errors import Error
-import json
 import uuid
+from helpers.fb import clean_url_keep_params
 from helpers.image import delete_image,download_image
-import requests
-from facebook.crawlid import CrawlId
+from tools.facebooks.browser_pages import BrowserFanpage
 from sql.comment import Comment
 from sql.account_cookies import AccountCookies
-from io import BytesIO
 from sql.accounts import Account
 from selenium.webdriver.common.action_chains import ActionChains
-import pyautogui
-from helpers.logs import log_push
 import threading
-from PIL import Image
-from facebook.login import HandleLogin
-from facebook.helpers import login,updateStatusAcount,updateStatusAcountCookie,updatePagePostInfo,push_list,push_page
+from helpers.login import HandleLogin
+from tools.facebooks.func_handle_push_post import push_page,push_list
+from main.post import get_post_process_instance
 
+post_process_instance = get_post_process_instance()
 
 class Push:
-    def __init__(self,browser,account,dirextension):
+    def __init__(self,browser,account,dirextension,manager):
         self.browser = browser
         self.account = account
+        self.manager = manager
         self.dirextension = dirextension
-        self.crawlid_instance = CrawlId(browser)
+        self.crawlid_instance = BrowserFanpage(browser)
         self.post_instance = Post()
         self.page_instance = Page()
         self.error_instance = Error()
@@ -41,69 +39,77 @@ class Push:
         self.account_cookie_instance = AccountCookies()
         self.pagePosts_instance = PagePosts()
         
-    def handle(self):
-        loginInstance = HandleLogin(self.browser,self.account)
-        while True:
+    def handle(self,stop_event):
+        loginInstance = HandleLogin(self.browser,self.account,post_process_instance)
+        while not stop_event.is_set():
             try:
-                log_push(self.account,f'* Bắt đầu ({self.account["name"]}) *')
+                post_process_instance.update_process(self.account.get('id'),'Bắt đầu đăng nhập')
                 print(f'==================Push ({self.account["name"]})================')
                 checkLogin = loginInstance.loginFacebook()
                 if checkLogin == False:
-                    print('Đợi 5p rồi thử login lại!')
-                    sleep(300)
-                    continue
+                    raise ValueError('Không thể login')
                 account = loginInstance.getAccount()
+                post_process_instance.update_process(self.account.get('id'),'Đăng nhập thành công')
                 self.account = account
-                self.handleData();          
+                self.handleData(stop_event);          
+                break
             except Exception as e:
+                post_process_instance.update_process(self.account.get('id'),'Login thất bài, thử lại sau 1p...')
                 print(f"Lỗi khi xử lý đăng bài viết!: {e}")
                 self.error_instance.insertContent(e)
-                print("Thử lại sau 5 phút...")
-                sleep(300)
+                print("Thử lại sau 1 phút...")
+                sleep(60)
 
-    def handleData(self):    
-        loginInstance = HandleLogin(self.browser,self.account)
-        print('Bắt đầu xử lý dữ liệu')
-        listPages = set()
-        while True:
-            try:
-                checkLogin = loginInstance.loginFacebook()
-                if checkLogin == False:
-                    print("Chưa đăng nhập, tiếp tục kiểm tra...")
-                    sleep(300)
-                    continue
+    def handleData(self,stop_event):    
+        try:
+            print(f"Đang ở trang chủ!")
+        
+            sleep(10)
+            threads = []
+            awaitListPage = self.getAwaitListPage()
+            post_process_instance.update_process(self.account.get('id'),f'Đang xử lý {len(awaitListPage)} fanpage')
+            for idx,pot in enumerate(awaitListPage):
+                managerDriver = {
+                    'manager': None,
+                    'browser': None,
+                }
+                # if idx == 0:
+                #     managerDriver = {
+                #         'manager': self.manager,
+                #         'browser': self.browser,
+                #     }
+                worker_thread = threading.Thread(target=push_page, args=(pot,self.account,self.dirextension,stop_event,managerDriver))
+                worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
+                worker_thread.start()
+                threads.append(worker_thread)
+                post_process_instance.update_task(self.account.get('id'),worker_thread)
 
-                while True: 
-                    try:
-                        listTimes = self.browseTime()
-                        if(len(listTimes) > 0):
-                            log_push(self.account,'Bắt đầu đăng bài')
-                            worker_thread = threading.Thread(target=push_list, args=(listTimes,self.account,self.dirextension))
-                            worker_thread.daemon = True  
-                            worker_thread.start()
-                        else:
-                            print(f"{self.account.get('name')} chưa có bài nào cần đăng trong khung giờ này!")
-                        
-                        awaitListPage = self.getAwaitListPage()
-                        for pot in awaitListPage:
-                            if pot and 'id' in pot:
-                                page_id = pot.get('id')  
-                                if page_id not in listPages:
-                                    log_push(self.account,f'=======Theo dõi: {pot.get("name")}')
-                                    print(f'=======Theo dõi: {pot.get("name")}')
-                                    worker_thread = threading.Thread(target=push_page, args=(pot,self.account,self.dirextension))
-                                    worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
-                                    worker_thread.start()
-                                    listPages.add(page_id)
-                    except Exception as e:
-                        print(e)
-                    print('Chờ 60s để tiếp tục...')
-                    sleep(60)
-   
-            except Exception as e:
-                print(f'Lỗi khi push: {e}')
-                print('Chờ 5 phút trước khi thử lại...')
-                sleep(300)
+            while not stop_event.is_set(): 
+                try:
+                    listTimes = self.browseTime()
+                    if(len(listTimes) > 0):
+                        worker_thread = threading.Thread(target=push_list, args=(listTimes,self.account,self.dirextension))
+                        worker_thread.daemon = True  
+                        worker_thread.start()
+                        threads.append(worker_thread)
+                        post_process_instance.update_task(self.account.get('id'),worker_thread)
+                    else:
+                        print(f"{self.account.get('name')} chưa có bài nào cần đăng trong khung giờ này!")
+                    
+                except Exception as e:
+                    print(e)
+                print('Chờ 60s để tiếp tục...')
+                sleep(60)
+
+            
+            for thread in threads:
+                thread.join()
+            post_process_instance.update_process(self.account.get('id'), f'Chương trình đã bị dừng...')
+
+        except Exception as e:
+            print(f'Lỗi khi push: {e}')
+            print('Chờ 5 phút trước khi thử lại...')
+            sleep(300)
 
             
     
@@ -117,28 +123,6 @@ class Push:
         return listPosts
         
     
-    def getListPage(self):
-        while True:
-            try:
-                listPages = self.page_instance.get_pages({
-                    'type_page': 2,
-                    'user_id': self.account["id"],
-                    'order': 'updated_at',
-                    'sort': 'asc',
-                    'show_all': True,
-                })['data']
-                if listPages: 
-                    print(f"Lấy được danh sách trang: {len(listPages)} trang.")
-                    return listPages
-                else:
-                    print("Không có dữ liệu. Đợi 5 phút trước khi thử lại...")
-            except Exception as e:
-                print(f"Lỗi khi lấy danh sách trang: {e}")
-
-            sleep(300)
-
-
-
     # Xử lý đăng
     def switchPage(self, page):
         name = page['name']
@@ -203,7 +187,7 @@ class Push:
                             temp_image_path = download_image(src, temp_file=f"image_{uuid.uuid4()}.png")
                             listLinkTemps.append(temp_image_path)
                             sleep(1)
-                            file_input = self.browser.find_elements(By.XPATH, '//input[@type="file"]')[-1]
+                            file_input = parent_form.find_elements(By.XPATH, './/input[@type="file"]')[-1]
                             file_input.send_keys(temp_image_path)
                             sleep(3)
                 except Exception as e:
@@ -256,6 +240,7 @@ class Push:
                         sleep(0.5)  # Đợi một chút để URL được cập nhật
                         # Lấy URL thật
                         href = link.get_attribute('href')
+                        href = clean_url_keep_params(href)
                         if href:  # Chỉ thêm nếu href không rỗng
                             if any(substring in href for substring in [pageLinkPost, pageLinkStory]):
                                 link_up = href
@@ -268,7 +253,8 @@ class Push:
             print(f"Không tìm thấy bài viết vừa đăng! {e}")
         
         print('Đã lấy được link up')
-        updatePagePostInfo(up['id'],{'link_up': link_up}) # Cập nhật trạng thái đã đăng
+        page_post_instance = PagePosts()
+        page_post_instance.update_status(up['id'],{'link_up': link_up})
         sleep(2)
         
         comments = up.get('comments', [])

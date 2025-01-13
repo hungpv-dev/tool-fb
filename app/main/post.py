@@ -1,5 +1,5 @@
 import threading
-class NewsFeedProcess:
+class PostProcess:
     def __init__(self):
         self.progress_data = {}
 
@@ -57,7 +57,7 @@ class NewsFeedProcess:
 
 
 # Biến toàn cục lưu instance của FanpageProcess
-newsfeed_process = NewsFeedProcess()
+post_process = PostProcess()
 
-def get_newsfeed_process_instance():
-    return newsfeed_process
+def get_post_process_instance():
+    return post_process

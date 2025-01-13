@@ -3,6 +3,7 @@ from sql.errors import Error
 from sql.account_cookies import AccountCookies
 import uuid
 from tools.driver import Browser
+import json
 from sql.system import System
 import unicodedata
 from time import sleep
@@ -10,6 +11,7 @@ from helpers.login import HandleLogin
 from urllib.parse import urlparse, parse_qs
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
+from helpers.fb import clean_url_keep_params
 from tools.types import push,types
 from helpers.time import convert_to_db_format
 from helpers.modal import closeModal
@@ -43,15 +45,13 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None, manag
                     loginInstance = HandleLogin(browser,account)
 
                     while not stop_event.is_set():
-                        checkCurrent = loginInstance.checkCurrent()
-                        if checkCurrent == False:
-                            checkLogin = loginInstance.loginFacebook()
-                            if checkLogin == False:
-                                print('Đợi 5p rồi thử login lại!')
-                                sleep(300)
-                            else:
-                                account = loginInstance.getAccount()
-                                break
+                        checkLogin = loginInstance.loginFacebook()
+                        if checkLogin == False:
+                            print('Đợi 1p rồi thử login lại!')
+                            sleep(60)
+                        else:
+                            account = loginInstance.getAccount()
+                            break
                     sleep(2)
                     try:
                         profile_button = browser.find_element(By.XPATH, push['openProfile'])
@@ -101,6 +101,7 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None, manag
                                     if link.is_displayed() and link.size['width'] > 0 and link.size['height'] > 0:
                                         actions.move_to_element(link).perform()
                                         href = link.get_attribute('href')
+                                        href = clean_url_keep_params(href)
                                         time = link.text.strip()
                                         converTime = convert_to_db_format(time)
                                         post_id = ''
@@ -117,7 +118,7 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None, manag
                                             account_cookie_instance.updateCount(account['latest_cookie']['id'], 'counts')
                                             data = {
                                                 'post_fb_id': post_id,
-                                                'post_fb_link': href,
+                                                'post_fb_link': clean_url_keep_params(href),
                                                 'status': 1,
                                                 'cookie_id': account['latest_cookie']['id'],
                                                 'account_id': account.get('id'),
@@ -188,15 +189,13 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                 loginInstance = HandleLogin(browser,account)
 
                 while not stop_event.is_set():
-                    checkCurrent = loginInstance.checkCurrent()
-                    if checkCurrent == False:
-                        checkLogin = loginInstance.loginFacebook()
-                        if checkLogin == False:
-                            print('Đợi 5p rồi thử login lại!')
-                            sleep(300)
-                        else:
-                            account = loginInstance.getAccount()
-                            break
+                    checkLogin = loginInstance.loginFacebook()
+                    if checkLogin == False:
+                        print('Đợi 1p rồi thử login lại!')
+                        sleep(60)
+                    else:
+                        account = loginInstance.getAccount()
+                        break
 
                 loginInstance.updateStatusAcount(account.get('id'),{'status_login': 3})
                 sleep(2)
@@ -219,6 +218,8 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                 crawl_instance = CrawlContentPost(browser)
                 # log_newsfeed(account,f"==> Lưu bài viết <==")
                 while not stop_event.is_set():
+                    browser.get('https://facebook.com')
+                    sleep(1)
                     try:
                         profile_button = browser.find_element(By.XPATH, push['openProfile'])
                     except Exception as e:
@@ -232,45 +233,57 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                             print('Hiện chưa có bài viết nào cần lấy! chờ 1p để tiếp tục...')
                             sleep(60)
                             continue
+                        
                         id = up['id']
-                        browser.get(up['post_fb_link'])
+                        browser.get(clean_url_keep_params(up['post_fb_link']))
                         up['newfeed'] = 1
                         up['id'] = up['post_fb_id']
                         up['link'] = up['post_fb_link']
                         try:
-                            data = crawl_instance.crawlContentPost({},up,{},True)
+                            data = crawl_instance.crawlContentPost({},up,{},newfeed=True)
                         except Exception as e:
                             newfeed_instance.destroy(id)
                             continue
 
-                        keywords = up.get('keywords') or []
                         check = False
                         
                         post = data.get('post')
                         comments = data.get('comments')
-                        post['keywords'] = keywords
-                        
-                        post_content_no_accents = remove_accents(post['content'].lower())
-                        if any(remove_accents(keyword.lower()) in post_content_no_accents for keyword in keywords):
-                            check = True
-
-                        for cm in comments:
-                            comment_content_no_accents = remove_accents(cm['content'].lower())
-                            if any(remove_accents(keyword.lower()) in comment_content_no_accents for keyword in keywords):
+                        try:
+                            keywords = up.get('keywords') or []
+                            post['keywords'] = keywords
+                            
+                            post_content_no_accents = remove_accents(post['content'].lower())
+                            if any(remove_accents(keyword.lower()) in post_content_no_accents for keyword in keywords):
                                 check = True
 
-                        if keywords is None or len(keywords) == 0:
-                            if 'media' in post and 'images' in post['media'] and 'videos' in post['media']:
-                                if len(post['media']['images']) > 0 or len(post['media']['videos']) > 0:
+                            for cm in comments:
+                                comment_content_no_accents = remove_accents(cm['content'].lower())
+                                if any(remove_accents(keyword.lower()) in comment_content_no_accents for keyword in keywords):
                                     check = True
+
+                            if keywords is None or len(keywords) == 0:
+                                if 'media' in post and 'images' in post['media'] and 'videos' in post['media']:
+                                    if len(post['media']['images']) > 0 or len(post['media']['videos']) > 0:
+                                        check = True
+                        except Exception as e:
+                            print('Lỗi khi check keywords')
 
                         # print(post.get('content'))
                         if check:
                             print('Đã lấy được 1 bài lưu db')
-                            crawl_instance.likePost()
+                            sleep(1)
+                            icon = crawl_instance.likePost()
+                            sleep(1)
+                            post['icon'] = icon
+                            print(json.dumps({
+                                'link': post.get('link_facebook'),
+                                'icon': post.get('icon'),
+                            },indent=4))
+                            crawl_instance.insertPostAndComment(post,comments,{},id)
+                            crawl_instance.viewImages(post)
                             system_instance.update_count(system['id'])
                             account_cookie_instance.updateCount(account['latest_cookie']['id'], 'count_get')
-                            crawl_instance.insertPostAndComment(post,comments,{},id)
                         else:
                             print('Bài này k thỏa mã yêu cầu!')
                             newfeed_instance.destroy(id)

@@ -45,7 +45,8 @@ class HandleLogin:
             try:
                 self.updateMainModel('Login với cookie')
                 self.login()
-            except:
+            except Exception as e:
+                self.updateMainModel('Không thể login với cookie')
                 pass
 
             check = self.saveLogin(False)
@@ -263,9 +264,8 @@ class HandleLogin:
             res = self.account_instance.update_account(self.account.get('id'),dataUpdate)
             check = True
             self.updateMainModel(f'Login thành công!')
-        except NoSuchElementException as e:
+        except Exception as e:
             self.account_instance.update_account(self.account.get('id'),{'status_login':1})
-            print('Login thất bại, tôi thất bại rồi!')
         return check
 
 
@@ -302,12 +302,8 @@ class HandleLogin:
             self.driver.get('https://facebook.com')
             sleep(1)
 
-
-        except ValueError as ve:
-            print(f"Lỗi giá trị: {ve}")
-            if 'latest_cookie' in account and 'id' in account['latest_cookie']:
-                self.updateStatusAcountCookie(account['latest_cookie']['id'], 1)
         except Exception as e:
+            self.updateMainModel('Không thể login')
             print(f"Lỗi login {account.get('name')}: {e}")
             if 'latest_cookie' in account and 'id' in account['latest_cookie']:
                 self.updateStatusAcountCookie(account['latest_cookie']['id'], 1)

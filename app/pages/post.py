@@ -2,38 +2,38 @@ import tkinter as tk
 from tkinter import ttk
 from main.root import get_root
 from sql.accounts import Account
-from main.newsfeed import get_newsfeed_process_instance
-from tools.facebooks.browser_newsfeed import process_newsfeed
+from main.post import get_post_process_instance
+from tools.facebooks.browser_post import process_post
 import threading
 
-newsfeed_process_instance = get_newsfeed_process_instance()
+post_process_instance = get_post_process_instance()
 
 def newfeedhandle(selected_accounts):
     try:
         for account in selected_accounts:
             print(account.get('name'))
             stop_event = threading.Event()
-            thread = threading.Thread(target=process_newsfeed, args=(account, stop_event))
+            thread = threading.Thread(target=process_post, args=(account, stop_event))
             thread.start()
             account['stop_event'] = stop_event
             account['tasks'] = [thread]
             account['status_process'] = 1 # 1: Hoạt động, 2: Đã đóng
-            newsfeed_process_instance.add_process(account)
+            post_process_instance.add_process(account)
     except Exception as e:
         print(f"Lỗi không mong muốn: {e}")
 
-def newsfeed_page():
+def post_page():
     account_sql = Account()
     root = get_root()
     from helpers.base import redirect
     frame = ttk.Frame(root, padding="10", style="Custom.TFrame")
     frame.grid(row=0, column=0, sticky="nsew")
 
-    account_selected = newsfeed_process_instance.get_all_processes()
+    account_selected = post_process_instance.get_all_processes()
 
     # Hàm lấy danh sách tài khoản từ API và hiển thị
     def fetch_and_display_accounts(search_keyword=None):
-        params = {'typenot': 2}
+        params = {'typenot': 1}
         if search_keyword:
             params['name'] = search_keyword
         accounts = account_sql.get_accounts(params)['data']
@@ -71,6 +71,9 @@ def newsfeed_page():
         keyword = search_var.get().strip()
         fetch_and_display_accounts(keyword)
 
+
+
+
     search_frame = ttk.Frame(frame)
     search_frame.pack(fill=tk.X, pady=5)
 
@@ -85,7 +88,7 @@ def newsfeed_page():
         selected_accounts = [data["account_data"] for account_id, data in checkboxes.items() if data["checkbox_var"].get()]
         if selected_accounts:
             newfeedhandle(selected_accounts)
-            redirect('newsfeed_page_list')
+            redirect('post_page_list')
             return
             # fetch_and_display_accounts()
             # update_process_count()
@@ -93,14 +96,14 @@ def newsfeed_page():
             print("Bạn đã không chọn tài khoản.")
 
     def update_process_count():
-        process_count = len(newsfeed_process_instance.get_all_processes())
+        process_count = len(post_process_instance.get_all_processes())
         process_button.config(text=f"Danh sách tiến trình ({process_count})")
 
     submit_button = ttk.Button(frame, text="Xác nhận", style="Custom.TButton", command=submit_selection)
     submit_button.pack(fill=tk.X, pady=5, expand=True)
 
-    process_button = ttk.Button(frame, text=f"Danh sách tiến trình ({len(newsfeed_process_instance.get_all_processes())})", 
-                                style="Custom.TButton", command=lambda: redirect('newsfeed_page_list'))
+    process_button = ttk.Button(frame, text=f"Danh sách tiến trình ({len(post_process_instance.get_all_processes())})", 
+                                style="Custom.TButton", command=lambda: redirect('post_page_list'))
     process_button.pack(fill=tk.X, pady=5, expand=True)
 
 
@@ -112,12 +115,12 @@ def newsfeed_page():
 
 
 def close_process(account):
-    newsfeed_process_instance.stop_process(account.get('id'))
+    post_process_instance.stop_process(account.get('id'))
 
-def newsfeed_page_list():
+def post_page_list():
     root = get_root()
     from helpers.base import redirect
-    accounts = newsfeed_process_instance.get_all_processes()  # Lấy tất cả tiến trình đang chạy từ instance
+    accounts = post_process_instance.get_all_processes()  # Lấy tất cả tiến trình đang chạy từ instance
     
     frame = ttk.Frame(root, padding="10", style="Custom.TFrame")
     frame.grid(row=0, column=0, sticky="nsew")
@@ -186,7 +189,7 @@ def newsfeed_page_list():
     button_frame = ttk.Frame(frame)
     button_frame.pack(fill=tk.X, pady=10)
 
-    add_button = ttk.Button(button_frame, text="Thêm mới", style="Custom.TButton", command=lambda: redirect('newsfeed'))
+    add_button = ttk.Button(button_frame, text="Thêm mới", style="Custom.TButton", command=lambda: redirect('post'))
     add_button.pack(side="left", padx=5, expand=True)
 
     back_button = ttk.Button(button_frame, text="Quay lại", style="Custom.TButton", command=lambda: redirect('home'))

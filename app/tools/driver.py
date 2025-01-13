@@ -90,6 +90,9 @@ class Browser:
             # service = Service('./tools/chromedriver.exe')
             service = Service('./tools/chromedriver')
             driver = webdriver.Chrome(service=service, options=chrome_options)
+
+            driver.set_page_load_timeout(60)
+            
             return driver
         except Exception as e:
             logging.error(f"Error starting Chrome browser: {e}")
