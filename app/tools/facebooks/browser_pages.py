@@ -29,45 +29,46 @@ class BrowserFanpage:
         self.account_instance = Account()
 
     def handle(self,tab_id,stop_event):
+        fanpage_process_instance.update_process(tab_id,'Bắt đầu thực thi....')
         while not stop_event.is_set():
             try:
-                self.crawl(tab_id,stop_event) 
+                fanpage_process_instance.update_process(tab_id,'Bắt đầu cào page')
+                self.crawl(tab_id)
             except Exception as e:
                 self.error_instance.insertContent(e)
                 print("Thử lại sau 3s...")
-                sleep(3)
-                raise e
+            fanpage_process_instance.update_process(tab_id,'Đợi 3s tới page kế tiếp')
+            sleep(3)
           
-    def crawl(self,tab_id,stop_event):
-        while stop_event.is_set():
-            his = None
-            page = None
-            try:
-                page = self.page_instance.page_old()
-                his = self.history_instance.insert({
-                    'status': 1,
-                    'page_id': page['id']
-                })
-                name = page.get('name')
-                fanpage_process_instance.update_process(tab_id, f"Đang cào page: {name if name else 'Không thể truy cập'}...")
-                link = page['link']
-                self.browser.get(link)
-                self.crawlIdFanpage(page,his)
-            except Exception as e:
-                if page:
-                    self.page_instance.update_page(page['id'],{'status':1}) # Đang hoạt động
-                if his:
-                    self.history_instance.update(his['id'], {'status': 2})
-                raise e
-            finally:
-                fanpage_process_instance.update_process(tab_id,'Đang chuyển hướng...')
-                if page:
-                    self.page_instance.update_page(page['id'],{'status':1}) # Đang hoạt động
-                if his:
-                    self.history_instance.update(his['id'], {'status': 2})
+    def crawl(self,tab_id):
+        his = None
+        page = None
+        try:
+            page = self.page_instance.page_old()
+            his = self.history_instance.insert({
+                'status': 1,
+                'page_id': page['id']
+            })
+            name = page.get('name')
+            fanpage_process_instance.update_process(tab_id, f"Đang truy cập page: {name}")
+            link = page['link']
+            self.browser.get(link)
+            self.crawlIdFanpage(page,his,tab_id)
+        except Exception as e:
+            if page:
+                self.page_instance.update_page(page['id'],{'status':1}) # Đang hoạt động
+            if his:
+                self.history_instance.update(his['id'], {'status': 2})
+            raise e
+        finally:
+            fanpage_process_instance.update_process(tab_id,'Đang chuyển hướng...')
+            if page:
+                self.page_instance.update_page(page['id'],{'status':1}) # Đang hoạt động
+            if his:
+                self.history_instance.update(his['id'], {'status': 2})
 
         
-    def crawlIdFanpage(self, page, his):
+    def crawlIdFanpage(self, page, his,tab_id):
         from tools.facebooks.crawl_content_post import CrawlContentPost
         crawl_instance = CrawlContentPost(self.browser)
         closeModal(0, self.browser)
@@ -77,8 +78,11 @@ class BrowserFanpage:
         sleep(5)
         try:
             name = self.updateInfoFanpage(page)
+            fanpage_process_instance.update_process(tab_id,f'Đang cào page: {name}')
         except Exception as e:
-            raise ValueError(f'Page {page["id"]} không thể truy cập!')
+            fanpage_process_instance.update_process(tab_id,f'Không thể truy cập: {page["id"]}')
+            print(f'Page {page["id"]} không thể truy cập!')
+            return
         print(f'====== {name} ======')
         
         pageLinkPost = f"{page['link']}/posts/"
@@ -136,61 +140,63 @@ class BrowserFanpage:
                     
         self.history_instance.update(his['id'],{'counts': len(post_data)})
         if post_data:
+            startLength = 0
             for post in post_data:
+                startLength = startLength + 1
+                fanpage_process_instance.update_process(tab_id,f'{name}: ~~{startLength}~~/{len(post_data)}')
                 if self.system is not None:
                     self.system_instance.update_count(self.system['id'])
                 crawl_instance.get(page, post, his)
-        
+                fanpage_process_instance.update_process(tab_id,f'{name}: {startLength}/{len(post_data)}')
         sleep(3)
 
     def updateInfoFanpage(self, page):
         dataUpdatePage = {}
-        while True: 
+        try:
+            name_page = self.browser.find_element(By.XPATH, '(//h1)[last()]')
+            name = name_page.text.strip()
+            dataUpdatePage['name'] = name
+
+            if name == 'This site can’t be reached':
+                print('Không load được trang đợi 30s,....')
+                sleep(30)
+                self.browser.refresh() 
+            
             try:
-                name_page = self.browser.find_element(By.XPATH, '(//h1)[last()]')
-                name = name_page.text.strip()
-                dataUpdatePage['name'] = name
-
-                if name == 'This site can’t be reached':
-                    print('Không load được trang đợi 30s,....')
-                    sleep(30)
-                    self.browser.refresh() 
-                
-                try:
-                    verified_elements = name_page.find_elements(By.XPATH, types['verify_account'])
-                    # Kiểm tra tích xanh
-                    if verified_elements:
-                        dataUpdatePage['verified'] = 1
-                    else:
-                        dataUpdatePage['verified'] = 0
-                except:
+                verified_elements = name_page.find_elements(By.XPATH, types['verify_account'])
+                # Kiểm tra tích xanh
+                if verified_elements:
+                    dataUpdatePage['verified'] = 1
+                else:
                     dataUpdatePage['verified'] = 0
-                    pass
-                
-                try: # Lấy lượt like
-                    likes = self.browser.find_element(By.CSS_SELECTOR, types['friends_likes'])
-                    dataUpdatePage['like_counts'] = likes.text
-                except:
-                    pass
-                
-                try: # Lấy follows
-                    follows = self.browser.find_element(By.CSS_SELECTOR, types['followers'])
-                    dataUpdatePage['follow_counts'] = follows.text
-                except:
-                    pass
-                
-                try: # Lấy followning
-                    following = self.browser.find_element(By.CSS_SELECTOR, types['following'])
-                    dataUpdatePage['following_counts'] = following.text
-                except:
-                    pass
+            except:
+                dataUpdatePage['verified'] = 0
+                pass
+            
+            try: # Lấy lượt like
+                likes = self.browser.find_element(By.CSS_SELECTOR, types['friends_likes'])
+                dataUpdatePage['like_counts'] = likes.text
+            except:
+                pass
+            
+            try: # Lấy follows
+                follows = self.browser.find_element(By.CSS_SELECTOR, types['followers'])
+                dataUpdatePage['follow_counts'] = follows.text
+            except:
+                pass
+            
+            try: # Lấy followning
+                following = self.browser.find_element(By.CSS_SELECTOR, types['following'])
+                dataUpdatePage['following_counts'] = following.text
+            except:
+                pass
 
-                dataUpdatePage['status'] = 1
-                self.page_instance.update_page(page['id'],dataUpdatePage)
-                return name
-            except Exception as e:
-                self.page_instance.update_page(page['id'], {'status': 3})  # Không thể truy cập
-                raise e
+            dataUpdatePage['status'] = 1
+            self.page_instance.update_page(page['id'],dataUpdatePage)
+            return name
+        except Exception as e:
+            self.page_instance.update_page(page['id'], {'status': 3})  # Không thể truy cập
+            raise e
         
    
     

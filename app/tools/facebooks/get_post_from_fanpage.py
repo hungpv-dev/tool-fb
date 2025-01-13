@@ -12,20 +12,13 @@ def process_crawl(id, stop_event):
     browser = None
     manager = None
     system = None
-    print(f'Đang mở tab: {id}')
+    fanpage_process_instance.update_process(id,'Đang mở tab....')
     while not stop_event.is_set(): 
         try:
-            fanpage_process_instance.update_process(id,'Đang mở tab....')
             manager = Browser('/crawl',None,'chrome',True)
             browser = manager.start()
-            while not stop_event.is_set():
-                try:
-                    browser.get("https://facebook.com")
-                    break
-                except Exception as e:
-                    print(f'=========\nĐang khởi động lại tab {id}!, chờ 10s ... \n{e}\n====================')
-                    sleep(10)
-            
+            fanpage_process_instance.update_process(id,'Đang chuyển hướng đến facebook....')
+            browser.get("https://facebook.com")
             info = get_system_info()
             system = system_instance.insert({
                 'info': info
@@ -33,6 +26,7 @@ def process_crawl(id, stop_event):
             crawl = BrowserFanpage(browser, system)
             crawl.handle(id,stop_event)
         except Exception as e:
+            fanpage_process_instance.update_process(id,'Tab bị lỗi, thử lại sau 10s....')
             print(f"Lỗi trong Crawl, khởi động lại sau 10s: {e}")
             sleep(10)
         finally:
@@ -43,5 +37,7 @@ def process_crawl(id, stop_event):
             if browser:
                 browser.quit()
             sleep(10)
+
+    fanpage_process_instance.update_process(id,'Tab đã bị đóng, xoá và chạy lại...')
 
 

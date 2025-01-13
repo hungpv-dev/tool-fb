@@ -23,13 +23,20 @@ def main_page():
     button3 = ttk.Button(main_frame, text="Đăng bài viết", style="Custom.TButton", command=lambda: redirect('post'))
     button3.pack(fill=tk.X, pady=5, expand=True)
 
-    button4 = ttk.Button(main_frame, text="Đăng nhập", style="Custom.TButton")
-    button4.pack(fill=tk.X, pady=5, expand=True)
+    # button4 = ttk.Button(main_frame, text="Đăng nhập", style="Custom.TButton")
+    # button4.pack(fill=tk.X, pady=5, expand=True)
 
-    button5 = ttk.Button(main_frame, text="Dọn dẹp bộ nhớ", style="Custom.TButton")
-    button5.pack(fill=tk.X, pady=5, expand=True)
+    # button5 = ttk.Button(main_frame, text="Dọn dẹp bộ nhớ", style="Custom.TButton")
+    # button5.pack(fill=tk.X, pady=5, expand=True)
+    
+    button7 = ttk.Button(main_frame, text="Cài đặt môi trường", style="Custom.TButton", command=lambda: redirect('settings'))
+    button7.pack(fill=tk.X, pady=5, expand=True)
 
-    button6 = ttk.Button(main_frame, text="Thoát", style="Custom.TButton")
+    button8 = ttk.Button(main_frame, text="Xem Log", style="Custom.TButton", command=lambda: redirect('logs'))
+    button8.pack(fill=tk.X, pady=5, expand=True)
+
+    button6 = ttk.Button(main_frame, text="Thoát", style="Custom.TButton", command=root.quit)
     button6.pack(fill=tk.X, pady=5, expand=True)
+
 
     return main_frame

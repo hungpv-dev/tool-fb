@@ -218,8 +218,6 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                 crawl_instance = CrawlContentPost(browser)
                 # log_newsfeed(account,f"==> Lưu bài viết <==")
                 while not stop_event.is_set():
-                    browser.get('https://facebook.com')
-                    sleep(1)
                     try:
                         profile_button = browser.find_element(By.XPATH, push['openProfile'])
                     except Exception as e:
@@ -272,18 +270,22 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                         # print(post.get('content'))
                         if check:
                             print('Đã lấy được 1 bài lưu db')
-                            sleep(1)
+                            crawl_instance.shareCopyLink()
+                            crawl_instance.sharePostAndOpenNotify()
                             icon = crawl_instance.likePost()
-                            sleep(1)
                             post['icon'] = icon
+                            closeModal(crawl_instance.index,browser)
+                            sleep(1)
                             print(json.dumps({
                                 'link': post.get('link_facebook'),
                                 'icon': post.get('icon'),
                             },indent=4))
-                            crawl_instance.insertPostAndComment(post,comments,{},id)
                             crawl_instance.viewImages(post)
+                            crawl_instance.insertPostAndComment(post,comments,{},id)
                             system_instance.update_count(system['id'])
                             account_cookie_instance.updateCount(account['latest_cookie']['id'], 'count_get')
+                            browser.get('https://facebook.com')
+                            sleep(2)
                         else:
                             print('Bài này k thỏa mã yêu cầu!')
                             newfeed_instance.destroy(id)

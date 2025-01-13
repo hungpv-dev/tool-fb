@@ -1,0 +1,5 @@
+{
+    "browser": "chrome",
+    "headless": true,
+    "driver_path": "C:\\Users\\Admin\\.wdm\\drivers\\chromedriver\\win64\\131.0.6778.264\\chromedriver-win32/chromedriver.exe"
+}

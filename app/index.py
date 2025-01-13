@@ -1,5 +1,3 @@
-import tkinter as tk
-from tkinter import ttk
 from helpers.base import redirect
 from main.root import get_root
 
@@ -12,5 +10,6 @@ def create_facebook_like_interface():
     # Chạy vòng lặp chính của giao diện
     root.mainloop()
 
+if __name__ == "__main__":
 # Gọi hàm để tạo giao diện đẹp
-create_facebook_like_interface()
+    create_facebook_like_interface()

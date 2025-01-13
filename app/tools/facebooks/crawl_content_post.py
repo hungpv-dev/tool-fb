@@ -12,7 +12,7 @@ from selenium.common.exceptions import NoSuchElementException,ElementClickInterc
 import random
 from sql.posts import Post
 from helpers.modal import closeModal
-from helpers.fb import clean_url_keep_params
+from helpers.fb import clean_url_keep_params,clean_facebook_url_redirect
 from sql.pages import Page
 from sql.errors import Error
 from sql.history import HistoryCrawlPage
@@ -31,6 +31,7 @@ class CrawlContentPost:
         self.account_instance = Account()
         self.account_cookies = AccountCookies()
         self.modal = None
+        self.index = 0
 
     def get(self,page, post, his):
         try:
@@ -80,10 +81,11 @@ class CrawlContentPost:
         else:
             aria_posinset = modal.get_attribute("aria-posinset")
             if aria_posinset is None:
-                closeModal(2, self.browser)
+                self.index = 2
+                closeModal(self.index,self.browser)
             else:
-                print(post['link'])
-                closeModal(0, self.browser)
+                self.index = 0
+                closeModal(self.index, self.browser)
 
         timeUp = None
 
@@ -264,7 +266,7 @@ class CrawlContentPost:
                 dataComment.append({
                     'user_name': user_name,
                     'content': textContentComment,
-                    'link_comment': link_comment,
+                    'link_comment': clean_facebook_url_redirect(link_comment),
                 })
             print(f"=> Lưu được {len(dataComment)} bình luận!")
         except Exception as e:
@@ -280,13 +282,6 @@ class CrawlContentPost:
         self.insertPostAndComment(data,dataComment, his)
         
     def likePost(self):
-        try:
-            scroll = self.modal.find_element(By.XPATH,types['scroll'])
-            self.browser.execute_script("arguments[0].scrollTop = 0;", scroll)
-        except: 
-            self.browser.execute_script("window.scrollTo(0, 0);")
-        # # Tìm thẻ có aria-label="Like"
-        # self.browser.execute_script("document.body.style.zoom='50%';")
         icon = ""
         sleep(2)
         try:
@@ -328,10 +323,81 @@ class CrawlContentPost:
             else:
                 print("Không có phần tử nào khả dụng.")
         except Exception as e:
-            print(e)
             print("Không tìm thấy thẻ like!")
         return icon
         
+    
+    def shareCopyLink(self):
+        try:
+            scroll = self.modal.find_element(By.XPATH,types['scroll'])
+            self.browser.execute_script("arguments[0].scrollTop = 0;", scroll)
+        except: 
+            self.browser.execute_script("window.scrollTo(0, 0);")
+        # # Tìm thẻ có aria-label="Like"
+        # self.browser.execute_script("document.body.style.zoom='50%';")
+        try:
+            btnShare = self.modal.find_element(By.XPATH,'.//*[@aria-label="Send this to friends or post it on your profile."]')
+            ActionChains(self.browser).move_to_element(btnShare).perform()
+            sleep(1)
+            btnShare.click()
+            sleep(3)
+
+            parent_element = self.browser.find_element(By.XPATH, ".//*[@aria-label='List of available \"share to\" options in the unified share sheet.']")
+            list = parent_element.find_elements(By.XPATH, "./div/div/div")
+            for item in list:
+                item_text = item.text.lower()
+                if "copy link" in item_text:
+                    item.click()
+                    sleep(2)
+                    break
+        except Exception as e:
+            closeModal(self.index,self.browser)
+            print('Không thể copy link')
+
+    
+    def sharePostAndOpenNotify(self):
+        try:
+            btnOpenMenu = self.modal.find_element(By.XPATH, './/*[@aria-label="Actions for this post" and @aria-haspopup="menu"]')
+            sleep(1)
+            ActionChains(self.browser).move_to_element(btnOpenMenu)
+            btnOpenMenu.click()
+            sleep(3)
+            menuitems = self.browser.find_elements(By.XPATH, ".//*[@aria-label='Feed story' and @role='menu']//*[@role='menuitem']")
+            for item in menuitems:
+                item_text = item.text.lower()
+                if "save post" in item_text and 'unsave post' not in item_text:
+                    item.click()
+                    sleep(3)
+                    try:
+                        diaglog = self.browser.find_element(By.XPATH, './/*[@aria-label="Save To" and @role="dialog"]')
+                        log = diaglog.find_element(By.XPATH,'.//*[@aria-label="Done"]')
+                        try:
+                            log.click()
+                            sleep(2) 
+                        except Exception as e:
+                            closeModal(self.index,self.browser)
+                    except Exception as e:
+                        print(e)
+                        print('Không thể save post')
+                    break
+            
+            menuitems = self.browser.find_elements(By.XPATH, ".//*[@aria-label='Feed story' and @role='menu']//*[@role='menuitem']")
+            if not menuitems:
+                btnOpenMenu.click()
+                sleep(3)
+                menuitems = self.browser.find_elements(By.XPATH, ".//*[@aria-label='Feed story' and @role='menu']//*[@role='menuitem']")
+
+            for item in menuitems:
+                item_text = item.text.lower()
+                if "turn on notifications" in item_text:
+                    item.click()
+                    sleep(1)
+                    break
+        except Exception as e: 
+            print('Không thể turn on notify')
+        sleep(1)
+
+
     def viewImages(self, post):
         try:
             media = post.get('media')
@@ -340,12 +406,16 @@ class CrawlContentPost:
                 for img in images:
                     try:
                         if isinstance(img, str): 
-                            self.browser.get(img)
+                            link = self.browser.find_element(By.XPATH, f"//img[@src='{img}']")
+                            link.click()  
+                            sleep(5)
+                            closeModal(0,self.browser)
+                            sleep(1)
                         else:
                             print(f"URL không hợp lệ: {img}")
                     except Exception as e:
+                        sleep(5)
                         print(f"Lỗi khi truy cập hình ảnh {img}: {e}")
-                    sleep(5)
         except Exception as e:
             print(f"Lỗi khi xem hình ảnh: {e}")
 

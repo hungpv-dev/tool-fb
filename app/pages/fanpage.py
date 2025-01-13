@@ -6,28 +6,51 @@ from main.fanpage import get_fanpage_process_instance
 import threading
 from time import sleep
 import uuid
+from tkinter import messagebox
 
 fanpage_process_instance = get_fanpage_process_instance()
 
-def submit_page_count(page_input_entry, progress_list):
+def submit_page_count(page_input_entry,list_process, total_process_label):
+    root = get_root()
     countPage = page_input_entry.get()
     try:
         countPage = int(countPage)
         if countPage < 1:
-            raise ValueError("Số lượng phải lớn hơn hoặc bằng 1.")
+            messagebox.showwarning("Cảnh báo","Số lượng phải lớn hơn hoặc bằng 1.")
         print(f"Bắt đầu cào {countPage} Fanpage.")
-        
-        # Thêm tất cả các tiến trình vào danh sách và cập nhật giao diện
+
+        def update_process_count():
+            total_process_label.config(text=f"Số tab đang mở: {len(fanpage_process_instance.get_all_processes())}")
+
+        # Tạo một sự kiện dùng để quản lý thời gian bắt đầu
+        event = threading.Event()
+
         for count in range(countPage):
             id = uuid.uuid4()
-            stop_event = threading.Event()  
-            thread = threading.Thread(target=process_crawl, args=(id, stop_event))
+            stop_event = threading.Event()
+
+            # Thêm delay vào mỗi thread
+            def thread_function():
+                event.wait()  # Đợi cho sự kiện được kích hoạt
+                process_crawl(id, stop_event)
+
+            thread = threading.Thread(target=thread_function)
             thread.start()
 
-            # Thêm tiến trình vào danh sách và cập nhật giao diện
-            fanpage_process_instance.add_process(id,progress_list,stop_event)
-            sleep(1)
-        
+            # Kích hoạt sự kiện sau mỗi lần tạo thread
+            event.set()  # Kích hoạt sự kiện để thread bắt đầu
+
+            data = {
+                'stop_event': stop_event,
+                'thread': thread,
+                'status_show': 'Sẵn sàng chạy...',
+                'status_process': 1,  # 1: Hoạt động, 2: Đã đóng
+            }
+            fanpage_process_instance.add_process(id, data, list_process)
+
+            root.after(0, update_process_count)
+            sleep(1)  # Giới hạn thời gian khởi động các thread
+
     except Exception as e:
         print(f"Lỗi không mong muốn: {e}")
     except ValueError as e:
@@ -49,7 +72,7 @@ def fanpage_page():
     page_input_entry = ttk.Entry(frame, font=("Segoe UI", 12), width=20)
     page_input_entry.pack(pady=10)
 
-    submit_button = ttk.Button(frame, text="Xác nhận", style="Custom.TButton", command=lambda: submit_page_count(page_input_entry, progress_list))
+    submit_button = ttk.Button(frame, text="Xác nhận", style="Custom.TButton", command=lambda: submit_page_count(page_input_entry,progress_list,total_process_label))
     submit_button.pack(fill=tk.X, pady=5, expand=True)
 
     back_button = ttk.Button(frame, text="Quay lại", style="Custom.TButton", command=lambda: redirect('home'))
@@ -75,24 +98,27 @@ def fanpage_page():
     # Cập nhật label với tổng số tiến trình
     total_process_label.config(text=f"Số tab đang mở: {len(all_processes)}")
 
-    for process in all_processes:
+    fanpage_process_instance.setMainLayout(frame)
+    for process_id,process in all_processes.items():
         process_frame = ttk.Frame(progress_list)
         process_frame.pack(fill="x", padx=20, pady=5)
-        progress_label = tk.Label(process_frame, text=f"Đang xử lý...", font=("Segoe UI", 12))
+
+        progress_label = tk.Label(process_frame, text=process["status_show"], font=("Segoe UI", 12))
         progress_label.pack(side="left", padx=5)
-        close_button = ttk.Button(process_frame, text="Đóng")
-        close_button.pack(side="right", padx=5)
         
+        if process.get('status_process') == 1:
+            close_button = ttk.Button(process_frame, text="Đóng")
+        else:
+            close_button = ttk.Button(process_frame, text="Đang đóng...",state="disabled")
+        close_button.pack(side="right", padx=5)
         
         process["frame"] =  process_frame
         process["label"] =  progress_label
-        process["button"] =  close_button
-        
+        process["close_button"] =  close_button
 
-        id = process.get('id')
         # Sửa lại cách gọi lambda để truyền đúng giá trị id tại thời điểm này
-        close_button.config(command=lambda id=id, progress_list=progress_list: fanpage_process_instance.stop_process(id, progress_list))
-        
+        close_button.config(command=lambda process_id=process_id,fanpage_process_instance=fanpage_process_instance: fanpage_process_instance.stop_process(process_id, ))
+
         progress_list.update_idletasks()
 
     return frame

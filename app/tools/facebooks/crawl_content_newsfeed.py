@@ -59,7 +59,7 @@ def process_fanpage(account, name, dirextension, stop_event, managerDriver):
     threads = [
         Thread(target=handleCrawlNewFeed, args=(account, name, dirextension, stop_event, managerDriver)),
         Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
-        Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
+        # Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
     ]
 
     # Khởi chạy các thread
@@ -110,11 +110,11 @@ class PageChecker:
                         'manager': None,
                         'browser': None,
                     }
-                    if idx == 0:
-                        managerDriver = {
-                            'manager': self.manager,
-                            'browser': self.browser,
-                        }
+                    # if idx == 0:
+                    #     managerDriver = {
+                    #         'manager': self.manager,
+                    #         'browser': self.browser,
+                    #     }
 
                     name = page.text.strip()
                     names.append(name)

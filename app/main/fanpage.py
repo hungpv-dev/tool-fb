@@ -6,47 +6,62 @@ import uuid
 
 class FanpageProcess:
     def __init__(self):
-        self.progress_data = []  # Danh sách lưu trạng thái tiến trình
+        self.progress_data = {}  # Danh sách lưu trạng thái tiến trình
+        self.main_layout = None  # Danh sách lưu trạng thái tiến trình
 
-    def add_process(self,id, progress_list, stop_event):
-        # Tạo frame chứa label và button trên cùng một dòng
+    def setMainLayout(self,mainLayout):
+        self.main_layout = mainLayout
+
+    def add_process(self,id, data, progress_list):
+        self.progress_data[id] = data
+
         process_frame = ttk.Frame(progress_list)
         process_frame.pack(fill="x", padx=20, pady=5)
 
-        progress_label = tk.Label(process_frame, text=f"Cào page", font=("Segoe UI", 12))
+        progress_label = tk.Label(process_frame, text="Sẵn sàng chạy...", font=("Segoe UI", 12))
         progress_label.pack(side="left", padx=5)
 
-        close_button = ttk.Button(process_frame, text="Đóng")
+        close_button = ttk.Button(process_frame, text="Đóng", command=lambda id=id: self.stop_process(id,))
         close_button.pack(side="right", padx=5)
 
-        self.progress_data.append({
-            "id": id,
-            "frame": process_frame,
-            "label": progress_label,
-            "button": close_button,
-            "stop_event": stop_event
-        })
+        # Liên kết giao diện với tiến trình
+        data["frame"] = process_frame
+        data["label"] = progress_label
+        data["close_button"] = close_button
 
-        # Cấu hình button đóng cho từng tiến trình
-        close_button.config(command=lambda: self.stop_process(id,progress_list))
         progress_list.update_idletasks()
 
-    def update_process(self, id, new_text):
-        for process in self.progress_data:
-            if process.get("id") == id:
-                process["label"].config(text=new_text)
-                break
 
-    def stop_process(self, id,progress_list):
-        for process in self.progress_data:
-            if process.get('id') == id:
-                process['stop_event'].set()
-                process['label'].config(text="Đã dừng")
-                process['button'].config(state="disabled")
-                process["frame"].destroy()
-                self.progress_data.remove(process) 
-                progress_list.update_idletasks()
-                break
+    def update_process(self, id, new_text):
+        if id in self.progress_data:
+            process = self.progress_data[id]
+            label = process.get("label") 
+            if label:
+                label.config(text=new_text) 
+            process["status_show"] = new_text
+
+    def stop_process(self, id):
+        if id in self.progress_data:
+            process = self.progress_data[id]
+            process['status_process'] = 2
+            stop_event = process.get('stop_event')
+
+            if stop_event:
+                stop_event.set()
+
+            close_button = process.get("close_button")
+            if close_button:
+                close_button.config(text="Đang đóng...", state="disabled")
+        
+        def stop_task(process):
+            threa = process.get('thread')
+            threa.join() 
+
+            self.progress_data[id].get('frame').destroy()
+            del self.progress_data[id]
+
+            # Chạy stop_task trong một thread riêng biệt
+        threading.Thread(target=stop_task, args=(process,), daemon=True).start()
 
 
     def get_all_processes(self):

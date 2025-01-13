@@ -61,3 +61,11 @@ def clean_url_keep_params(href):
         # Nếu gặp lỗi, trả về href gốc
         print(f"Lỗi khi xử lý URL: {e}")
         return href
+    
+def clean_facebook_url_redirect(url):
+    if 'l.facebook.com/l.php?u=' in url:
+        parsed_url = urlparse(url)
+        query_params = parse_qs(parsed_url.query)
+        if 'u' in query_params:
+            return query_params['u'][0]
+    return url
