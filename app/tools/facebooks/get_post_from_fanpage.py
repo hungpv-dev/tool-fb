@@ -4,11 +4,13 @@ from tools.facebooks.browser_pages import BrowserFanpage
 from time import sleep
 from main.fanpage import get_fanpage_process_instance
 from sql.system import System
+from sql.errors import Error
 from helpers.system import get_system_info
 fanpage_process_instance = get_fanpage_process_instance()
 
 def process_crawl(id, stop_event):
     system_instance = System()
+    error_instance = Error()
     browser = None
     manager = None
     system = None
@@ -26,6 +28,7 @@ def process_crawl(id, stop_event):
             crawl = BrowserFanpage(browser, system)
             crawl.handle(id,stop_event)
         except Exception as e:
+            error_instance.insert(e)
             fanpage_process_instance.update_process(id,'Tab bị lỗi, thử lại sau 10s....')
             print(f"Lỗi trong Crawl, khởi động lại sau 10s: {e}")
             sleep(10)

@@ -15,9 +15,17 @@ def newfeedhandle(selected_accounts):
             stop_event = threading.Event()
             thread = threading.Thread(target=process_newsfeed, args=(account, stop_event))
             thread.start()
-            account['stop_event'] = stop_event
-            account['tasks'] = [thread]
+            account['tasks'] = [
+                {
+                    'id': 'main',
+                    'name': account.get('name'),
+                    'status': 'Đang hoạt động',
+                    'thread': thread,
+                    'main_stop': stop_event,
+                }
+            ]
             account['status_process'] = 1 # 1: Hoạt động, 2: Đã đóng
+            account['status_vie'] = 1 # 1: Cào, 2: Đã đóng
             newsfeed_process_instance.add_process(account)
     except Exception as e:
         print(f"Lỗi không mong muốn: {e}")
@@ -176,7 +184,13 @@ def newsfeed_page_list():
             close_button.pack(side="right", padx=5)
             account['close_button'] = close_button
 
-
+            vie_button = ttk.Button(
+                row,
+                text="Bật cào vie" if account.get('status_vie') == 1 else "Tắt cào vie",
+                style="Custom.TButton",
+            )
+            vie_button.pack(side="right", padx=5)
+            account['vie_button'] = vie_button
         table.update_idletasks()
     else:
         no_process_label = tk.Label(frame, text="Không có tiến trình nào đang chạy.", font=("Segoe UI", 12), bg="#f0f2f5", fg="#1c1e21")

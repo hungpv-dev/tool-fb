@@ -10,6 +10,7 @@ from threading import Thread, Event
 from tools.facebooks.handle_craw_newsfeed import handleCrawlNewFeed,crawlNewFeed
 from helpers.login import HandleLogin
 from time import sleep
+import uuid
 from main.newsfeed import get_newsfeed_process_instance
 
 newsfeed_process_instance = get_newsfeed_process_instance()
@@ -57,14 +58,31 @@ class CrawContentNewsfeed:
 def process_fanpage(account, name, dirextension, stop_event, managerDriver):
     print(f"Đang xử lý fanpage: {name}")
     threads = [
-        Thread(target=handleCrawlNewFeed, args=(account, name, dirextension, stop_event, managerDriver)),
-        Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
-        # Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
+        {
+            'id': uuid.uuid4(),
+            'name': name,
+            'thread': Thread(target=handleCrawlNewFeed, args=(account, name, dirextension, stop_event, managerDriver)),
+        },
+        {
+            'id': uuid.uuid4(),
+            'name': name,
+            'thread': Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
+        },
+        {
+            'id': uuid.uuid4(),
+            'name': name,
+            'thread': Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
+        },
     ]
 
     # Khởi chạy các thread
     for thread in threads:
-        newsfeed_process_instance.update_task(account.get('id'),thread)
+        newsfeed_process_instance.update_task(account.get('id'),{
+            'id': thread.get('id'),
+            'status': 'Sẵn sàng chạy...',
+            'thread': thread.get('thread'),
+            'main_stop': stop_event,
+        })
         thread.start()
         sleep(3)
 

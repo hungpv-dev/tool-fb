@@ -1,4 +1,6 @@
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse, unquote
+import pyperclip
+from selenium.webdriver.common.keys import Keys
 
 def is_valid_link(href, post):
     """
@@ -69,3 +71,18 @@ def clean_facebook_url_redirect(url):
         if 'u' in query_params:
             return query_params['u'][0]
     return url
+
+import re
+def sanitize_text(text):
+    # Lọc bỏ các ký tự nằm ngoài phạm vi BMP
+    return re.sub(r'[^\u0000-\uFFFF]', '', text)
+
+def copy_and_paste_text(text,element):
+    sanitized_text = sanitize_text(text)  # Loại bỏ ký tự đặc biệt
+    element.send_keys(sanitized_text)
+    # pyperclip.copy(text)
+    # element.send_keys(Keys.CONTROL, 'v')
+
+def set_html_in_div(driver, element, html_content):
+    driver.execute_script("arguments[0].innerHTML = arguments[1];", element, html_content)
+    driver.execute_script("arguments[0].dispatchEvent(new Event('input'));", element)

@@ -53,6 +53,7 @@ class HandleLogin:
             sleep(2)
             if check == False:
                 self.driver.get("https://facebook.com/login")
+                sleep(3)
                 self.driver.find_element(By.ID,'email').send_keys(self.user)
                 sleep(1)
                 self.driver.find_element(By.ID,'pass').send_keys(self.pwd)
@@ -81,14 +82,16 @@ class HandleLogin:
                         try:
                             self.driver.find_element(By.NAME,'email')
                             print(f'{self.account.get("name")} lấy mã từ Outlook')
-                            self.updateMainModel('Login với Outlook')
-                            self.toggleEmail() # Chuyển sang nhận mã từ email
-                            code = self.loginEmailAndGetCode() # Lấy code
-                            self.updateMainModel(f'Code là: {code}')
-                            check = self.pushCode(code)
-                        except:
-                            self.account_instance.update_account(self.account.get('id'),{'status_login':1})
-                            print(f'{self.account.get("name")} lấy mã từ Audio (chiu)')
+                            try:
+                                self.updateMainModel('Login với Outlook')
+                                self.toggleEmail() # Chuyển sang nhận mã từ email
+                                code = self.loginEmailAndGetCode() # Lấy code
+                                self.updateMainModel(f'Code là: {code}')
+                                check = self.pushCode(code)
+                            except Exception as e:
+                                self.account_instance.update_account(self.account.get('id'),{'status_login':1})
+                                print(f'{self.account.get("name")} lấy mã từ Audio (chiu)')
+                        except Exception as e:
                             pass
             
         except Exception as e:
@@ -251,6 +254,12 @@ class HandleLogin:
     def saveLogin(self,saveCookie = True):
         check = False
         try:
+            checkBlock = self.checkBlock()
+            if checkBlock:
+                self.updateMainModel('Tài khoản đã bị khoá!')
+                self.account_instance.update_account(self.account.get('id'),{'status_login': 5})
+                return check
+
             self.driver.find_element(By.XPATH, push['openProfile'])
             cookies = self.driver.get_cookies()
             dataUpdate = {
@@ -267,6 +276,22 @@ class HandleLogin:
         except Exception as e:
             self.account_instance.update_account(self.account.get('id'),{'status_login':1})
         return check
+    
+    def checkBlock(self):
+        try:
+            self.driver.find_element(By.XPATH, "//*[contains(text(), 'your account has been locked')]")
+            return True
+        except NoSuchElementException:
+            pass
+        
+        try:
+            self.driver.find_element(By.XPATH, "//*[contains(text(), 'Account locked')]")
+            return True
+        except NoSuchElementException:
+            pass
+
+        return False
+
 
 
     def clickText(self,text):

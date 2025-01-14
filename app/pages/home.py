@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from main.root import get_root
+from tkinter import messagebox
 
 def main_page():
     from helpers.base import redirect
@@ -35,8 +36,13 @@ def main_page():
     button8 = ttk.Button(main_frame, text="Xem Log", style="Custom.TButton", command=lambda: redirect('logs'))
     button8.pack(fill=tk.X, pady=5, expand=True)
 
-    button6 = ttk.Button(main_frame, text="Thoát", style="Custom.TButton", command=root.quit)
+    button6 = ttk.Button(main_frame, text="Thoát", style="Custom.TButton", command=lambda: on_close())
     button6.pack(fill=tk.X, pady=5, expand=True)
 
+    def on_close():
+        if messagebox.askyesno("Thoát", "Bạn có chắc muốn thoát?"):
+            root.destroy()
+
+    root.protocol("WM_DELETE_WINDOW", on_close)
 
     return main_frame

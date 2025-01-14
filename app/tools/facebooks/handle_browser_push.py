@@ -5,12 +5,13 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from tools.types import push
+import pyperclip
 from sql.pagePosts import PagePosts
 from sql.pages import Page
 from helpers.modal import closeModal
 from sql.errors import Error
 import uuid
-from helpers.fb import clean_url_keep_params
+from helpers.fb import clean_url_keep_params,copy_and_paste_text
 from helpers.image import delete_image,download_image
 from tools.facebooks.browser_pages import BrowserFanpage
 from sql.comment import Comment
@@ -51,7 +52,6 @@ class Push:
                 account = loginInstance.getAccount()
                 post_process_instance.update_process(self.account.get('id'),'Đăng nhập thành công')
                 self.account = account
-                self.handleData(stop_event);          
                 break
             except Exception as e:
                 post_process_instance.update_process(self.account.get('id'),'Login thất bài, thử lại sau 1p...')
@@ -59,49 +59,39 @@ class Push:
                 self.error_instance.insertContent(e)
                 print("Thử lại sau 1 phút...")
                 sleep(60)
+        self.handleData(stop_event);          
 
     def handleData(self,stop_event):    
         try:
             print(f"Đang ở trang chủ!")
-        
-            sleep(10)
+            sleep(2)
+            pageIds = set()
             threads = []
-            awaitListPage = self.getAwaitListPage()
-            post_process_instance.update_process(self.account.get('id'),f'Đang xử lý {len(awaitListPage)} fanpage')
-            for idx,pot in enumerate(awaitListPage):
-                managerDriver = {
-                    'manager': None,
-                    'browser': None,
-                }
-                # if idx == 0:
-                #     managerDriver = {
-                #         'manager': self.manager,
-                #         'browser': self.browser,
-                #     }
-                worker_thread = threading.Thread(target=push_page, args=(pot,self.account,self.dirextension,stop_event,managerDriver))
-                worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
-                worker_thread.start()
-                threads.append(worker_thread)
-                post_process_instance.update_task(self.account.get('id'),worker_thread)
-
-            while not stop_event.is_set(): 
-                try:
-                    listTimes = self.browseTime()
-                    if(len(listTimes) > 0):
-                        worker_thread = threading.Thread(target=push_list, args=(listTimes,self.account,self.dirextension))
-                        worker_thread.daemon = True  
+            try:
+                awaitListPage = self.getAwaitListPage()
+                post_process_instance.update_process(self.account.get('id'),f'Đang xử lý {len(awaitListPage)} fanpage')
+                for pot in awaitListPage:
+                    if pot.get('id') not in pageIds:
+                        pageIds.add(pot.get('id'))
+                        worker_thread = threading.Thread(target=push_page, args=(pot,self.account,self.dirextension,stop_event))
+                        worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
                         worker_thread.start()
                         threads.append(worker_thread)
                         post_process_instance.update_task(self.account.get('id'),worker_thread)
-                    else:
-                        print(f"{self.account.get('name')} chưa có bài nào cần đăng trong khung giờ này!")
-                    
-                except Exception as e:
-                    print(e)
-                print('Chờ 60s để tiếp tục...')
-                sleep(60)
-
-            
+            except Exception as e:
+                print(e)
+                
+            try:
+                worker_thread = threading.Thread(target=push_list, args=(self.account,self.dirextension,stop_event))
+                worker_thread.daemon = True  
+                worker_thread.start()
+                threads.append(worker_thread)
+                post_process_instance.update_task(self.account.get('id'),worker_thread)
+            except Exception as e:
+                print(e)
+            print('Chờ 60s để tiếp tục...')
+            sleep(60)
+                
             for thread in threads:
                 thread.join()
             post_process_instance.update_process(self.account.get('id'), f'Chương trình đã bị dừng...')
@@ -124,19 +114,19 @@ class Push:
         
     
     # Xử lý đăng
-    def switchPage(self, page):
+    def switchPage(self, page, stop_event):
         name = page['name']
         try:
             self.browser.get(page['link'])
             sleep(2)
-            name = self.crawlid_instance.updateInfoFanpage(page)
+            name = self.crawlid_instance.updateInfoFanpage(page,stop_event)
         except Exception as e:
             pass
         print('-> Mở popup thông tin cá nhân!')
         profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
-        sleep(5)
+        sleep(7)
         profile_button.click()
-        sleep(3)
+        sleep(5)
         try:
             switchPage = self.browser.find_element(By.XPATH, push['switchPage'](name))
             switchPage.click()
@@ -169,19 +159,22 @@ class Push:
             except:
                 raise ValueError(f"Không thể click nút tạo bài viết!")
             
-            sleep(1)
+            sleep(5)
             input_element = self.browser.switch_to.active_element
             print('- Gán nội dung bài viết!')
-            input_element.send_keys(post['content'])
+            copy_and_paste_text(post['content'],input_element)
+            # input_element.send_keys(post['content'])
+            
             parent_form = input_element.find_element(By.XPATH, "./ancestor::form")
             media = post['media']
             listLinkTemps = []
             if media is not None: 
-                photo_video_element = parent_form.find_element(By.XPATH, './/div[@aria-label="Photo/video"]')
-                photo_video_element.click()
                 try:
                     images = media['images']
                     if images is not None and len(images) > 0:
+                        photo_video_element = parent_form.find_element(By.XPATH, './/div[@aria-label="Photo/video"]')
+                        photo_video_element.click()
+                        sleep(5)
                         print('- Copy và dán hình ảnh')
                         for src in images:
                             temp_image_path = download_image(src, temp_file=f"image_{uuid.uuid4()}.png")
@@ -267,14 +260,10 @@ class Push:
                 
                 for comment in comments:
                     inpComment.click()  # Focus vào ô input
-                    inpComment.send_keys(comment['content'])  # Nhập nội dung comment
+                    copy_and_paste_text(comment['content'],inpComment)
+                    # inpComment.send_keys(comment['content'])  # Nhập nội dung comment
                     inpComment.send_keys(Keys.ENTER)
                     sleep(3)
                     self.comment_instance.update_pp(comment['id'],{'status': 2})
             except Exception as e:
                 print(f"Lỗi khi xử lý comment: {e}")
-                
-                
-        
-        
-    
