@@ -1,15 +1,17 @@
-from helpers.base import redirect
+from helpers.base import render
+import tkinter as tk
+from pages.menu import setup_menu
 from main.root import get_root
 
-def create_facebook_like_interface():
-    root = get_root(True)
+if __name__ == "__main__":
+    root = get_root()
 
-    # Lúc đầu, hiển thị trang chính (main_frame)
-    redirect('home')
+    # Tạo menu
+    setup_menu()
 
-    # Chạy vòng lặp chính của giao diện
+    # Hiển thị trang Home ban đầu
+    render('home')
+
+    # Khởi động ứng dụng
     root.mainloop()
 
-if __name__ == "__main__":
-# Gọi hàm để tạo giao diện đẹp
-    create_facebook_like_interface()

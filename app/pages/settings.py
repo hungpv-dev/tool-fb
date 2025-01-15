@@ -5,12 +5,12 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-from main.root import get_root
+from main.root import get_frame
 import tkinter as tk
 from tkinter import ttk
 
 def save_configuration(browser_var, headless_var):
-    from helpers.base import redirect
+    from helpers.base import render
 
     def load_browser(browser_var, headless_var):
         browser_type = browser_var.get()
@@ -41,7 +41,7 @@ def save_configuration(browser_var, headless_var):
             
             # Thông báo thành công và quay lại trang chủ
             messagebox.showinfo("Thành công", "Cấu hình thành công! Trình duyệt đã được khởi động.")
-            redirect('home')  # Quay lại trang chủ sau khi cài đặt xong
+            render('home')  # Quay lại trang chủ sau khi cài đặt xong
             loading_window.destroy()  # Đóng cửa sổ loading khi hoàn thành
 
         except Exception as e:
@@ -59,15 +59,13 @@ def save_configuration(browser_var, headless_var):
     threading.Thread(target=load_browser, args=(browser_var, headless_var), daemon=True).start()
 
 def settings_page():
-    root = get_root()
+    main_frame = get_frame()
+    label = tk.Label(main_frame, text="Trang chủ", font=("Segoe UI", 20), bg="#f0f2f5")
+    label.pack(pady=20)
     from helpers.base import config
-    from helpers.base import redirect
+    from helpers.base import render
 
     current_config = config()
-
-    # Tạo frame chính (Trang cấu hình)
-    main_frame = ttk.Frame(root, padding="10", style="Custom.TFrame")
-    main_frame.grid(row=0, column=0, sticky="nsew")
 
     # Thêm Label vào frame chính (Trang cấu hình)
     label = tk.Label(main_frame, text="Cấu hình môi trường trình duyệt:", font=("Segoe UI", 16), bg="#f0f2f5", fg="#1c1e21")
@@ -93,7 +91,7 @@ def settings_page():
     save_button.pack(fill=tk.X, pady=10, expand=True)
 
     # Button quay lại trang trước đó
-    back_button = ttk.Button(main_frame, text="Quay lại", style="Custom.TButton", command=lambda: redirect('home'))
+    back_button = ttk.Button(main_frame, text="Quay lại", style="Custom.TButton", command=lambda: render('home'))
     back_button.pack(fill=tk.X, pady=5)
 
     return main_frame

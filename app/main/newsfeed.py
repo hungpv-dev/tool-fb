@@ -21,7 +21,24 @@ class NewsFeedProcess:
             task_label = process.get("task_label") 
             if task_label:
                 task_label.config(text=len(process.get('tasks')))
-        
+
+    def update_statusVie(self,acc):
+        status_vie = acc.get('status_vie')
+        process = self.progress_data[acc.get('id')]
+        if status_vie == 1:
+            if 'vie_button' in process:
+                process['vie_button'].config(text="Tắt cào vie")
+            process['status_vie'] = 2
+        else:
+            if 'vie_button' in process:
+                process['vie_button'].config(text="Bật cào vie")
+            process['status_vie'] = 1
+
+    def show(self, id):
+        process = self.progress_data[id]
+        return process
+
+
     def stop_process(self, id):
         # Dừng tiến trình theo id
         if id in self.progress_data:

@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from main.root import get_root
+from main.root import get_frame
 from sql.accounts import Account
 from main.newsfeed import get_newsfeed_process_instance
 from tools.facebooks.browser_newsfeed import process_newsfeed
@@ -11,19 +11,11 @@ newsfeed_process_instance = get_newsfeed_process_instance()
 def newfeedhandle(selected_accounts):
     try:
         for account in selected_accounts:
-            print(account.get('name'))
             stop_event = threading.Event()
             thread = threading.Thread(target=process_newsfeed, args=(account, stop_event))
             thread.start()
-            account['tasks'] = [
-                {
-                    'id': 'main',
-                    'name': account.get('name'),
-                    'status': 'Đang hoạt động',
-                    'thread': thread,
-                    'main_stop': stop_event,
-                }
-            ]
+            account['tasks'] = [thread]
+            account['stop_event'] = stop_event
             account['status_process'] = 1 # 1: Hoạt động, 2: Đã đóng
             account['status_vie'] = 1 # 1: Cào, 2: Đã đóng
             newsfeed_process_instance.add_process(account)
@@ -32,11 +24,10 @@ def newfeedhandle(selected_accounts):
 
 def newsfeed_page():
     account_sql = Account()
-    root = get_root()
-    from helpers.base import redirect
-    frame = ttk.Frame(root, padding="10", style="Custom.TFrame")
-    frame.grid(row=0, column=0, sticky="nsew")
-
+    frame = get_frame()
+    from helpers.base import render
+    label = tk.Label(frame, text="Thêm tài khoản cào newsfeed", font=("Segoe UI", 20), bg="#f0f2f5")
+    label.pack(pady=20)
     account_selected = newsfeed_process_instance.get_all_processes()
 
     # Hàm lấy danh sách tài khoản từ API và hiển thị
@@ -93,42 +84,31 @@ def newsfeed_page():
         selected_accounts = [data["account_data"] for account_id, data in checkboxes.items() if data["checkbox_var"].get()]
         if selected_accounts:
             newfeedhandle(selected_accounts)
-            redirect('newsfeed_page_list')
+            render('newsfeed_page_list')
             return
-            # fetch_and_display_accounts()
-            # update_process_count()
-        else:
-            print("Bạn đã không chọn tài khoản.")
-
-    def update_process_count():
-        process_count = len(newsfeed_process_instance.get_all_processes())
-        process_button.config(text=f"Danh sách tiến trình ({process_count})")
 
     submit_button = ttk.Button(frame, text="Xác nhận", style="Custom.TButton", command=submit_selection)
     submit_button.pack(fill=tk.X, pady=5, expand=True)
 
     process_button = ttk.Button(frame, text=f"Danh sách tiến trình ({len(newsfeed_process_instance.get_all_processes())})", 
-                                style="Custom.TButton", command=lambda: redirect('newsfeed_page_list'))
+                                style="Custom.TButton", command=lambda: render('newsfeed_page_list'))
     process_button.pack(fill=tk.X, pady=5, expand=True)
 
 
     # Nút quay lại
-    back_button = ttk.Button(frame, text="Quay lại", style="Custom.TButton", command=lambda: redirect('home'))
+    back_button = ttk.Button(frame, text="Quay lại", style="Custom.TButton", command=lambda: render('home'))
     back_button.pack(fill=tk.X, pady=5, expand=True)
-
-    return frame
 
 
 def close_process(account):
     newsfeed_process_instance.stop_process(account.get('id'))
 
 def newsfeed_page_list():
-    root = get_root()
-    from helpers.base import redirect
+    frame = get_frame()
+    from helpers.base import render
+    label = tk.Label(frame, text="Danh sách tài khoản cào newsfeed", font=("Segoe UI", 20), bg="#f0f2f5")
+    label.pack(pady=20)
     accounts = newsfeed_process_instance.get_all_processes()  # Lấy tất cả tiến trình đang chạy từ instance
-    
-    frame = ttk.Frame(root, padding="10", style="Custom.TFrame")
-    frame.grid(row=0, column=0, sticky="nsew")
 
     # Thêm label để hiển thị số lượng tiến trình
     total_process_label = tk.Label(frame, text=f"Số tài khoản đang chạy: {len(accounts)}", font=("Segoe UI", 12), bg="#f0f2f5", fg="#1c1e21")
@@ -188,6 +168,7 @@ def newsfeed_page_list():
                 row,
                 text="Bật cào vie" if account.get('status_vie') == 1 else "Tắt cào vie",
                 style="Custom.TButton",
+                command=lambda account=account: newsfeed_process_instance.update_statusVie(account,)
             )
             vie_button.pack(side="right", padx=5)
             account['vie_button'] = vie_button
@@ -200,10 +181,10 @@ def newsfeed_page_list():
     button_frame = ttk.Frame(frame)
     button_frame.pack(fill=tk.X, pady=10)
 
-    add_button = ttk.Button(button_frame, text="Thêm mới", style="Custom.TButton", command=lambda: redirect('newsfeed'))
+    add_button = ttk.Button(button_frame, text="Thêm mới", style="Custom.TButton", command=lambda: render('newsfeed'))
     add_button.pack(side="left", padx=5, expand=True)
 
-    back_button = ttk.Button(button_frame, text="Quay lại", style="Custom.TButton", command=lambda: redirect('home'))
+    back_button = ttk.Button(button_frame, text="Quay lại", style="Custom.TButton", command=lambda: render('home'))
     back_button.pack(side="right", padx=5, expand=True)
 
     return frame

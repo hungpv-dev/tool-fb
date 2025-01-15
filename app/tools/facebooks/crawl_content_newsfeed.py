@@ -7,7 +7,7 @@ from multiprocessing import Process
 from sql.account_cookies import AccountCookies
 from sql.accounts import Account
 from threading import Thread, Event
-from tools.facebooks.handle_craw_newsfeed import handleCrawlNewFeed,crawlNewFeed
+from tools.facebooks.handle_craw_newsfeed import handleCrawlNewFeed,crawlNewFeed,handleCrawlNewFeedVie
 from helpers.login import HandleLogin
 from time import sleep
 import uuid
@@ -58,31 +58,15 @@ class CrawContentNewsfeed:
 def process_fanpage(account, name, dirextension, stop_event, managerDriver):
     print(f"Đang xử lý fanpage: {name}")
     threads = [
-        {
-            'id': uuid.uuid4(),
-            'name': name,
-            'thread': Thread(target=handleCrawlNewFeed, args=(account, name, dirextension, stop_event, managerDriver)),
-        },
-        {
-            'id': uuid.uuid4(),
-            'name': name,
-            'thread': Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
-        },
-        {
-            'id': uuid.uuid4(),
-            'name': name,
-            'thread': Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
-        },
+        Thread(target=handleCrawlNewFeedVie, args=(account, managerDriver, stop_event)),
+        # Thread(target=handleCrawlNewFeed, args=(account, name, dirextension, stop_event)),
+        # Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
+        # Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
     ]
 
     # Khởi chạy các thread
     for thread in threads:
-        newsfeed_process_instance.update_task(account.get('id'),{
-            'id': thread.get('id'),
-            'status': 'Sẵn sàng chạy...',
-            'thread': thread.get('thread'),
-            'main_stop': stop_event,
-        })
+        newsfeed_process_instance.update_task(account.get('id'),thread)
         thread.start()
         sleep(3)
 
@@ -119,20 +103,14 @@ class PageChecker:
             newsfeed_process_instance.update_process(account.get('id'),f'Lấy được: {len(allPages)} page')
 
             names = []
+            managerDriver = {
+                'manager': self.manager,
+                'browser': self.browser,
+            }
             if len(allPages) > 0: 
                 for idx, page in enumerate(allPages):
                     if stop_event.is_set():
                         break
-
-                    managerDriver = {
-                        'manager': None,
-                        'browser': None,
-                    }
-                    # if idx == 0:
-                    #     managerDriver = {
-                    #         'manager': self.manager,
-                    #         'browser': self.browser,
-                    #     }
 
                     name = page.text.strip()
                     names.append(name)

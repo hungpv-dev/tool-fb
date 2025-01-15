@@ -17,7 +17,107 @@ from helpers.time import convert_to_db_format
 from helpers.modal import closeModal
 from helpers.system import get_system_info
 
-def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None, managerDriver = {}):
+from main.newsfeed import get_newsfeed_process_instance
+
+newsfeed_process_instance = get_newsfeed_process_instance()
+
+def handleCrawlNewFeedVie(account, managerDriver ,stop_event=None):
+    process = newsfeed_process_instance.show(account.get('id'))
+    newfeed_instance = NewFeedModel()
+    error_instance = Error()
+    account_cookie_instance = AccountCookies()
+    manager = managerDriver.get('manager')
+    browser = managerDriver.get('browser')
+    while not stop_event.is_set():
+        if process['status_vie'] == 1:
+            sleep(30)
+            process = newsfeed_process_instance.show(account.get('id'))
+            continue
+
+        try:
+            loginInstance = HandleLogin(browser,account)
+            while not stop_event.is_set():
+                checkLogin = loginInstance.loginFacebook()
+                if checkLogin == False:
+                    print('Đợi 1p rồi thử login lại!')
+                    sleep(60)
+                else:
+                    account = loginInstance.getAccount()
+                    break
+            sleep(2)
+            closeModal(1,browser)
+            pageLinkPost = f"/posts/"
+            pageLinkStory = "https://www.facebook.com/permalink.php"
+            
+            browser.execute_script("document.body.style.zoom='0.2';")
+            sleep(3)
+            listId = set() 
+            # log_newsfeed(account,f"====================Thực thi cào fanpage {name}=====================")
+            while not stop_event.is_set() and process['status_vie'] == 2: 
+                try:
+                    profile_button = browser.find_element(By.XPATH, push['openProfile'])
+                except Exception as e:
+                    raise e
+                    
+                actions = ActionChains(browser)
+                
+                listPosts = browser.find_elements(By.XPATH, types['list_posts']) 
+                
+                for p in listPosts:
+                    try:
+                        idAreaPost = p.get_attribute('aria-posinset')
+                        if idAreaPost not in listId:
+                            listId.add(idAreaPost)
+                            links = p.find_elements(By.XPATH, ".//a")
+                            for link in links:
+                                if link.is_displayed() and link.size['width'] > 0 and link.size['height'] > 0:
+                                    actions.move_to_element(link).perform()
+                                    href = link.get_attribute('href')
+                                    href = clean_url_keep_params(href)
+                                    time = link.text.strip()
+                                    converTime = convert_to_db_format(time)
+                                    post_id = ''
+                                    if any(substring in href for substring in [pageLinkPost, pageLinkStory]) or converTime:
+                                        if pageLinkPost in href:
+                                            post_id = href.replace(pageLinkPost, '').split('?')[0]
+                                            post_id = post_id.split('/')[-1]
+                                        elif pageLinkStory in href:
+                                            parsed_url = urlparse(href)
+                                            query_params = parse_qs(parsed_url.query)
+                                            post_id = query_params.get('story_fbid', [None])[0]
+                                        if post_id == '': continue
+
+                                        account_cookie_instance.updateCount(account['latest_cookie']['id'], 'counts')
+                                        data = {
+                                            'post_fb_id': post_id,
+                                            'post_fb_link': clean_url_keep_params(href),
+                                            'status': 1,
+                                            'cookie_id': account['latest_cookie']['id'],
+                                            'account_id': account.get('id'),
+                                        }
+                                        res = newfeed_instance.insert(data)
+                                        # log_newsfeed(account, f"* +1 đường dẫn * {str(res.get('data', {}).get('id', 'Không có id'))}")
+
+                    except Exception as e:
+                        print("Phần tử đã không còn tồn tại, tìm lại phần tử.")
+                        continue
+            
+                if len(listId) >= 20:
+                    browser.refresh() 
+                    sleep(2)  
+                    listId.clear() 
+                    browser.execute_script("document.body.style.zoom='0.2';")
+                    sleep(3)
+                    print('Load lại trang!')
+                else:
+                    browser.execute_script("window.scrollBy(0, 500);")
+                sleep(5)
+                process = newsfeed_process_instance.show(account.get('id'))
+        except Exception as e:
+            error_instance.insertContent(e)
+            sleep(30)
+
+def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
     try:
         newfeed_instance = NewFeedModel()
         error_instance = Error()
@@ -26,8 +126,8 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None, manag
         pathProfile = f"/newsfeed/{str(account_id)}/{str(uuid.uuid4())}"
         print(f'Chuyển hướng tới fanpage: {name}')
 
-        manager = managerDriver.get('manager')
-        browser = managerDriver.get('browser')
+        manager = None
+        browser = None
 
         while not stop_event.is_set():
             try:
@@ -179,7 +279,7 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                 while not stop_event.is_set():
                     try:
                         manager = Browser(pathProfile,dirextension)
-                        browser = manager.start()
+                        browser = manager.start(False)
                         sleep(5)
                         break
                     except Exception as e:

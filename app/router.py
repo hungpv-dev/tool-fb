@@ -4,6 +4,7 @@ from pages.newsfeed import newsfeed_page,newsfeed_page_list
 from pages.post import post_page,post_page_list
 from pages.logs import logs_page
 from pages.settings import settings_page
+import tkinter as tk
 
 router = {
     'home' : main_page,

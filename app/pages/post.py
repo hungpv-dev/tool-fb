@@ -5,6 +5,7 @@ from sql.accounts import Account
 from main.post import get_post_process_instance
 from tools.facebooks.browser_post import process_post
 import threading
+from main.root import get_frame
 
 post_process_instance = get_post_process_instance()
 
@@ -24,10 +25,10 @@ def newfeedhandle(selected_accounts):
 
 def post_page():
     account_sql = Account()
-    root = get_root()
-    from helpers.base import redirect
-    frame = ttk.Frame(root, padding="10", style="Custom.TFrame")
-    frame.grid(row=0, column=0, sticky="nsew")
+    from helpers.base import render
+    frame = get_frame()
+    label = tk.Label(frame, text="Thêm tài khoản đăng bài", font=("Segoe UI", 20), bg="#f0f2f5")
+    label.pack(pady=20)
 
     account_selected = post_process_instance.get_all_processes()
 
@@ -88,7 +89,7 @@ def post_page():
         selected_accounts = [data["account_data"] for account_id, data in checkboxes.items() if data["checkbox_var"].get()]
         if selected_accounts:
             newfeedhandle(selected_accounts)
-            redirect('post_page_list')
+            render('post_page_list')
             return
             # fetch_and_display_accounts()
             # update_process_count()
@@ -103,12 +104,12 @@ def post_page():
     submit_button.pack(fill=tk.X, pady=5, expand=True)
 
     process_button = ttk.Button(frame, text=f"Danh sách tiến trình ({len(post_process_instance.get_all_processes())})", 
-                                style="Custom.TButton", command=lambda: redirect('post_page_list'))
+                                style="Custom.TButton", command=lambda: render('post_page_list'))
     process_button.pack(fill=tk.X, pady=5, expand=True)
 
 
     # Nút quay lại
-    back_button = ttk.Button(frame, text="Quay lại", style="Custom.TButton", command=lambda: redirect('home'))
+    back_button = ttk.Button(frame, text="Quay lại", style="Custom.TButton", command=lambda: render('home'))
     back_button.pack(fill=tk.X, pady=5, expand=True)
 
     return frame
@@ -118,13 +119,12 @@ def close_process(account):
     post_process_instance.stop_process(account.get('id'))
 
 def post_page_list():
-    root = get_root()
-    from helpers.base import redirect
+    from helpers.base import render
+    frame = get_frame()
+    label = tk.Label(frame, text="Danh sách tài khoản đăng bài", font=("Segoe UI", 20), bg="#f0f2f5")
+    label.pack(pady=20)
     accounts = post_process_instance.get_all_processes()  # Lấy tất cả tiến trình đang chạy từ instance
     
-    frame = ttk.Frame(root, padding="10", style="Custom.TFrame")
-    frame.grid(row=0, column=0, sticky="nsew")
-
     # Thêm label để hiển thị số lượng tiến trình
     total_process_label = tk.Label(frame, text=f"Số tài khoản đang chạy: {len(accounts)}", font=("Segoe UI", 12), bg="#f0f2f5", fg="#1c1e21")
     total_process_label.pack(pady=10)
@@ -189,11 +189,10 @@ def post_page_list():
     button_frame = ttk.Frame(frame)
     button_frame.pack(fill=tk.X, pady=10)
 
-    add_button = ttk.Button(button_frame, text="Thêm mới", style="Custom.TButton", command=lambda: redirect('post'))
+    add_button = ttk.Button(button_frame, text="Thêm mới", style="Custom.TButton", command=lambda: render('post'))
     add_button.pack(side="left", padx=5, expand=True)
 
-    back_button = ttk.Button(button_frame, text="Quay lại", style="Custom.TButton", command=lambda: redirect('home'))
+    back_button = ttk.Button(button_frame, text="Quay lại", style="Custom.TButton", command=lambda: render('home'))
     back_button.pack(side="right", padx=5, expand=True)
 
-    return frame
 

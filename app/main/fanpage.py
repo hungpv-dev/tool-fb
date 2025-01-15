@@ -7,29 +7,38 @@ import uuid
 class FanpageProcess:
     def __init__(self):
         self.progress_data = {}  # Danh sách lưu trạng thái tiến trình
-        self.main_layout = None  # Danh sách lưu trạng thái tiến trình
+        self.progress_list = None  # Danh sách lưu trạng thái tiến trình
 
-    def setMainLayout(self,mainLayout):
-        self.main_layout = mainLayout
+    def setMainLayout(self,progress_list):
+        self.progress_list = progress_list
 
-    def add_process(self,id, data, progress_list):
+    def add_process(self,id, data):
         self.progress_data[id] = data
+        self.insert_view(id)
 
-        process_frame = ttk.Frame(progress_list)
-        process_frame.pack(fill="x", padx=20, pady=5)
+    def insert_view(self,id):
+        if id in self.progress_data:
+            process = self.progress_data[id]
+            process_frame = ttk.Frame(self.progress_list)
+            process_frame.pack(fill="x", padx=20, pady=5)
 
-        progress_label = tk.Label(process_frame, text="Sẵn sàng chạy...", font=("Segoe UI", 12))
-        progress_label.pack(side="left", padx=5)
+            progress_label = tk.Label(process_frame, text=process["status_show"], font=("Segoe UI", 12))
+            progress_label.pack(side="left", padx=5)
+            
+            if process.get('status_process') == 1:
+                close_button = ttk.Button(process_frame, text="Đóng")
+            else:
+                close_button = ttk.Button(process_frame, text="Đang đóng...",state="disabled")
+            close_button.pack(side="right", padx=5)
+            
+            process["frame"] =  process_frame
+            process["label"] =  progress_label
+            process["close_button"] =  close_button
 
-        close_button = ttk.Button(process_frame, text="Đóng", command=lambda id=id: self.stop_process(id,))
-        close_button.pack(side="right", padx=5)
+            # Sửa lại cách gọi lambda để truyền đúng giá trị id tại thời điểm này
+            close_button.config(command=lambda id=id: self.stop_process(id, ))
 
-        # Liên kết giao diện với tiến trình
-        data["frame"] = process_frame
-        data["label"] = progress_label
-        data["close_button"] = close_button
-
-        progress_list.update_idletasks()
+            self.progress_list.update_idletasks()
 
 
     def update_process(self, id, new_text):

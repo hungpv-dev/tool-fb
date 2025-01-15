@@ -340,7 +340,7 @@ class CrawlContentPost:
             ActionChains(self.browser).move_to_element(btnShare).perform()
             sleep(1)
             btnShare.click()
-            sleep(3)
+            sleep(5)
 
             parent_element = self.browser.find_element(By.XPATH, ".//*[@aria-label='List of available \"share to\" options in the unified share sheet.']")
             list = parent_element.find_elements(By.XPATH, "./div/div/div")

@@ -35,7 +35,7 @@ def process_newsfeed(account, stop_event):
         try:
             if checkProxy == True:
                 manager = Browser(f"/newsfeed/home/{account['id']}",extension)
-                browser = manager.start()
+                browser = manager.start(False)
                 newsfeed_process_instance.update_process(account.get('id'),'Đã khởi tạo trình duyệt')
                 break
             else:

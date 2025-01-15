@@ -2,13 +2,13 @@ from router import router
 from tkinter import messagebox
 import json
 
-def redirect(page_name):
-    frame = router.get(page_name)()
-    if 'logs' in page_name: return
-    if frame is None:
-        raise ValueError(f"Frame '{page_name}' không được khởi tạo.")
-    frame.tkraise()
-
+def render(page_name):
+    """Xóa toàn bộ widget trong frame."""
+    from main.root import get_frame
+    frame = get_frame()
+    for widget in frame.winfo_children():
+        widget.destroy()
+    router.get(page_name)()
 
 def config(key=None):
     try:
