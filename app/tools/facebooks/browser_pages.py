@@ -11,6 +11,7 @@ from tools.types import types
 from sql.history import HistoryCrawlPage
 from time import sleep
 from helpers.fb import clean_url_keep_params
+import logging
 from helpers.time import convert_to_db_format
 from sql.system import System
 from main.fanpage import get_fanpage_process_instance
@@ -36,6 +37,7 @@ class BrowserFanpage:
                 self.crawl(tab_id,stop_event)
             except Exception as e:
                 self.error_instance.insertContent(e)
+                logging.error("Thử lại sau 3s...")
                 print("Thử lại sau 3s...")
             fanpage_process_instance.update_process(tab_id,'Đợi 3s tới page kế tiếp')
             sleep(3)
@@ -81,13 +83,16 @@ class BrowserFanpage:
             fanpage_process_instance.update_process(tab_id,f'Đang cào page: {name}')
         except Exception as e:
             fanpage_process_instance.update_process(tab_id,f'Không thể truy cập: {page["id"]}')
+            logging.error(f'Page {page["id"]} không thể truy cập!')
             print(f'Page {page["id"]} không thể truy cập!')
             return
+        logging.info(f'====== {name} ======')
         print(f'====== {name} ======')
         
         pageLinkPost = f"{page['link']}/posts/"
         pageLinkStory = "https://www.facebook.com/permalink.php"
         listPosts = self.browser.find_elements(By.XPATH, types['list_posts'])
+        logging.info(f"Lấy được {len(listPosts)} bài viết")
         print(f"Lấy được {len(listPosts)} bài viết")
         post_links = []
         try:
@@ -109,6 +114,7 @@ class BrowserFanpage:
             pass
         
         if(len(post_links) == 0):
+            logging.info('Không lấy được đường dẫn bài viết nào!')
             print('Không lấy được đường dẫn bài viết nào!')
             return
         

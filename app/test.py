@@ -116,6 +116,8 @@ class Test:
             'id': '10161000087849142',
             'link': 'https://www.facebook.com/homesoftherich/posts/982177123948005?__cft__[0]=AZUS2xdrxGoD7-RDr_t_JMMMFqfL-SfusGDTXs5Rij_QLdHXYZiHCKjKZLo3zwnaD4EqzWaL2OBQN_oo1kKWi_ReiljxaEYVrfOQcW8WX-_fZ902zHPzuHt8qs7KhnDArdZCXIq07aDa3XAq28VS6R0BTm4TZym9DyXNKujTPw_MUnDlVGre8jQZyn5EdP3-t8c&__tn__=%2CO%2CP-R',
         }
+        print('Chuẩn bị')
+        sleep(10)
         driver.get(up['link'])
         sleep(1)
         data = crawl_instance.crawlContentPost({},up,{},True)
@@ -135,8 +137,8 @@ class Test:
 
 # Đăng bài
 test = Test()
-test.post(82)
-# test.crawl(75)
+# test.post(82)
+test.crawl(75)
 
 # # href = 'https://www.facebook.com/homesoftherich/posts/982177123948005?__cft__[0]=AZUS2xdrxGoD7-RDr_t_JMMMFqfL-SfusGDTXs5Rij_QLdHXYZiHCKjKZLo3zwnaD4EqzWaL2OBQN_oo1kKWi_ReiljxaEYVrfOQcW8WX-_fZ902zHPzuHt8qs7KhnDArdZCXIq07aDa3XAq28VS6R0BTm4TZym9DyXNKujTPw_MUnDlVGre8jQZyn5EdP3-t8c&__tn__=%2CO%2CP-R'
 # from helpers.fb import clean_url_keep_params,clean_facebook_url_redirect

@@ -1,6 +1,7 @@
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse, unquote
 import pyperclip
 from selenium.webdriver.common.keys import Keys
+import logging
 
 def is_valid_link(href, post):
     """
@@ -61,6 +62,7 @@ def clean_url_keep_params(href):
         return cleaned_url
     except Exception as e:
         # Nếu gặp lỗi, trả về href gốc
+        logging.error(f"Lỗi khi xử lý URL: {e}")
         print(f"Lỗi khi xử lý URL: {e}")
         return href
     

@@ -10,6 +10,7 @@ from threading import Thread, Event
 from tools.facebooks.handle_craw_newsfeed import handleCrawlNewFeed,crawlNewFeed,handleCrawlNewFeedVie
 from helpers.login import HandleLogin
 from time import sleep
+import logging
 import uuid
 from main.newsfeed import get_newsfeed_process_instance
 
@@ -32,6 +33,7 @@ class CrawContentNewsfeed:
             try:
                 newsfeed_process_instance.update_process(self.account.get('id'),'Bắt đầu đăng nhập')
                 # log_newsfeed(self.account,f'* Bắt đầu ({self.account["name"]}) *')
+                logging.info(f'==================Newsfeed ({self.account["name"]})================')
                 print(f'==================Newsfeed ({self.account["name"]})================')
                 checkLogin = loginInstance.loginFacebook()
                 if checkLogin == False:
@@ -44,8 +46,10 @@ class CrawContentNewsfeed:
                 break
             except Exception as e:
                 newsfeed_process_instance.update_process(self.account.get('id'),'Login thất bài, thử lại sau 1p...')
+                logging.error(f"Lỗi khi xử lý lấy dữ liệu!: {e}")
                 print(f"Lỗi khi xử lý lấy dữ liệu!: {e}")
                 self.error_instance.insertContent(e)
+                logging.error("Thử lại sau 1 phút...")
                 print("Thử lại sau 1 phút...")
                 sleep(60)                
 
@@ -56,12 +60,13 @@ class CrawContentNewsfeed:
         
 
 def process_fanpage(account, name, dirextension, stop_event, managerDriver):
+    logging.info(f"Đang xử lý fanpage: {name}")
     print(f"Đang xử lý fanpage: {name}")
     threads = [
         Thread(target=handleCrawlNewFeedVie, args=(account, managerDriver, stop_event)),
-        # Thread(target=handleCrawlNewFeed, args=(account, name, dirextension, stop_event)),
-        # Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
-        # Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
+        Thread(target=handleCrawlNewFeed, args=(account, name, dirextension, stop_event)),
+        Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
+        Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
     ]
 
     # Khởi chạy các thread
@@ -76,6 +81,7 @@ def process_fanpage(account, name, dirextension, stop_event, managerDriver):
     
     sleep(5)
     newsfeed_process_instance.update_process(account.get('id'), f'Chương trình đã bị dừng...')
+    logging.info(f"Hoàn thành xử lý fanpage: {name}")
     print(f"Hoàn thành xử lý fanpage: {name}")
 
 class PageChecker:
@@ -88,6 +94,7 @@ class PageChecker:
     def run(self, account,stop_event):
         threads = []
         try:
+            logging.info(f"Đang ở trang chủ!")
             print(f"Đang ở trang chủ!")
             newsfeed_process_instance.update_process(account.get('id'),'Tìm số fanpage')
             try:
@@ -99,6 +106,7 @@ class PageChecker:
             sleep(10)
             # Tìm tất cả các page
             allPages = self.browser.find_elements(By.XPATH, '//div[contains(@aria-label, "Switch to")]')
+            logging.info(f'Số fanpage để lướt: {len(allPages)}')
             print(f'Số fanpage để lướt: {len(allPages)}')
             newsfeed_process_instance.update_process(account.get('id'),f'Lấy được: {len(allPages)} page')
 
@@ -116,6 +124,7 @@ class PageChecker:
                     names.append(name)
                     names_str = ", ".join(names)  # Biến mảng thành chuỗi
                     newsfeed_process_instance.update_process(account.get('id'), f'Xử lý page: {names_str}')
+                    logging.info(f'=================={name}================')
                     print(f'=================={name}================')
 
                     # Khởi tạo các process

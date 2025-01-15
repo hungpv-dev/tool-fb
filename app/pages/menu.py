@@ -26,7 +26,11 @@ def setup_menu():
     actions_menu.add_command(label="Thêm tiến trình", command=lambda: render('post'))
     menubar.add_cascade(label="Đăng bài viết", menu=actions_menu)
 
+    menubar.add_command(label="Đăng nhập", command=lambda: render('login'))
+    
     menubar.add_command(label="Cài đặt môi trường", command=lambda: render('settings'))
+
+    menubar.add_command(label="Xem log", command=lambda: render('logs'))
 
     # Áp dụng menu vào cửa sổ chính
     root.config(menu=menubar)

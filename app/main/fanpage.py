@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import threading
+import logging
 from time import sleep
 import uuid 
 
@@ -42,35 +43,45 @@ class FanpageProcess:
 
 
     def update_process(self, id, new_text):
-        if id in self.progress_data:
-            process = self.progress_data[id]
-            label = process.get("label") 
-            if label:
-                label.config(text=new_text) 
-            process["status_show"] = new_text
+        try:
+            if id in self.progress_data:
+                process = self.progress_data[id]
+                label = process.get("label") 
+                if label:
+                    # Đảm bảo rằng việc cập nhật label diễn ra trong main thread
+                    label.after(0, lambda: label.config(text=new_text))  # Thực hiện cập nhật trong main thread
+                    process["status_show"] = new_text
+        except Exception as e:
+            logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
+            print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
+        
 
     def stop_process(self, id):
-        if id in self.progress_data:
-            process = self.progress_data[id]
-            process['status_process'] = 2
-            stop_event = process.get('stop_event')
+        try:
+            if id in self.progress_data:
+                process = self.progress_data[id]
+                process['status_process'] = 2
+                stop_event = process.get('stop_event')
 
-            if stop_event:
-                stop_event.set()
+                if stop_event:
+                    stop_event.set()
 
-            close_button = process.get("close_button")
-            if close_button:
-                close_button.config(text="Đang đóng...", state="disabled")
-        
-        def stop_task(process):
-            threa = process.get('thread')
-            threa.join() 
+                close_button = process.get("close_button")
+                if close_button:
+                    close_button.config(text="Đang đóng...", state="disabled")
+            
+            def stop_task(process):
+                threa = process.get('thread')
+                threa.join() 
 
-            self.progress_data[id].get('frame').destroy()
-            del self.progress_data[id]
+                self.progress_data[id].get('frame').destroy()
+                del self.progress_data[id]
 
-            # Chạy stop_task trong một thread riêng biệt
-        threading.Thread(target=stop_task, args=(process,), daemon=True).start()
+                # Chạy stop_task trong một thread riêng biệt
+            threading.Thread(target=stop_task, args=(process,), daemon=True).start()
+        except Exception as e:
+            logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
+            print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
 
 
     def get_all_processes(self):

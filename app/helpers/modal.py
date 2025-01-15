@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-
+import logging
 def closeModal(index, browser,last = False):
     try:
         closeModels = browser.find_elements(By.XPATH, '//*[@aria-label="Close"]')
@@ -10,6 +10,8 @@ def closeModal(index, browser,last = False):
             else:
                 closeModels[index].click()
         else:
-            print("Không tìm thấy phần tử hợp lệ tại index:", index)
+            logging.error(f"Không tìm thấy phần tử hợp lệ tại index: {index}")
+            print(f"Không tìm thấy phần tử hợp lệ tại index: {index}")
     except Exception as e:
-        print("Lỗi:", str(e))
+        logging.error(f"Lỗi: {str(e)}")
+        print(f"Lỗi: {str(e)}")

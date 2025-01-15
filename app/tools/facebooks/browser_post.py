@@ -4,6 +4,7 @@ from extensions.auth_proxy import create_proxy_extension,check_proxy
 from sql.accounts import Account
 from tools.facebooks.handle_browser_push import Push
 from sql.errors import Error
+import logging
 from main.post import get_post_process_instance
 
 account_instance = Account()
@@ -15,6 +16,7 @@ def process_post(account,stop_event):
     manager = None
     
     post_process_instance.update_process(account.get('id'),'Bắt đầu')
+    logging.info(f'=========={account["name"]}============')
     print(f'=========={account["name"]}============')
     while not stop_event.is_set():
         checkProxy = True
@@ -40,6 +42,7 @@ def process_post(account,stop_event):
         except Exception as e:
             error_instance.insertContent(e)
             post_process_instance.update_process(account.get('id'),'Không thể khởi tạo trình duyệt, đợi 30s...')
+            logging.error(f"Không thể khởi tạo trình duyệt, thử lại sau 30s...")
             print(f"Không thể khởi tạo trình duyệt, thử lại sau 30s...")
             sleep(30)
             account = account_instance.find(account['id'])
@@ -51,6 +54,7 @@ def process_post(account,stop_event):
         crawl.handle(stop_event)
         sleep(5)
     except Exception as e:
+        logging.error(f"Lỗi trong push: {e}")
         print(f"Lỗi trong push: {e}")
     finally:
         if browser:

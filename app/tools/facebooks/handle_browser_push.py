@@ -22,6 +22,7 @@ import threading
 from helpers.login import HandleLogin
 from tools.facebooks.func_handle_push_post import push_page,push_list
 from main.post import get_post_process_instance
+import logging
 
 post_process_instance = get_post_process_instance()
 
@@ -45,6 +46,7 @@ class Push:
         while not stop_event.is_set():
             try:
                 post_process_instance.update_process(self.account.get('id'),'Bắt đầu đăng nhập')
+                logging.error(f'==================Push ({self.account["name"]})================')
                 print(f'==================Push ({self.account["name"]})================')
                 checkLogin = loginInstance.loginFacebook()
                 if checkLogin == False:
@@ -55,14 +57,17 @@ class Push:
                 break
             except Exception as e:
                 post_process_instance.update_process(self.account.get('id'),'Login thất bài, thử lại sau 1p...')
+                logging.error(f"Lỗi khi xử lý đăng bài viết!: {e}")
                 print(f"Lỗi khi xử lý đăng bài viết!: {e}")
                 self.error_instance.insertContent(e)
+                logging.error("Thử lại sau 1 phút...")
                 print("Thử lại sau 1 phút...")
                 sleep(60)
         self.handleData(stop_event);          
 
     def handleData(self,stop_event):    
         try:
+            logging.error(f"Đang ở trang chủ!")
             print(f"Đang ở trang chủ!")
             sleep(2)
             pageIds = set()
@@ -79,6 +84,7 @@ class Push:
                         threads.append(worker_thread)
                         post_process_instance.update_task(self.account.get('id'),worker_thread)
             except Exception as e:
+                logging.error(e)
                 print(e)
                 
             try:
@@ -88,7 +94,9 @@ class Push:
                 threads.append(worker_thread)
                 post_process_instance.update_task(self.account.get('id'),worker_thread)
             except Exception as e:
+                logging.error(e)
                 print(e)
+            logging.error('Chờ 60s để tiếp tục...')
             print('Chờ 60s để tiếp tục...')
             sleep(60)
                 
@@ -97,15 +105,17 @@ class Push:
             post_process_instance.update_process(self.account.get('id'), f'Chương trình đã bị dừng...')
 
         except Exception as e:
+            logging.error(f'Lỗi khi push: {e}')
             print(f'Lỗi khi push: {e}')
+            logging.error('Chờ 5 phút trước khi thử lại...')
             print('Chờ 5 phút trước khi thử lại...')
             sleep(300)
 
             
     
-    def browseTime(self):
-        listPosts = self.pagePosts_instance.get_post_time({'account_id': self.account['id']})
-        return listPosts
+    # def browseTime(self):
+    #     listPosts = self.pagePosts_instance.get_post_time({'account_id': self.account['id']})
+    #     return listPosts
         
 
     def getAwaitListPage(self):
@@ -122,6 +132,7 @@ class Push:
             name = self.crawlid_instance.updateInfoFanpage(page,stop_event)
         except Exception as e:
             pass
+        logging.error('-> Mở popup thông tin cá nhân!')
         print('-> Mở popup thông tin cá nhân!')
         profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
         sleep(7)
@@ -131,7 +142,15 @@ class Push:
             switchPage = self.browser.find_element(By.XPATH, push['switchPage'](name))
             switchPage.click()
         except Exception as e:
+            logging.error("-> Không tìm thấy nút chuyển hướng tới trang quản trị!")
             print("-> Không tìm thấy nút chuyển hướng tới trang quản trị!")
+        sleep(3)
+
+        try:
+            usePage = self.browser.find_element(By.XPATH, '//*[@aria-label="Use Page"]')
+            usePage.click()
+        except Exception as e:
+            pass
         sleep(3)
         return name
         
@@ -141,6 +160,7 @@ class Push:
         # self.browser.execute_script("document.body.style.zoom='0.4';")
         sleep(2)
         try:
+            logging.error('==> Bắt đầu đăng bài')
             print('==> Bắt đầu đăng bài')
             # Check nút button
             createPost = None
@@ -161,6 +181,7 @@ class Push:
             
             sleep(5)
             input_element = self.browser.switch_to.active_element
+            logging.error('- Gán nội dung bài viết!')
             print('- Gán nội dung bài viết!')
             copy_and_paste_text(post['content'],input_element)
             # input_element.send_keys(post['content'])
@@ -175,6 +196,7 @@ class Push:
                         photo_video_element = parent_form.find_element(By.XPATH, './/div[@aria-label="Photo/video"]')
                         photo_video_element.click()
                         sleep(5)
+                        logging.error('- Copy và dán hình ảnh')
                         print('- Copy và dán hình ảnh')
                         for src in images:
                             temp_image_path = download_image(src, temp_file=f"image_{uuid.uuid4()}.png")
@@ -184,8 +206,10 @@ class Push:
                             file_input.send_keys(temp_image_path)
                             sleep(3)
                 except Exception as e:
+                    logging.error(f'Lỗi khi thêm hình ảnh: {e}')
                     print(f'Lỗi khi thêm hình ảnh: {e}')
             sleep(5)
+            logging.error('Đăng bài')
             print('Đăng bài')
             parent_form.submit()
             sleep(10)
@@ -200,6 +224,7 @@ class Push:
                 delete_image(file)
             self.afterUp(page,post,name) # Lấy link bài viết vừa đăng
             sleep(2)
+            logging.error('\n--------- Đăng bài thành công ---------\n')
             print('\n--------- Đăng bài thành công ---------\n')
         except Exception as e:
             raise e
@@ -240,11 +265,14 @@ class Push:
                                 break
                                 
                     except Exception as hover_error:
+                        logging.error(f"Lỗi khi hover vào liên kết: {hover_error}")
                         print(f"Lỗi khi hover vào liên kết: {hover_error}")
         except Exception as e:
             self.error_instance.insertContent(e)
+            logging.error(f"Không tìm thấy bài viết vừa đăng! {e}")
             print(f"Không tìm thấy bài viết vừa đăng! {e}")
         
+        logging.error('Đã lấy được link up')
         print('Đã lấy được link up')
         page_post_instance = PagePosts()
         page_post_instance.update_status(up['id'],{'link_up': link_up})
@@ -266,4 +294,5 @@ class Push:
                     sleep(3)
                     self.comment_instance.update_pp(comment['id'],{'status': 2})
             except Exception as e:
+                logging.error(f"Lỗi khi xử lý comment: {e}")
                 print(f"Lỗi khi xử lý comment: {e}")

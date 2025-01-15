@@ -3,12 +3,24 @@ from tkinter import messagebox
 import json
 
 def render(page_name):
-    """Xóa toàn bộ widget trong frame."""
+    """Xóa toàn bộ widget trong frame trừ các widget của trang log."""
     from main.root import get_frame
     frame = get_frame()
+
+    # Lưu lại các widget của trang log nếu cần
+    if page_name == 'logs':  # Nếu trang đang render là trang log
+        log_widgets = frame.winfo_children()  # Lưu tất cả widget con
+    else:
+        log_widgets = []  # Nếu không phải trang log thì không cần lưu lại
+
+    # Xóa toàn bộ widget trong frame
     for widget in frame.winfo_children():
-        widget.destroy()
+        if widget not in log_widgets:  # Không xóa các widget của trang log
+            widget.destroy()
+
+    # Sau đó gọi router để render trang mới
     router.get(page_name)()
+
 
 def config(key=None):
     try:

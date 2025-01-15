@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from main.root import get_frame
+import logging
 
 def main_page():
     frame = get_frame()

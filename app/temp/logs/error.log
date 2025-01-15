@@ -1,0 +1,208 @@
+2025-01-15 16:44:16,518 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:44:45,493 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:44:45,594 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
+2025-01-15 16:44:48,659 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-15 16:44:48,659 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
+2025-01-15 16:44:49,552 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
+2025-01-15 16:44:49,552 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-15 16:44:49,552 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
+2025-01-15 16:44:49,552 - ERROR - crawl_content_post - 478 - 
+-----------------------------------------------------
+
+2025-01-15 16:44:54,408 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:44:54,522 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
+2025-01-15 16:44:57,579 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-15 16:44:57,580 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
+2025-01-15 16:44:58,687 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
+2025-01-15 16:44:58,687 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-15 16:44:58,687 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
+2025-01-15 16:44:58,687 - ERROR - crawl_content_post - 478 - 
+-----------------------------------------------------
+
+2025-01-15 16:45:03,595 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:45:06,767 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-15 16:45:06,767 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
+2025-01-15 16:45:07,266 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
+2025-01-15 16:45:07,266 - ERROR - crawl_content_post - 465 - Response: {'post_id': 102673}
+2025-01-15 16:45:07,345 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
+2025-01-15 16:45:07,345 - ERROR - crawl_content_post - 478 - 
+-----------------------------------------------------
+
+2025-01-15 16:45:12,396 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:45:15,566 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-15 16:45:15,566 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
+2025-01-15 16:45:16,085 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
+2025-01-15 16:45:16,085 - ERROR - crawl_content_post - 465 - Response: {'post_id': 102674}
+2025-01-15 16:45:16,149 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
+2025-01-15 16:45:16,149 - ERROR - crawl_content_post - 478 - 
+-----------------------------------------------------
+
+2025-01-15 16:45:21,138 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:45:24,293 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-15 16:45:24,293 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
+2025-01-15 16:45:24,742 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
+2025-01-15 16:45:24,742 - ERROR - crawl_content_post - 465 - Response: {'post_id': 102675}
+2025-01-15 16:45:26,606 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
+2025-01-15 16:45:26,606 - ERROR - crawl_content_post - 478 - 
+-----------------------------------------------------
+
+2025-01-15 16:45:31,822 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:45:31,921 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
+2025-01-15 16:45:34,965 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-15 16:45:34,965 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
+2025-01-15 16:45:35,321 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
+2025-01-15 16:45:35,321 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-15 16:45:35,321 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
+2025-01-15 16:45:35,321 - ERROR - crawl_content_post - 478 - 
+-----------------------------------------------------
+
+2025-01-15 16:45:40,032 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:45:40,135 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
+2025-01-15 16:45:43,180 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-15 16:45:43,180 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
+2025-01-15 16:45:43,609 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
+2025-01-15 16:45:43,609 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-15 16:45:43,609 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
+2025-01-15 16:45:43,609 - ERROR - crawl_content_post - 478 - 
+-----------------------------------------------------
+
+2025-01-15 16:45:49,861 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:45:49,958 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
+2025-01-15 16:45:53,002 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-15 16:45:53,003 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
+2025-01-15 16:45:53,318 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
+2025-01-15 16:45:53,319 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-15 16:45:53,320 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
+2025-01-15 16:45:53,321 - ERROR - crawl_content_post - 478 - 
+-----------------------------------------------------
+
+2025-01-15 16:45:57,994 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:45:58,085 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
+2025-01-15 16:46:01,133 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-15 16:46:01,133 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
+2025-01-15 16:46:01,475 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
+2025-01-15 16:46:01,476 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-15 16:46:01,477 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
+2025-01-15 16:46:01,478 - ERROR - crawl_content_post - 478 - 
+-----------------------------------------------------
+
+2025-01-15 16:46:07,153 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:46:07,242 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
+2025-01-15 16:46:10,297 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-15 16:46:10,298 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
+2025-01-15 16:46:10,605 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
+2025-01-15 16:46:10,605 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-15 16:46:10,605 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
+2025-01-15 16:46:10,605 - ERROR - crawl_content_post - 478 - 
+-----------------------------------------------------
+
+2025-01-15 16:46:17,769 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:46:17,871 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
+2025-01-15 16:46:20,920 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-15 16:46:20,920 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
+2025-01-15 16:46:21,222 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
+2025-01-15 16:46:21,222 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-15 16:46:21,222 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
+2025-01-15 16:46:21,223 - ERROR - crawl_content_post - 478 - 
+-----------------------------------------------------
+
+2025-01-15 16:46:25,971 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:46:29,122 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-15 16:46:29,123 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
+2025-01-15 16:46:29,478 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
+2025-01-15 16:46:29,480 - ERROR - crawl_content_post - 465 - Response: {'post_id': 102676}
+2025-01-15 16:46:29,545 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
+2025-01-15 16:46:29,545 - ERROR - crawl_content_post - 478 - 
+-----------------------------------------------------
+
+2025-01-15 16:46:34,505 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-15 16:46:37,740 - ERROR - crawl_content_post - 286 - => Lưu được 1 bình luận!
+2025-01-15 16:46:37,740 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
+2025-01-15 16:46:39,560 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: 2025-01-15 02:46:34
+2025-01-15 16:46:39,560 - ERROR - crawl_content_post - 465 - Response: {'post_id': 102677}
+2025-01-15 16:46:40,662 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
+2025-01-15 16:46:40,662 - ERROR - crawl_content_post - 478 - 
+-----------------------------------------------------
+
+2025-01-15 16:46:46,886 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 1bfd8a62-66f5-47a5-bb11-42ab6b940c1e
+2025-01-15 16:47:20,095 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:47:20,096 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:47:31,100 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
+2025-01-15 16:47:41,103 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:47:41,105 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:47:51,108 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
+2025-01-15 16:48:01,113 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:48:01,113 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:48:11,115 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
+2025-01-15 16:48:21,116 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:48:21,116 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:48:31,118 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
+2025-01-15 16:48:41,119 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:48:41,119 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:48:51,126 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
+2025-01-15 16:49:01,129 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:49:01,130 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:49:11,132 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
+2025-01-15 16:49:21,136 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:49:21,137 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:49:31,140 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
+2025-01-15 16:49:41,145 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:49:41,146 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:49:42,226 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
+2025-01-15 16:49:52,227 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
+2025-01-15 16:50:02,232 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:50:02,234 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:50:03,310 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
+2025-01-15 16:50:13,312 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
+2025-01-15 16:50:23,313 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:50:23,314 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:50:24,441 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
+2025-01-15 16:50:34,443 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
+2025-01-15 16:50:44,446 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:50:44,446 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:50:45,541 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
+2025-01-15 16:50:55,543 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
+2025-01-15 16:51:05,546 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:51:05,548 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:51:06,659 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
+2025-01-15 16:51:16,660 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
+2025-01-15 16:51:26,664 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:51:26,665 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:51:27,759 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
+2025-01-15 16:51:37,761 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
+2025-01-15 16:51:47,764 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:51:47,766 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:51:48,842 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
+2025-01-15 16:53:58,415 - ERROR - driver - 102 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:54:00,507 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+2025-01-15 16:54:00,508 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: dbd3aeba-591d-4534-b17c-1d879c541455

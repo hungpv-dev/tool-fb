@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.options import Options
 # from selenium.webdriver.edge.options import Options as EdgeOptions
 # from webdriver_manager.microsoft import EdgeChromiumDriverManager
 import logging
+from tkinter import messagebox
 import os
 
 
@@ -45,17 +46,18 @@ class Browser:
         if self.profile_dir != './temp/profiles/crawl':
             full_path = os.path.abspath(self.profile_dir)
             chrome_options.add_argument(f"--user-data-dir={full_path}")
-            pass
         if self.anonymous:
             chrome_options.add_argument("--incognito")
 
         if headless:
-            chrome_options.add_argument("--headless=new")
-            chrome_options.add_argument("--no-sandbox")
-            chrome_options.add_argument("--disable-gpu")
-            chrome_options.add_argument("--enable-unsafe-swiftshader")
-            chrome_options.add_argument("--disable-webgl")
-            chrome_options.add_argument("--use-gl=swiftshader")
+            headlessConfig = config('headless')
+            if headlessConfig == False:
+                chrome_options.add_argument("--headless=new")
+                chrome_options.add_argument("--no-sandbox")
+                chrome_options.add_argument("--disable-gpu")
+                chrome_options.add_argument("--enable-unsafe-swiftshader")
+                chrome_options.add_argument("--disable-webgl")
+                chrome_options.add_argument("--use-gl=swiftshader")
         
         if self.loadContent == False:
             prefs = {
@@ -88,9 +90,9 @@ class Browser:
                 #     'https': f'http://{proxy["user"]}:{proxy["pass"]}@{proxy["ip"]}:{proxy["port"]}',
                 #     'no_proxy': 'localhost, 127.0.0.1'
                 # }
-            # service = Service(config('driver_path'))
+            service = Service(config('driver_path'))
             # service = Service('./tools/chromedriver.exe')
-            service = Service('./tools/chromedriver')
+            # service = Service('./tools/chromedriver')
             driver = webdriver.Chrome(service=service, options=chrome_options)
 
             driver.set_page_load_timeout(60)
@@ -98,6 +100,8 @@ class Browser:
             return driver
         except Exception as e:
             logging.error(f"Error starting Chrome browser: {e}")
+            messagebox.showerror('Lỗi','Vui lòng tải driver')
+            print(f"Error starting Chrome browser: {e}")
             raise e
 
     def cleanup(self):

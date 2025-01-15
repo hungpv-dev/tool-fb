@@ -2,6 +2,7 @@ from time import sleep
 from tools.types import push
 from selenium.webdriver.common.by import By
 from sql.accounts import Account
+import logging
 import re
 from selenium.common.exceptions import NoSuchElementException
 class HandleLogin:
@@ -30,6 +31,7 @@ class HandleLogin:
     def loginFacebook(self):
         self.setAccount()
         try:
+            logging.info(f"Bắt đầu thực khi login: {self.account.get('name')}")
             print(f"Bắt đầu thực khi login: {self.account.get('name')}")
             self.driver.get("https://facebook.com")
             sleep(2)
@@ -71,6 +73,7 @@ class HandleLogin:
                         authenapp = self.driver.find_element(
                             By.XPATH, "//*[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'authentication app')]"
                         )
+                        logging.info(f'{self.account.get("name")} lấy mã xác thực App Authenticate')
                         print(f'{self.account.get("name")} lấy mã xác thực App Authenticate')
                         self.updateMainModel('Login với 2fa')
                         authenapp.click()
@@ -81,6 +84,7 @@ class HandleLogin:
                     except NoSuchElementException as e:
                         try:
                             self.driver.find_element(By.NAME,'email')
+                            logging.info(f'{self.account.get("name")} lấy mã từ Outlook')
                             print(f'{self.account.get("name")} lấy mã từ Outlook')
                             try:
                                 self.updateMainModel('Login với Outlook')
@@ -90,11 +94,13 @@ class HandleLogin:
                                 check = self.pushCode(code)
                             except Exception as e:
                                 self.account_instance.update_account(self.account.get('id'),{'status_login':1})
+                                logging.error(f'{self.account.get("name")} lấy mã từ Audio (chiu)')
                                 print(f'{self.account.get("name")} lấy mã từ Audio (chiu)')
                         except Exception as e:
                             pass
             
         except Exception as e:
+            logging.error(f'Lỗi login: {e}')
             print(f'Lỗi login: {e}')
             check = False
         return check
@@ -102,6 +108,7 @@ class HandleLogin:
             
         
     def getCode2Fa(self):
+        logging.info(f'{self.account.get("name")} Mở web lấy mã')
         print(f'{self.account.get("name")} Mở web lấy mã')
 
         self.driver.execute_script("window.open('about:blank', '_blank');")
@@ -129,6 +136,7 @@ class HandleLogin:
         pass
 
     def loginEmailAndGetCode(self):
+        logging.info(f'{self.account.get("name")} Mờ outlook')
         print(f'{self.account.get("name")} Mờ outlook')
         self.driver.execute_script("window.open('about:blank', '_blank');")
         sleep(1)
@@ -149,14 +157,17 @@ class HandleLogin:
         # try:
         #     self.driver.find_element(By.CSS_SELECTOR, '[aria-posinset="1"]').click()
         # except NoSuchElementException as e:
+        #     logging.info("Không cần chuyển tiếp")
         #     print("Không cần chuyển tiếp")
 
         try:
             self.driver.find_element(By.CSS_SELECTOR,'[type="submit"]').click()
         except NoSuchElementException as e:
+            logging.error("Không cần chuyển tiếp")
             print("Không cần chuyển tiếp")
 
         sleep(5)
+        logging.info(f'{self.account.get("name")} Đăng nhập outlook thành công, mở inbox')
         print(f'{self.account.get("name")} Đăng nhập outlook thành công, mở inbox')
 
         self.clickText('Inbox')
@@ -167,6 +178,7 @@ class HandleLogin:
         return self.getCode()
 
     def getCode(self):
+        logging.info(f'{self.account.get("name")} Lấy code từ outlook')
         print(f'{self.account.get("name")} Lấy code từ outlook')
 
         messages = self.driver.find_elements(By.XPATH, '//*[@aria-posinset]')
@@ -176,6 +188,7 @@ class HandleLogin:
                 facebook_element.click()
                 break
             except NoSuchElementException:
+                logging.error("Không phải thẻ có thuộc tính facebook")
                 print("Không phải thẻ có thuộc tính facebook")
         
         sleep(3)
@@ -204,6 +217,7 @@ class HandleLogin:
         sleep(3)
     
     def pushCode(self,code):
+        logging.info(f'{self.account.get("name")} Code là {code}')
         print(f'{self.account.get("name")} Code là {code}')
         if code:
 
@@ -235,6 +249,7 @@ class HandleLogin:
                 pass
             sleep(5)
         else:
+            logging.error('Không tìm thấy mã code')
             print('Không tìm thấy mã code')
         sleep(5)
         return self.saveLogin()
@@ -247,6 +262,7 @@ class HandleLogin:
             self.driver.find_element(By.XPATH, push['openProfile'])
             check = True
         except Exception:
+            logging.error('Login thất bại, tôi thất bại rồi!')
             print('Login thất bại, tôi thất bại rồi!')
         return check
 
@@ -299,6 +315,7 @@ class HandleLogin:
             element = self.driver.find_element(By.XPATH, f"//*[contains(text(), '{text}')]")
             element.click()
         except NoSuchElementException as e:
+            logging.error('No has element')
             print('No has element')
 
     def login(self):
@@ -329,6 +346,7 @@ class HandleLogin:
 
         except Exception as e:
             self.updateMainModel('Không thể login')
+            logging.error(f"Lỗi login {account.get('name')}: {e}")
             print(f"Lỗi login {account.get('name')}: {e}")
             if 'latest_cookie' in account and 'id' in account['latest_cookie']:
                 self.updateStatusAcountCookie(account['latest_cookie']['id'], 1)

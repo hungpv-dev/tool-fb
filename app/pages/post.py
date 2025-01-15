@@ -6,12 +6,14 @@ from main.post import get_post_process_instance
 from tools.facebooks.browser_post import process_post
 import threading
 from main.root import get_frame
+import logging
 
 post_process_instance = get_post_process_instance()
 
 def newfeedhandle(selected_accounts):
     try:
         for account in selected_accounts:
+            logging.info(account.get('name'))
             print(account.get('name'))
             stop_event = threading.Event()
             thread = threading.Thread(target=process_post, args=(account, stop_event))
@@ -21,6 +23,7 @@ def newfeedhandle(selected_accounts):
             account['status_process'] = 1 # 1: Hoạt động, 2: Đã đóng
             post_process_instance.add_process(account)
     except Exception as e:
+        logging.error(f"Lỗi không mong muốn: {e}")
         print(f"Lỗi không mong muốn: {e}")
 
 def post_page():
@@ -94,6 +97,7 @@ def post_page():
             # fetch_and_display_accounts()
             # update_process_count()
         else:
+            logging.error("Bạn đã không chọn tài khoản.")
             print("Bạn đã không chọn tài khoản.")
 
     def update_process_count():

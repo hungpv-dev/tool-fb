@@ -5,6 +5,7 @@ from sql.accounts import Account
 from main.newsfeed import get_newsfeed_process_instance
 from tools.facebooks.browser_newsfeed import process_newsfeed
 import threading
+import logging
 
 newsfeed_process_instance = get_newsfeed_process_instance()
 
@@ -20,6 +21,7 @@ def newfeedhandle(selected_accounts):
             account['status_vie'] = 1 # 1: Cào, 2: Đã đóng
             newsfeed_process_instance.add_process(account)
     except Exception as e:
+        logging.error(f"Lỗi không mong muốn: {e}")
         print(f"Lỗi không mong muốn: {e}")
 
 def newsfeed_page():

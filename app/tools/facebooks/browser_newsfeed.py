@@ -6,6 +6,7 @@ from extensions.auth_proxy import create_proxy_extension,check_proxy
 from sql.accounts import Account
 from sql.errors import Error
 from main.newsfeed import get_newsfeed_process_instance
+import logging
 
 
 account_instance = Account()
@@ -17,6 +18,7 @@ def process_newsfeed(account, stop_event):
     browser = None
     manager = None
     
+    logging.info(f'=========={account["name"]}============')
     print(f'=========={account["name"]}============')
     newsfeed_process_instance.update_process(account.get('id'),'Bắt đầu')
 
@@ -35,7 +37,7 @@ def process_newsfeed(account, stop_event):
         try:
             if checkProxy == True:
                 manager = Browser(f"/newsfeed/home/{account['id']}",extension)
-                browser = manager.start(False)
+                browser = manager.start()
                 newsfeed_process_instance.update_process(account.get('id'),'Đã khởi tạo trình duyệt')
                 break
             else:
@@ -44,6 +46,7 @@ def process_newsfeed(account, stop_event):
         except Exception as e:
             error_instance.insertContent(e)
             newsfeed_process_instance.update_process(account.get('id'),'Không thể khởi tạo trình duyệt, đợi 30s...')
+            logging.error(f"Không thể khởi tạo trình duyệt, thử lại sau 30s...")
             print(f"Không thể khởi tạo trình duyệt, thử lại sau 30s...")
             sleep(30)
             account = account_instance.find(account['id'])
@@ -57,6 +60,7 @@ def process_newsfeed(account, stop_event):
         newfeed.handle(stop_event)
         sleep(5)
     except Exception as e:
+        logging.error(f"Lỗi khi lấy bài new feed: {e}")
         print(f"Lỗi khi lấy bài new feed: {e}")
     finally:
         if browser:

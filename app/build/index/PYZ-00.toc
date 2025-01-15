@@ -15,6 +15,9 @@
   ('OpenSSL.version',
    'C:\\Users\\Admin\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\OpenSSL\\version.py',
    'PYMODULE'),
+  ('PyQt5',
+   'C:\\Users\\Admin\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\PyQt5\\__init__.py',
+   'PYMODULE'),
   ('__future__',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\__future__.py',
@@ -42,6 +45,12 @@
   ('_pydecimal',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\_pydecimal.py',
+   'PYMODULE'),
+  ('_pyi_rth_utils',
+   'C:\\Users\\Admin\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\PyInstaller\\fake-modules\\_pyi_rth_utils\\__init__.py',
+   'PYMODULE'),
+  ('_pyi_rth_utils.qt',
+   'C:\\Users\\Admin\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\PyInstaller\\fake-modules\\_pyi_rth_utils\\qt.py',
    'PYMODULE'),
   ('_strptime',
    'C:\\Program '
@@ -1866,9 +1875,17 @@
    'C:\\Users\\Admin\\OneDrive\\Máy '
    'tính\\Workspace\\CrawFacebookNotLogin\\app\\app\\pages\\home.py',
    'PYMODULE'),
+  ('pages.login',
+   'C:\\Users\\Admin\\OneDrive\\Máy '
+   'tính\\Workspace\\CrawFacebookNotLogin\\app\\app\\pages\\login.py',
+   'PYMODULE'),
   ('pages.logs',
    'C:\\Users\\Admin\\OneDrive\\Máy '
    'tính\\Workspace\\CrawFacebookNotLogin\\app\\app\\pages\\logs.py',
+   'PYMODULE'),
+  ('pages.menu',
+   'C:\\Users\\Admin\\OneDrive\\Máy '
+   'tính\\Workspace\\CrawFacebookNotLogin\\app\\app\\pages\\menu.py',
    'PYMODULE'),
   ('pages.newsfeed',
    'C:\\Users\\Admin\\OneDrive\\Máy '
@@ -2130,6 +2147,9 @@
    'PYMODULE'),
   ('pyparsing.util',
    'C:\\Users\\Admin\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\pyparsing\\util.py',
+   'PYMODULE'),
+  ('pyperclip',
+   'C:\\Users\\Admin\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\pyperclip\\__init__.py',
    'PYMODULE'),
   ('pythoncom',
    'C:\\Users\\Admin\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python311\\site-packages\\pythoncom.py',

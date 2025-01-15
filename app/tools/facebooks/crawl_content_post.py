@@ -16,6 +16,7 @@ from helpers.fb import clean_url_keep_params,clean_facebook_url_redirect
 from sql.pages import Page
 from sql.errors import Error
 from sql.history import HistoryCrawlPage
+import logging
 from sql.accounts import Account
 from sql.account_cookies import AccountCookies
 from sql.comment import Comment 
@@ -43,6 +44,7 @@ class CrawlContentPost:
         except Exception as e:
             self.history_instance.update_count(his['id'], {'type': 'errors'})
             self.error_instance.insertContent(e)
+            logging.error(f'Lỗi khi cào: {e}')
             print(f'Lỗi khi cào: {e}')
             raise e
   
@@ -64,11 +66,13 @@ class CrawlContentPost:
         }
         dataComment = []
         sleep(2)
+        logging.info(f"Bắt đầu lấy dữ liệu bài viết")
         print(f"Bắt đầu lấy dữ liệu bài viết")
         
         modal = None # Xử lý lấy ô bài viết
         for modalXPath in types['modal']:
             try:
+                logging.info(f'****:  {modalXPath}')
                 print(f'****:  {modalXPath}')
                 modal = self.browser.find_element(By.XPATH, modalXPath)
                 break
@@ -76,6 +80,7 @@ class CrawlContentPost:
                 continue
 
         if not modal:
+            logging.error('Không tìm thấy modal')
             print('Không tìm thấy modal')
             raise ValueError('Không tìm thấy modal')        
         else:
@@ -105,10 +110,12 @@ class CrawlContentPost:
                             if formatted_time:
                                 timeUp = formatted_time
                     except StaleElementReferenceException:
+                        logging.error("Element no longer in the DOM, retrying...")
                         print("Element no longer in the DOM, retrying...")
                         sleep(1)
                         continue
         except StaleElementReferenceException:
+            logging.error("The element is stale and cannot be accessed.")
             print("The element is stale and cannot be accessed.")
         
         data['time_up'] = timeUp
@@ -136,7 +143,9 @@ class CrawlContentPost:
             for video in videos:
                 data['media']['videos'].append(video.get_attribute('src'))
         except Exception as e:
+            logging.error(e)
             print(e)
+            logging.error(f'Bài viết k có ảnh hoặc video')
             print(f'Bài viết k có ảnh hoặc video')
 
         try:
@@ -155,11 +164,13 @@ class CrawlContentPost:
                     if selectDyamic['share'] in dyamic:
                         data['share'] = dyamic
         except Exception as e:
+            logging.error(f"Không lấy được like, comment, share")
             print(f"Không lấy được like, comment, share")
         # Lấy comment
         try:
             scroll = modal.find_element(By.XPATH,types['scroll'])
             self.browser.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", scroll)
+            logging.error('Cuộn chuột xuống')
             print('Cuộn chuột xuống')
         except: 
             self.browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -228,16 +239,20 @@ class CrawlContentPost:
                                     pass
                                 
                                 if img_element:
+                                    logging.error("Thẻ <a> có thẻ <img> phía trước, không lấy href.")
                                     print("Thẻ <a> có thẻ <img> phía trước, không lấy href.")
                                 else:
                                     href = a.get_attribute('href')
                                     if href and is_valid_link(href, post) and href not in link_comment:
                                         link_comment.append(href)
                             except Exception as e:
+                                logging.error(f"Lỗi khi lấy href: {e}")
                                 print(f"Lỗi khi lấy href: {e}")
                     except IndexError as ie:
+                        logging.error(f"Lỗi chỉ mục: {ie}")
                         print(f"Lỗi chỉ mục: {ie}")
                     except Exception as e:
+                        logging.error(f"Lỗi không xác định: {e}")
                         print(f"Lỗi không xác định: {e}")
                         
                 except:
@@ -268,9 +283,12 @@ class CrawlContentPost:
                     'content': textContentComment,
                     'link_comment': clean_facebook_url_redirect(link_comment),
                 })
+            logging.error(f"=> Lưu được {len(dataComment)} bình luận!")
             print(f"=> Lưu được {len(dataComment)} bình luận!")
         except Exception as e:
+            logging.error(e)
             print(e)
+            logging.error("Không lấy được bình luận!")
             print("Không lấy được bình luận!")
 
 
@@ -298,6 +316,7 @@ class CrawlContentPost:
                         ele = parents_icons.find_element(By.XPATH,f'.//*[@aria-label="{label}"]')
                         eles.append(ele)
                     except NoSuchElementException as e:
+                        logging.error(f"Không có icon: {label}")
                         print(f"Không có icon: {label}")
             
             if len(eles) > 0:
@@ -312,6 +331,7 @@ class CrawlContentPost:
                         break
                     except ElementClickInterceptedException as e:
                         icon = ""
+                        logging.error("Không thể nhấp vào phần tử, thử phần tử khác.")
                         print("Không thể nhấp vào phần tử, thử phần tử khác.")
                         eles.remove(ele)
                 if not clicked:
@@ -321,8 +341,10 @@ class CrawlContentPost:
                     except Exception as e:
                         pass
             else:
+                logging.error("Không có phần tử nào khả dụng.")
                 print("Không có phần tử nào khả dụng.")
         except Exception as e:
+            logging.error("Không tìm thấy thẻ like!")
             print("Không tìm thấy thẻ like!")
         return icon
         
@@ -352,6 +374,7 @@ class CrawlContentPost:
                     break
         except Exception as e:
             closeModal(self.index,self.browser)
+            logging.error('Không thể copy link')
             print('Không thể copy link')
 
     
@@ -377,7 +400,9 @@ class CrawlContentPost:
                         except Exception as e:
                             closeModal(self.index,self.browser)
                     except Exception as e:
+                        logging.error(e)
                         print(e)
+                        logging.error('Không thể save post')
                         print('Không thể save post')
                     break
             
@@ -393,7 +418,21 @@ class CrawlContentPost:
                     item.click()
                     sleep(1)
                     break
+
+            menuitems = self.browser.find_elements(By.XPATH, ".//*[@aria-label='Feed story' and @role='menu']//*[@role='menuitem']")
+            if not menuitems:
+                btnOpenMenu.click()
+                sleep(3)
+                menuitems = self.browser.find_elements(By.XPATH, ".//*[@aria-label='Feed story' and @role='menu']//*[@role='menuitem']")
+
+            for item in menuitems:
+                item_text = item.text.lower()
+                if "interested" in item_text:
+                    item.click()
+                    sleep(1)
+                    break
         except Exception as e: 
+            logging.error('Không thể turn on notify')
             print('Không thể turn on notify')
         sleep(1)
 
@@ -412,17 +451,21 @@ class CrawlContentPost:
                             closeModal(0,self.browser)
                             sleep(1)
                         else:
+                            logging.error(f"URL không hợp lệ: {img}")
                             print(f"URL không hợp lệ: {img}")
                     except Exception as e:
                         sleep(5)
+                        logging.error(f"Lỗi khi truy cập hình ảnh {img}: {e}")
                         print(f"Lỗi khi truy cập hình ảnh {img}: {e}")
         except Exception as e:
+            logging.error(f"Lỗi khi xem hình ảnh: {e}")
             print(f"Lỗi khi xem hình ảnh: {e}")
 
     def insertPostAndComment(self, data, dataComment, his, newfeedid = 0):
         
         from sql.newsfeed import NewFeedModel
         newfeed_instance = NewFeedModel()
+        logging.error("Đang lưu bài viết và bình luận vào database...")
         print("Đang lưu bài viết và bình luận vào database...")
         try:
             res = self.post_instance.insert_post({
@@ -430,7 +473,9 @@ class CrawlContentPost:
                 'comments': dataComment
             })
 
-            print('==> Thời gian đăng: ', data['time_up'])
+            logging.error(f'==> Thời gian đăng: {data["time_up"]}')
+            print(f'==> Thời gian đăng: {data["time_up"]}')
+            logging.error(f"Response: {res}")
             print(f"Response: {res}")
             if 'post_id' in res and res['post_id']:
                 if 'id' in his:
@@ -441,10 +486,13 @@ class CrawlContentPost:
                 if newfeedid != 0:
                     newfeed_instance.destroy(newfeedid)
             
+            logging.error("=> Đã lưu thành công!")
             print("=> Đã lưu thành công!")
+            logging.error("\n-----------------------------------------------------\n")
             print("\n-----------------------------------------------------\n")
             
         except Exception as e:
+            logging.error(e)
             print(e)
             raise e
 
@@ -457,5 +505,6 @@ def extract_facebook_content(modal):
             contentText = contentText.replace(string, '')
         return contentText.strip()
     except Exception as e:
+        logging.error(f'Không tìm thấy nội dung')
         print(f'Không tìm thấy nội dung')
         return ''

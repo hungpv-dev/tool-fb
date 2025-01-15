@@ -5,6 +5,7 @@ from main.fanpage import get_fanpage_process_instance
 import threading
 from time import sleep
 import uuid
+import logging
 from main.root import get_frame
 from tkinter import messagebox
 
@@ -16,6 +17,7 @@ def submit_page_count(page_input_entry,total_process_label):
         countPage = int(countPage)
         if countPage < 1:
             messagebox.showwarning("Cảnh báo","Số lượng phải lớn hơn hoặc bằng 1.")
+        logging.info(f"Bắt đầu cào {countPage} Fanpage.")
         print(f"Bắt đầu cào {countPage} Fanpage.")
 
         def update_process_count():
@@ -37,8 +39,10 @@ def submit_page_count(page_input_entry,total_process_label):
             sleep(1) 
 
     except Exception as e:
+        logging.error(f"Lỗi không mong muốn: {e}")
         print(f"Lỗi không mong muốn: {e}")
     except ValueError as e:
+        logging.error(f"Giá trị không hợp lệ: {e}")
         print(f"Giá trị không hợp lệ: {e}")
 
 
@@ -65,6 +69,7 @@ def fanpage_page():
 
     back_button = ttk.Button(frame, text="Quay lại", style="Custom.TButton", command=lambda: render('home'))
     back_button.pack(fill=tk.X, pady=5, expand=True)
+
 
     canvas = tk.Canvas(frame)
     scroll_y = ttk.Scrollbar(frame, orient="vertical", command=canvas.yview)
