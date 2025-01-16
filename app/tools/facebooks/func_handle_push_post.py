@@ -26,31 +26,40 @@ def push_page(page,account,dirextension,stop_event):
     while not stop_event.is_set():
         manager = None
         browser = None
+        loginInstance = None
         try:
-            if not isinstance(manager,Browser):
-                while not stop_event.is_set():
-                    try:
-                        manager = Browser(pathProfile,dirextension,'chrome',False,loadContent=True)
-                        browser = manager.start()
-                        sleep(5)
-                        break
-                    except Exception as e:
-                        logging.error('Không tạo được trình duyệt')
-                        print('Không tạo được trình duyệt')
-                        sleep(30)
+            while not stop_event.is_set():
+                try:
+                    manager = Browser(pathProfile,dirextension,'chrome',False,loadContent=True)
+                    browser = manager.start()
+                    sleep(5)
+                    break
+                except Exception as e:
+                    error_instance.insertContent(e)
+                    logging.error('Không tạo được trình duyệt')
+                    print('Không tạo được trình duyệt')
+                    sleep(30)
 
-                loginInstance = HandleLogin(browser,account)
-                while not stop_event.is_set():
+            loginInstance = HandleLogin(browser,account)
+            while not stop_event.is_set():
+                try:
                     checkLogin = loginInstance.loginFacebook()
                     if checkLogin == False:
                         post_process_instance.update_process(account.get('id'),'Không login được, đợi 1p')
-                        logging.error('Đợi 1p rồi thử login lại!')
-                        print('Đợi 1p rồi thử login lại!')
-                        sleep(60)
                     else:
                         account = loginInstance.getAccount()
+                        loginInstance.updateStatusAcount(account.get('id'),4)
                         break
-                sleep(15)
+                except Exception as e:
+                    logging.error(e)
+                    print(e)
+                    error_instance.insertContent(e)
+                finally:
+                    logging.error('Đợi 1p rồi thử login lại!')
+                    print('Đợi 1p rồi thử login lại!')
+                    sleep(60)
+
+            sleep(15)
                     
             sleep(2)
             push_instance = Push(browser,account,dirextension,manager)
@@ -83,24 +92,28 @@ def push_page(page,account,dirextension,stop_event):
                     except Exception as e:
                         error_instance.insertContent(e)
                         page_post_instance.update_status(pageUP['id'],{
-                            'status':4,
+                            'status': 4,
                             'cookie_id': cookie['id']
                         })
                         sleep(5)
                 else: 
                     logging.error('Chưa có bài viết nào trong hàng chờ, chờ 1p để tiếp tục....')
                     print('Chưa có bài viết nào trong hàng chờ, chờ 1p để tiếp tục....')
+                    if loginInstance:
+                        loginInstance.updateStatusAcount(account.get('id'),2)
                     sleep(60)
         except Exception as e:
             error_instance.insertContent(e)
             logging.error(f'Lỗi khi theo dõi page: {e}')
             print(f'Lỗi khi theo dõi page: {e}')
         finally:
+            logging.error('Lỗi khi đăng bài page,thử lại sau 30s')
+            print('Lỗi khi đăng bài page,thử lại sau 30s')
+            sleep(30)
             if 'browser' in locals():
                 if browser:
                     browser.quit()
                     manager.cleanup()
-            sleep(300)
 
 
 def browseTime(account):
@@ -115,6 +128,7 @@ def push_list(account,dirextension,stop_event):
     pathProfile = f"/push/{account['id']}/{str(uuid.uuid4())}"
     manager = None
     browser = None
+    loginInstance = None
     while not stop_event.is_set():
         try:
             manager = Browser(pathProfile,dirextension,'chrome',loadContent=True)
@@ -124,14 +138,22 @@ def push_list(account,dirextension,stop_event):
             browser.get('https://facebook.com')
             sleep(15)
             while not stop_event.is_set():
-                checkLogin = loginInstance.loginFacebook()
-                if checkLogin == False:
+                try:
+                    checkLogin = loginInstance.loginFacebook()
+                    if checkLogin == False:
+                        post_process_instance.update_process(account.get('id'),'Không login được, đợi 1p')
+                    else:
+                        account = loginInstance.getAccount()
+                        loginInstance.updateStatusAcount(account.get('id'),4)
+                        break
+                except Exception as e:
+                    logging.error(e)
+                    print(e)
+                    error_instance.insertContent(e)
+                finally:
                     logging.error('Đợi 1p rồi thử login lại!')
                     print('Đợi 1p rồi thử login lại!')
                     sleep(60)
-                else:
-                    account = loginInstance.getAccount()
-                    break
             sleep(2)
             push = Push(browser,account,dirextension,manager)
             while not stop_event.is_set():
@@ -157,6 +179,7 @@ def push_list(account,dirextension,stop_event):
                             page_post_instance.update_status(post['id'], {'status': 1})
                             raise e
                         except Exception as e:
+                            error_instance.insertContent(e)
                             logging.error(e)
                             print(e)
                             error_instance.insertContent(e)
@@ -167,8 +190,11 @@ def push_list(account,dirextension,stop_event):
                 else:
                     logging.error('Không có bài nào cần đăng trong thời gian này, đợi 30s...')
                     print('Không có bài nào cần đăng trong thời gian này, đợi 30s...')
+                    if loginInstance:
+                        loginInstance.updateStatusAcount(account.get('id'),2)
                     sleep(30)
         except Exception as e:
+            error_instance.insertContent(e)
             logging.error(f'Lỗi khi xử lý đăng bài: {e}')
             print(f'Lỗi khi xử lý đăng bài: {e}')
         finally: 

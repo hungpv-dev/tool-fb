@@ -16,7 +16,7 @@ class NewsFeedProcess:
                     status_label.config(text=new_text) 
                 process["status"] = new_text
         except Exception as e:
-            logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
+            # logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
             print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
         
     def update_task(self, id, newtask):
@@ -28,7 +28,7 @@ class NewsFeedProcess:
                 if task_label:
                     task_label.config(text=len(process.get('tasks')))
         except Exception as e:
-            logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
+            # logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
             print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
 
     def update_statusVie(self,acc):
@@ -44,7 +44,7 @@ class NewsFeedProcess:
                     process['vie_button'].config(text="Bật cào vie")
                 process['status_vie'] = 1
         except Exception as e:
-            logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
+            # logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
             print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
 
     def show(self, id):
@@ -83,7 +83,7 @@ class NewsFeedProcess:
                 # Chạy stop_task trong một thread riêng biệt
                 threading.Thread(target=stop_task, args=(process,), daemon=True).start()
         except Exception as e:
-            logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
+            # logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
             print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
 
     def get_all_processes(self):

@@ -385,39 +385,39 @@ class CrawlContentPost:
             ActionChains(self.browser).move_to_element(btnOpenMenu)
             btnOpenMenu.click()
             sleep(3)
-            menuitems = self.browser.find_elements(By.XPATH, ".//*[@aria-label='Feed story' and @role='menu']//*[@role='menuitem']")
-            for item in menuitems:
-                item_text = item.text.lower()
-                if "save post" in item_text and 'unsave post' not in item_text:
-                    item.click()
-                    sleep(3)
-                    try:
-                        diaglog = self.browser.find_element(By.XPATH, './/*[@aria-label="Save To" and @role="dialog"]')
-                        log = diaglog.find_element(By.XPATH,'.//*[@aria-label="Done"]')
-                        try:
-                            log.click()
-                            sleep(2) 
-                        except Exception as e:
-                            closeModal(self.index,self.browser)
-                    except Exception as e:
-                        logging.error(e)
-                        print(e)
-                        logging.error('Không thể save post')
-                        print('Không thể save post')
-                    break
+            # menuitems = self.browser.find_elements(By.XPATH, ".//*[@aria-label='Feed story' and @role='menu']//*[@role='menuitem']")
+            # for item in menuitems:
+            #     item_text = item.text.lower()
+            #     if "save post" in item_text and 'unsave post' not in item_text:
+            #         item.click()
+            #         sleep(3)
+            #         try:
+            #             diaglog = self.browser.find_element(By.XPATH, './/*[@aria-label="Save To" and @role="dialog"]')
+            #             log = diaglog.find_element(By.XPATH,'.//*[@aria-label="Done"]')
+            #             try:
+            #                 log.click()
+            #                 sleep(2) 
+            #             except Exception as e:
+            #                 closeModal(self.index,self.browser)
+            #         except Exception as e:
+            #             logging.error(e)
+            #             print(e)
+            #             logging.error('Không thể save post')
+            #             print('Không thể save post')
+            #         break
             
-            menuitems = self.browser.find_elements(By.XPATH, ".//*[@aria-label='Feed story' and @role='menu']//*[@role='menuitem']")
-            if not menuitems:
-                btnOpenMenu.click()
-                sleep(3)
-                menuitems = self.browser.find_elements(By.XPATH, ".//*[@aria-label='Feed story' and @role='menu']//*[@role='menuitem']")
+            # menuitems = self.browser.find_elements(By.XPATH, ".//*[@aria-label='Feed story' and @role='menu']//*[@role='menuitem']")
+            # if not menuitems:
+            #     btnOpenMenu.click()
+            #     sleep(3)
+            #     menuitems = self.browser.find_elements(By.XPATH, ".//*[@aria-label='Feed story' and @role='menu']//*[@role='menuitem']")
 
-            for item in menuitems:
-                item_text = item.text.lower()
-                if "turn on notifications" in item_text:
-                    item.click()
-                    sleep(1)
-                    break
+            # for item in menuitems:
+            #     item_text = item.text.lower()
+            #     if "turn on notifications" in item_text:
+            #         item.click()
+            #         sleep(1)
+            #         break
 
             menuitems = self.browser.find_elements(By.XPATH, ".//*[@aria-label='Feed story' and @role='menu']//*[@role='menuitem']")
             if not menuitems:

@@ -44,15 +44,19 @@ def newsfeed_page():
         for widget in checkbutton_frame.winfo_children():
             widget.destroy()
 
-        # Hiển thị các checkbox mới
+        row = 0 
+        column = 0
         for account in accounts:
             if account.get('id') in account_selected:
                 continue
-
             var = tk.BooleanVar()
             cb = ttk.Checkbutton(checkbutton_frame, text=account["name"], variable=var, style="Custom.TCheckbutton")
-            cb.pack(anchor="w", padx=20, pady=2)
+            cb.grid(row=row, column=column, padx=10, pady=5, sticky="w")  
             checkboxes[account["id"]] = {"checkbox_var": var, "account_data": account}
+            column += 1
+            if column == 4:
+                column = 0
+                row += 1
 
     # Hiển thị danh sách tài khoản
     label = tk.Label(frame, text="Chọn tài khoản:", font=("Segoe UI", 14), bg="#f0f2f5", fg="#1c1e21")
@@ -73,11 +77,11 @@ def newsfeed_page():
         fetch_and_display_accounts(keyword)
 
     search_frame = ttk.Frame(frame)
-    search_frame.pack(fill=tk.X, pady=5)
+    search_frame.pack(fill=tk.X, pady=5,anchor='center')
 
-    search_entry = ttk.Entry(search_frame, textvariable=search_var, style="Custom.TEntry")
-    search_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
-
+    search_entry = ttk.Entry(search_frame, textvariable=search_var,style="Custom.TEntry")
+    search_entry.pack(side=tk.LEFT, padx=5, ipady=3, ipadx=5)
+    
     search_button = ttk.Button(search_frame, text="Tìm kiếm", style="Custom.TButton", command=search_accounts)
     search_button.pack(side=tk.LEFT, padx=5)
 
@@ -89,17 +93,20 @@ def newsfeed_page():
             render('newsfeed_page_list')
             return
 
-    submit_button = ttk.Button(frame, text="Xác nhận", style="Custom.TButton", command=submit_selection)
-    submit_button.pack(fill=tk.X, pady=5, expand=True)
+    button_frame = tk.Frame(frame, bg="#f0f2f5")
+    button_frame.pack(pady=10)
 
-    process_button = ttk.Button(frame, text=f"Danh sách tiến trình ({len(newsfeed_process_instance.get_all_processes())})", 
+    submit_button = ttk.Button(button_frame, text="Xác nhận", style="Custom.TButton", command=submit_selection)
+    submit_button.pack(side=tk.LEFT,fill=tk.X, pady=5, expand=True)
+
+    process_button = ttk.Button(button_frame, text=f"Danh sách tiến trình ({len(newsfeed_process_instance.get_all_processes())})", 
                                 style="Custom.TButton", command=lambda: render('newsfeed_page_list'))
-    process_button.pack(fill=tk.X, pady=5, expand=True)
+    process_button.pack(side=tk.LEFT,fill=tk.X, pady=5, expand=True)
 
 
     # Nút quay lại
-    back_button = ttk.Button(frame, text="Quay lại", style="Custom.TButton", command=lambda: render('home'))
-    back_button.pack(fill=tk.X, pady=5, expand=True)
+    back_button = ttk.Button(button_frame, text="Quay lại", style="Custom.TButton", command=lambda: render('home'))
+    back_button.pack(side=tk.LEFT,fill=tk.X, pady=5, expand=True)
 
 
 def close_process(account):

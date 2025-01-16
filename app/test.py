@@ -124,8 +124,8 @@ class Test:
         sleep(2)
         crawl_instance.shareCopyLink()
         crawl_instance.sharePostAndOpenNotify()
-        icon = crawl_instance.likePost()
-        data.get('post')['icon'] = icon
+        # icon = crawl_instance.likePost()
+        # data.get('post')['icon'] = icon
         closeModal(2,driver)
         sleep(1)
         crawl_instance.viewImages(data.get('post'))

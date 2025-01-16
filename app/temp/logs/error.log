@@ -1,208 +1,423 @@
-2025-01-15 16:44:16,518 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:44:45,493 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:44:45,594 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
-2025-01-15 16:44:48,659 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
-2025-01-15 16:44:48,659 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
-2025-01-15 16:44:49,552 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
-2025-01-15 16:44:49,552 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
-2025-01-15 16:44:49,552 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
-2025-01-15 16:44:49,552 - ERROR - crawl_content_post - 478 - 
+2025-01-16 09:17:21,213 - ERROR - login - 318 - No has element
+2025-01-16 09:17:23,223 - ERROR - login - 318 - No has element
+2025-01-16 09:17:25,233 - ERROR - login - 318 - No has element
+2025-01-16 09:17:43,873 - ERROR - login - 166 - Không cần chuyển tiếp
+2025-01-16 09:17:48,885 - ERROR - login - 318 - No has element
+2025-01-16 09:19:02,236 - ERROR - login - 97 - Trung- Spam - 100016322688790 - US Niger lấy mã từ Audio (chiu)
+2025-01-16 09:57:46,966 - ERROR - handle_craw_newsfeed - 132 - Chuyển hướng tới fanpage: WNBA News Daily
+2025-01-16 09:57:50,587 - ERROR - handle_craw_newsfeed - 286 - Chuyển hướng tới fanpage: WNBA News Daily
+2025-01-16 09:57:53,631 - ERROR - handle_craw_newsfeed - 286 - Chuyển hướng tới fanpage: WNBA News Daily
+2025-01-16 09:58:39,176 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 1
+2025-01-16 09:59:00,220 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-16 09:59:04,943 - ERROR - crawl_content_post - 286 - => Lưu được 6 bình luận!
+2025-01-16 09:59:04,944 - ERROR - handle_craw_newsfeed - 391 - Đã lấy được 1 bài lưu db
+2025-01-16 09:59:06,621 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-16 09:59:11,253 - ERROR - crawl_content_post - 286 - => Lưu được 9 bình luận!
+2025-01-16 09:59:11,253 - ERROR - handle_craw_newsfeed - 391 - Đã lấy được 1 bài lưu db
+2025-01-16 09:59:35,565 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-16 09:59:41,814 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-16 09:59:42,770 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-16 09:59:43,195 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-10 09:59:00
+2025-01-16 09:59:43,195 - ERROR - crawl_content_post - 478 - Response: {'post_id': 105737}
+2025-01-16 09:59:43,252 - ERROR - crawl_content_post - 489 - => Đã lưu thành công!
+2025-01-16 09:59:43,252 - ERROR - crawl_content_post - 491 - 
 -----------------------------------------------------
 
-2025-01-15 16:44:54,408 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:44:54,522 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
-2025-01-15 16:44:57,579 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
-2025-01-15 16:44:57,580 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
-2025-01-15 16:44:58,687 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
-2025-01-15 16:44:58,687 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
-2025-01-15 16:44:58,687 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
-2025-01-15 16:44:58,687 - ERROR - crawl_content_post - 478 - 
+2025-01-16 09:59:49,056 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-16 09:59:49,530 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-15 09:59:07
+2025-01-16 09:59:49,531 - ERROR - crawl_content_post - 478 - Response: {'post_id': 105739}
+2025-01-16 09:59:49,592 - ERROR - crawl_content_post - 489 - => Đã lưu thành công!
+2025-01-16 09:59:49,592 - ERROR - crawl_content_post - 491 - 
 -----------------------------------------------------
 
-2025-01-15 16:45:03,595 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:45:06,767 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
-2025-01-15 16:45:06,767 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
-2025-01-15 16:45:07,266 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
-2025-01-15 16:45:07,266 - ERROR - crawl_content_post - 465 - Response: {'post_id': 102673}
-2025-01-15 16:45:07,345 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
-2025-01-15 16:45:07,345 - ERROR - crawl_content_post - 478 - 
+2025-01-16 09:59:58,492 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-16 10:00:03,249 - ERROR - crawl_content_post - 286 - => Lưu được 6 bình luận!
+2025-01-16 10:00:03,250 - ERROR - handle_craw_newsfeed - 391 - Đã lấy được 1 bài lưu db
+2025-01-16 10:00:04,602 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-16 10:00:09,304 - ERROR - crawl_content_post - 286 - => Lưu được 9 bình luận!
+2025-01-16 10:00:09,304 - ERROR - handle_craw_newsfeed - 391 - Đã lấy được 1 bài lưu db
+2025-01-16 10:00:20,041 - ERROR - crawl_content_post - 435 - Không thể turn on notify
+2025-01-16 10:00:25,587 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-16 10:00:32,799 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-16 10:00:33,247 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-15 10:00:05
+2025-01-16 10:00:33,247 - ERROR - crawl_content_post - 478 - Response: {'post_id': 105746}
+2025-01-16 10:00:33,306 - ERROR - crawl_content_post - 489 - => Đã lưu thành công!
+2025-01-16 10:00:33,306 - ERROR - crawl_content_post - 491 - 
 -----------------------------------------------------
 
-2025-01-15 16:45:12,396 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:45:15,566 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
-2025-01-15 16:45:15,566 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
-2025-01-15 16:45:16,085 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
-2025-01-15 16:45:16,085 - ERROR - crawl_content_post - 465 - Response: {'post_id': 102674}
-2025-01-15 16:45:16,149 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
-2025-01-15 16:45:16,149 - ERROR - crawl_content_post - 478 - 
+2025-01-16 10:00:34,068 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-16 10:00:41,254 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-16 10:00:41,660 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-16 06:59:59
+2025-01-16 10:00:41,661 - ERROR - crawl_content_post - 478 - Response: {'post_id': 105749}
+2025-01-16 10:00:41,705 - ERROR - crawl_content_post - 489 - => Đã lưu thành công!
+2025-01-16 10:00:41,705 - ERROR - crawl_content_post - 491 - 
 -----------------------------------------------------
 
-2025-01-15 16:45:21,138 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:45:24,293 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
-2025-01-15 16:45:24,293 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
-2025-01-15 16:45:24,742 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
-2025-01-15 16:45:24,742 - ERROR - crawl_content_post - 465 - Response: {'post_id': 102675}
-2025-01-15 16:45:26,606 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
-2025-01-15 16:45:26,606 - ERROR - crawl_content_post - 478 - 
+2025-01-16 10:00:47,403 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-16 10:00:52,020 - ERROR - crawl_content_post - 286 - => Lưu được 9 bình luận!
+2025-01-16 10:00:52,020 - ERROR - handle_craw_newsfeed - 391 - Đã lấy được 1 bài lưu db
+2025-01-16 10:01:14,422 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-16 10:01:21,619 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-16 10:01:22,001 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-15 20:00:48
+2025-01-16 10:01:22,001 - ERROR - crawl_content_post - 478 - Response: {'post_id': 105758}
+2025-01-16 10:01:22,049 - ERROR - crawl_content_post - 489 - => Đã lưu thành công!
+2025-01-16 10:01:22,049 - ERROR - crawl_content_post - 491 - 
 -----------------------------------------------------
 
-2025-01-15 16:45:31,822 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:45:31,921 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
-2025-01-15 16:45:34,965 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
-2025-01-15 16:45:34,965 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
-2025-01-15 16:45:35,321 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
-2025-01-15 16:45:35,321 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
-2025-01-15 16:45:35,321 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
-2025-01-15 16:45:35,321 - ERROR - crawl_content_post - 478 - 
+2025-01-16 10:01:48,525 - ERROR - handle_craw_newsfeed - 250 - Load lại trang!
+2025-01-16 10:05:23,948 - ERROR - handle_craw_newsfeed - 132 - Chuyển hướng tới fanpage: Rap Zone
+2025-01-16 10:05:27,780 - ERROR - handle_craw_newsfeed - 287 - Chuyển hướng tới fanpage: Rap Zone
+2025-01-16 10:05:30,749 - ERROR - handle_craw_newsfeed - 287 - Chuyển hướng tới fanpage: Rap Zone
+2025-01-16 10:06:17,052 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 1
+2025-01-16 10:06:31,805 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 2
+2025-01-16 10:06:32,642 - ERROR - crawl_content_post - 173 - Cuộn chuột xuống
+2025-01-16 10:06:33,339 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 2
+2025-01-16 10:06:34,074 - ERROR - crawl_content_post - 173 - Cuộn chuột xuống
+2025-01-16 10:06:36,478 - ERROR - crawl_content_post - 286 - => Lưu được 10 bình luận!
+2025-01-16 10:06:36,479 - ERROR - handle_craw_newsfeed - 417 - Bài này k thỏa mã yêu cầu!
+2025-01-16 10:06:37,624 - ERROR - crawl_content_post - 286 - => Lưu được 4 bình luận!
+2025-01-16 10:06:37,626 - ERROR - handle_craw_newsfeed - 417 - Bài này k thỏa mã yêu cầu!
+2025-01-16 10:06:44,455 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 2
+2025-01-16 10:06:45,075 - ERROR - crawl_content_post - 173 - Cuộn chuột xuống
+2025-01-16 10:06:46,209 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 2
+2025-01-16 10:06:46,953 - ERROR - crawl_content_post - 173 - Cuộn chuột xuống
+2025-01-16 10:06:48,603 - ERROR - crawl_content_post - 286 - => Lưu được 2 bình luận!
+2025-01-16 10:06:48,603 - ERROR - handle_craw_newsfeed - 392 - Đã lấy được 1 bài lưu db
+2025-01-16 10:06:50,944 - ERROR - crawl_content_post - 286 - => Lưu được 10 bình luận!
+2025-01-16 10:06:50,945 - ERROR - handle_craw_newsfeed - 417 - Bài này k thỏa mã yêu cầu!
+2025-01-16 10:06:59,028 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 2
+2025-01-16 10:06:59,855 - ERROR - crawl_content_post - 173 - Cuộn chuột xuống
+2025-01-16 10:07:03,824 - ERROR - crawl_content_post - 286 - => Lưu được 10 bình luận!
+2025-01-16 10:07:03,825 - ERROR - handle_craw_newsfeed - 392 - Đã lấy được 1 bài lưu db
+2025-01-16 10:07:20,281 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 2
+2025-01-16 10:07:27,515 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-16 10:07:28,272 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-14 10:06:44
+2025-01-16 10:07:28,272 - ERROR - crawl_content_post - 478 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-16 10:07:28,596 - ERROR - crawl_content_post - 489 - => Đã lưu thành công!
+2025-01-16 10:07:28,596 - ERROR - crawl_content_post - 491 - 
 -----------------------------------------------------
 
-2025-01-15 16:45:40,032 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:45:40,135 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
-2025-01-15 16:45:43,180 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
-2025-01-15 16:45:43,180 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
-2025-01-15 16:45:43,609 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
-2025-01-15 16:45:43,609 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
-2025-01-15 16:45:43,609 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
-2025-01-15 16:45:43,609 - ERROR - crawl_content_post - 478 - 
+2025-01-16 10:07:35,443 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 2
+2025-01-16 10:07:42,761 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-16 10:07:43,272 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-09 10:06:59
+2025-01-16 10:07:43,272 - ERROR - crawl_content_post - 478 - Response: {'post_id': 105862}
+2025-01-16 10:07:43,339 - ERROR - crawl_content_post - 489 - => Đã lưu thành công!
+2025-01-16 10:07:43,339 - ERROR - crawl_content_post - 491 - 
 -----------------------------------------------------
 
-2025-01-15 16:45:49,861 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:45:49,958 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
-2025-01-15 16:45:53,002 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
-2025-01-15 16:45:53,003 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
-2025-01-15 16:45:53,318 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
-2025-01-15 16:45:53,319 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
-2025-01-15 16:45:53,320 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
-2025-01-15 16:45:53,321 - ERROR - crawl_content_post - 478 - 
+2025-01-16 10:07:43,833 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 2
+2025-01-16 10:07:44,925 - ERROR - crawl_content_post - 173 - Cuộn chuột xuống
+2025-01-16 10:07:49,181 - ERROR - crawl_content_post - 286 - => Lưu được 10 bình luận!
+2025-01-16 10:07:49,182 - ERROR - handle_craw_newsfeed - 392 - Đã lấy được 1 bài lưu db
+2025-01-16 10:07:59,226 - ERROR - handle_craw_newsfeed - 251 - Load lại trang!
+2025-01-16 10:08:20,739 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 2
+2025-01-16 10:08:28,016 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-16 10:08:28,428 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-15 13:07:44
+2025-01-16 10:08:28,428 - ERROR - crawl_content_post - 478 - Response: {'post_id': 105867}
+2025-01-16 10:08:28,492 - ERROR - crawl_content_post - 489 - => Đã lưu thành công!
+2025-01-16 10:08:28,492 - ERROR - crawl_content_post - 491 - 
 -----------------------------------------------------
 
-2025-01-15 16:45:57,994 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:45:58,085 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
-2025-01-15 16:46:01,133 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
-2025-01-15 16:46:01,133 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
-2025-01-15 16:46:01,475 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
-2025-01-15 16:46:01,476 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
-2025-01-15 16:46:01,477 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
-2025-01-15 16:46:01,478 - ERROR - crawl_content_post - 478 - 
------------------------------------------------------
+2025-01-16 15:05:11,522 - ERROR - handle_browser_push - 49 - ==================Push (Quân 100026492650172 Celebrity Lifestyle &amp; Khloé K's Corner - US)================
+2025-01-16 15:06:05,512 - ERROR - handle_browser_push - 70 - Đang ở trang chủ!
+2025-01-16 15:06:07,563 - ERROR - handle_browser_push - 99 - Chờ 60s để tiếp tục...
+2025-01-16 15:21:34,944 - ERROR - login - 103 - Lỗi login: Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="email"]"}
+  (Session info: chrome=131.0.6778.265); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x0032FD53+23747]
+	(No symbol) [0x002B7D54]
+	(No symbol) [0x0018BE53]
+	(No symbol) [0x001CFCA6]
+	(No symbol) [0x001CFEEB]
+	(No symbol) [0x0020D852]
+	(No symbol) [0x001F1E44]
+	(No symbol) [0x0020B41E]
+	(No symbol) [0x001F1B96]
+	(No symbol) [0x001C3F3C]
+	(No symbol) [0x001C4EBD]
+	GetHandleVerifier [0x0060AC73+3017699]
+	GetHandleVerifier [0x0061B93B+3086507]
+	GetHandleVerifier [0x006140F2+3055714]
+	GetHandleVerifier [0x003C5AF0+637536]
+	(No symbol) [0x002C0A5D]
+	(No symbol) [0x002BDA28]
+	(No symbol) [0x002BDBC5]
+	(No symbol) [0x002B07F0]
+	BaseThreadInitThunk [0x75C57BA9+25]
+	RtlInitializeExceptionChain [0x7723C0CB+107]
+	RtlClearBits [0x7723C04F+191]
+	(No symbol) [0x00000000]
 
-2025-01-15 16:46:07,153 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:46:07,242 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
-2025-01-15 16:46:10,297 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
-2025-01-15 16:46:10,298 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
-2025-01-15 16:46:10,605 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
-2025-01-15 16:46:10,605 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
-2025-01-15 16:46:10,605 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
-2025-01-15 16:46:10,605 - ERROR - crawl_content_post - 478 - 
------------------------------------------------------
+2025-01-16 15:21:34,945 - ERROR - crawl_content_newsfeed - 49 - Lỗi khi xử lý lấy dữ liệu!: Không thể login
+2025-01-16 15:21:35,027 - ERROR - crawl_content_newsfeed - 52 - Thử lại sau 1 phút...
+2025-01-16 15:29:52,030 - ERROR - newsfeed - 19 - Đã xảy ra lỗi khi cập nhật task_label: invalid command name ".!frame.!frame5.!frame.!frame2.!label3"
+2025-01-16 15:29:52,031 - ERROR - newsfeed - 19 - Đã xảy ra lỗi khi cập nhật task_label: invalid command name ".!frame.!frame5.!frame.!frame2.!label3"
+2025-01-16 15:30:01,413 - ERROR - newsfeed - 19 - Đã xảy ra lỗi khi cập nhật task_label: invalid command name ".!frame.!frame5.!frame.!frame2.!label3"
+2025-01-16 15:30:06,957 - ERROR - newsfeed - 19 - Đã xảy ra lỗi khi cập nhật task_label: invalid command name ".!frame.!frame5.!frame.!frame2.!label3"
+2025-01-16 15:30:34,225 - ERROR - newsfeed - 19 - Đã xảy ra lỗi khi cập nhật task_label: invalid command name ".!frame.!frame5.!frame.!frame2.!label3"
+2025-01-16 15:30:36,228 - ERROR - newsfeed - 19 - Đã xảy ra lỗi khi cập nhật task_label: invalid command name ".!frame.!frame5.!frame.!frame2.!label3"
+2025-01-16 15:30:36,295 - ERROR - newsfeed - 19 - Đã xảy ra lỗi khi cập nhật task_label: invalid command name ".!frame.!frame5.!frame.!frame2.!label3"
+2025-01-16 15:30:49,493 - ERROR - handle_craw_newsfeed - 132 - Chuyển hướng tới fanpage: NBA Warriors
+2025-01-16 15:30:53,340 - ERROR - handle_craw_newsfeed - 287 - Chuyển hướng tới fanpage: NBA Warriors
+2025-01-16 15:30:56,307 - ERROR - handle_craw_newsfeed - 287 - Chuyển hướng tới fanpage: NBA Warriors
+2025-01-16 15:30:57,974 - ERROR - handle_craw_newsfeed - 169 - Không thể mở profile: NBA Warriors
+2025-01-16 15:30:58,988 - ERROR - handle_craw_newsfeed - 182 - Không thể chuyển hướng tới fanpage: NBA Warriors
+2025-01-16 15:31:00,991 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 1
+2025-01-16 15:31:01,724 - ERROR - handle_craw_newsfeed - 322 - Không thể mở profile: NBA Warriors
+2025-01-16 15:31:02,732 - ERROR - handle_craw_newsfeed - 330 - Không thể chuyển hướng tới fanpage: NBA Warriors
+2025-01-16 15:31:21,909 - ERROR - newsfeed - 19 - Đã xảy ra lỗi khi cập nhật task_label: invalid command name ".!frame.!frame8.!frame.!frame2.!label3"
+2025-01-16 16:48:02,138 - ERROR - handle_browser_push - 49 - ==================Push (Manju Dhakal)================
+2025-01-16 16:48:23,984 - ERROR - handle_browser_push - 72 - Đang ở trang chủ!
+2025-01-16 16:49:12,497 - ERROR - func_handle_push_post - 58 - Đợi 1p rồi thử login lại!
+2025-01-16 16:49:28,340 - ERROR - func_handle_push_post - 152 - Đợi 1p rồi thử login lại!
+2025-01-16 16:50:30,431 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:50:30,431 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:50:32,499 - ERROR - func_handle_push_post - 68 - Bắt đầu theo dõi page: Commodity Exchange
+2025-01-16 16:50:45,101 - ERROR - handle_browser_push - 144 - -> Mở popup thông tin cá nhân!
+2025-01-16 16:51:00,548 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:51:00,548 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:51:10,893 - ERROR - handle_browser_push - 172 - ==> Bắt đầu đăng bài
+2025-01-16 16:51:15,976 - ERROR - handle_browser_push - 193 - - Gán nội dung bài viết!
+2025-01-16 16:51:21,801 - ERROR - handle_browser_push - 208 - - Copy và dán hình ảnh
+2025-01-16 16:51:30,648 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:51:30,648 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:51:31,950 - ERROR - handle_browser_push - 221 - Đăng bài
+2025-01-16 16:51:41,992 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 1
+2025-01-16 16:51:56,447 - ERROR - handle_browser_push - 284 - Đã lấy được link up
+2025-01-16 16:52:00,513 - ERROR - handle_browser_push - 236 - 
+--------- Đăng bài thành công ---------
 
-2025-01-15 16:46:17,769 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:46:17,871 - ERROR - crawl_content_post - 495 - Không tìm thấy nội dung
-2025-01-15 16:46:20,920 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
-2025-01-15 16:46:20,920 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
-2025-01-15 16:46:21,222 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
-2025-01-15 16:46:21,222 - ERROR - crawl_content_post - 465 - Response: {'message': 'Bài viết đã tồn tại!'}
-2025-01-15 16:46:21,222 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
-2025-01-15 16:46:21,223 - ERROR - crawl_content_post - 478 - 
------------------------------------------------------
+2025-01-16 16:52:00,590 - ERROR - func_handle_push_post - 85 - =====>Commodity Exchange: cần đợi 60p để đăng bài tiếp theo!
+2025-01-16 16:52:00,749 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:52:00,749 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:52:30,890 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:52:30,890 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:53:01,036 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:53:01,036 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:53:31,186 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:53:31,186 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:54:01,290 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:54:01,290 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:54:31,415 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:54:31,415 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:55:01,549 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:55:01,549 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:55:31,652 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:55:31,653 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:56:01,771 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:56:01,772 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:56:31,876 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:56:31,877 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:57:02,028 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:57:02,028 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:57:32,180 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 1 bài viết
+2025-01-16 16:57:45,986 - ERROR - handle_browser_push - 144 - -> Mở popup thông tin cá nhân!
+2025-01-16 16:58:20,803 - ERROR - handle_browser_push - 172 - ==> Bắt đầu đăng bài
+2025-01-16 16:58:25,876 - ERROR - handle_browser_push - 193 - - Gán nội dung bài viết!
+2025-01-16 16:58:31,194 - ERROR - handle_browser_push - 208 - - Copy và dán hình ảnh
+2025-01-16 16:58:41,238 - ERROR - handle_browser_push - 221 - Đăng bài
+2025-01-16 16:58:51,268 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 1
+2025-01-16 16:59:05,694 - ERROR - handle_browser_push - 284 - Đã lấy được link up
+2025-01-16 16:59:09,764 - ERROR - handle_browser_push - 236 - 
+--------- Đăng bài thành công ---------
 
-2025-01-15 16:46:25,971 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:46:29,122 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
-2025-01-15 16:46:29,123 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
-2025-01-15 16:46:29,478 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: None
-2025-01-15 16:46:29,480 - ERROR - crawl_content_post - 465 - Response: {'post_id': 102676}
-2025-01-15 16:46:29,545 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
-2025-01-15 16:46:29,545 - ERROR - crawl_content_post - 478 - 
------------------------------------------------------
+2025-01-16 16:59:11,956 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:59:11,956 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 16:59:42,083 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 16:59:42,083 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:00:12,198 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 17:00:12,198 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:00:42,328 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 17:00:42,328 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:01:12,426 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 17:01:12,436 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:01:42,538 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 17:01:42,538 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:02:12,632 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 17:02:12,632 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:02:42,798 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 17:02:42,798 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:03:12,913 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 17:03:12,915 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:03:43,030 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 17:03:43,030 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:04:13,130 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 17:04:13,131 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:04:43,252 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 17:04:43,252 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:05:13,410 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 1 bài viết
+2025-01-16 17:05:27,593 - ERROR - handle_browser_push - 144 - -> Mở popup thông tin cá nhân!
+2025-01-16 17:05:39,718 - ERROR - handle_browser_push - 154 - -> Không tìm thấy nút chuyển hướng tới trang quản trị!
+2025-01-16 17:05:51,949 - ERROR - handle_browser_push - 172 - ==> Bắt đầu đăng bài
+2025-01-16 17:05:57,033 - ERROR - handle_browser_push - 193 - - Gán nội dung bài viết!
+2025-01-16 17:06:02,293 - ERROR - handle_browser_push - 208 - - Copy và dán hình ảnh
+2025-01-16 17:06:12,482 - ERROR - handle_browser_push - 221 - Đăng bài
+2025-01-16 17:06:36,950 - ERROR - handle_browser_push - 284 - Đã lấy được link up
+2025-01-16 17:06:41,105 - ERROR - handle_browser_push - 236 - 
+--------- Đăng bài thành công ---------
 
-2025-01-15 16:46:34,505 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
-2025-01-15 16:46:37,740 - ERROR - crawl_content_post - 286 - => Lưu được 1 bình luận!
-2025-01-15 16:46:37,740 - ERROR - crawl_content_post - 455 - Đang lưu bài viết và bình luận vào database...
-2025-01-15 16:46:39,560 - ERROR - crawl_content_post - 463 - ==> Thời gian đăng: 2025-01-15 02:46:34
-2025-01-15 16:46:39,560 - ERROR - crawl_content_post - 465 - Response: {'post_id': 102677}
-2025-01-15 16:46:40,662 - ERROR - crawl_content_post - 476 - => Đã lưu thành công!
-2025-01-15 16:46:40,662 - ERROR - crawl_content_post - 478 - 
------------------------------------------------------
+2025-01-16 17:06:43,262 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 17:06:43,262 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:07:13,371 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 17:07:13,371 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:07:43,504 - ERROR - func_handle_push_post - 159 - Manju Dhakal => đăng: 0 bài viết
+2025-01-16 17:07:43,504 - ERROR - func_handle_push_post - 189 - Không có bài nào cần đăng trong thời gian này, đợi 30s...
+2025-01-16 17:08:15,964 - ERROR - func_handle_push_post - 202 - Lỗi khi đăng bài time,thử lại sau 30s
+2025-01-16 17:22:01,312 - ERROR - login - 103 - Lỗi login: 'NoneType' object has no attribute 'get'
+2025-01-16 17:24:20,772 - ERROR - login - 349 - Lỗi login Quân 100026492650172 Celebrity Lifestyle &amp; Khloé K's Corner - US: Không thể thêm cookie {'name': 'dpr', 'path': '/', 'value': '1.75', 'domain': '.facebook.com', 'secure': True, 'expires': 1737608611, 'httpOnly': False} vào trình duyệt: Message: invalid cookie domain
+  (Session info: chrome=131.0.6778.265)
+Stacktrace:
+	GetHandleVerifier [0x0032FD53+23747]
+	(No symbol) [0x002B7D54]
+	(No symbol) [0x0018BCCD]
+	(No symbol) [0x0021B4EC]
+	(No symbol) [0x001F1DFC]
+	(No symbol) [0x0020B41E]
+	(No symbol) [0x001F1B96]
+	(No symbol) [0x001C3F3C]
+	(No symbol) [0x001C4EBD]
+	GetHandleVerifier [0x0060AC73+3017699]
+	GetHandleVerifier [0x0061B93B+3086507]
+	GetHandleVerifier [0x006140F2+3055714]
+	GetHandleVerifier [0x003C5AF0+637536]
+	(No symbol) [0x002C0A5D]
+	(No symbol) [0x002BDA28]
+	(No symbol) [0x002BDBC5]
+	(No symbol) [0x002B07F0]
+	BaseThreadInitThunk [0x75C57BA9+25]
+	RtlInitializeExceptionChain [0x7723C0CB+107]
+	RtlClearBits [0x7723C04F+191]
+	(No symbol) [0x00000000]
 
-2025-01-15 16:46:46,886 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 1bfd8a62-66f5-47a5-bb11-42ab6b940c1e
-2025-01-15 16:47:20,095 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+2025-01-16 17:24:26,684 - ERROR - login - 103 - Lỗi login: Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="email"]"}
+  (Session info: chrome=131.0.6778.265); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x0032FD53+23747]
+	(No symbol) [0x002B7D54]
+	(No symbol) [0x0018BE53]
+	(No symbol) [0x001CFCA6]
+	(No symbol) [0x001CFEEB]
+	(No symbol) [0x0020D852]
+	(No symbol) [0x001F1E44]
+	(No symbol) [0x0020B41E]
+	(No symbol) [0x001F1B96]
+	(No symbol) [0x001C3F3C]
+	(No symbol) [0x001C4EBD]
+	GetHandleVerifier [0x0060AC73+3017699]
+	GetHandleVerifier [0x0061B93B+3086507]
+	GetHandleVerifier [0x006140F2+3055714]
+	GetHandleVerifier [0x003C5AF0+637536]
+	(No symbol) [0x002C0A5D]
+	(No symbol) [0x002BDA28]
+	(No symbol) [0x002BDBC5]
+	(No symbol) [0x002B07F0]
+	BaseThreadInitThunk [0x75C57BA9+25]
+	RtlInitializeExceptionChain [0x7723C0CB+107]
+	RtlClearBits [0x7723C04F+191]
+	(No symbol) [0x00000000]
 
-2025-01-15 16:47:20,096 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+2025-01-16 17:25:27,390 - ERROR - login - 349 - Lỗi login Quân 100026492650172 Celebrity Lifestyle &amp; Khloé K's Corner - US: Không thể thêm cookie {'name': 'dpr', 'path': '/', 'value': '1.75', 'domain': '.facebook.com', 'secure': True, 'expires': 1737608611, 'httpOnly': False} vào trình duyệt: Message: invalid cookie domain
+  (Session info: chrome=131.0.6778.265)
+Stacktrace:
+	GetHandleVerifier [0x0032FD53+23747]
+	(No symbol) [0x002B7D54]
+	(No symbol) [0x0018BCCD]
+	(No symbol) [0x0021B4EC]
+	(No symbol) [0x001F1DFC]
+	(No symbol) [0x0020B41E]
+	(No symbol) [0x001F1B96]
+	(No symbol) [0x001C3F3C]
+	(No symbol) [0x001C4EBD]
+	GetHandleVerifier [0x0060AC73+3017699]
+	GetHandleVerifier [0x0061B93B+3086507]
+	GetHandleVerifier [0x006140F2+3055714]
+	GetHandleVerifier [0x003C5AF0+637536]
+	(No symbol) [0x002C0A5D]
+	(No symbol) [0x002BDA28]
+	(No symbol) [0x002BDBC5]
+	(No symbol) [0x002B07F0]
+	BaseThreadInitThunk [0x75C57BA9+25]
+	RtlInitializeExceptionChain [0x7723C0CB+107]
+	RtlClearBits [0x7723C04F+191]
+	(No symbol) [0x00000000]
 
-2025-01-15 16:47:31,100 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
-2025-01-15 16:47:41,103 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+2025-01-16 17:25:33,283 - ERROR - login - 103 - Lỗi login: Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="email"]"}
+  (Session info: chrome=131.0.6778.265); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x0032FD53+23747]
+	(No symbol) [0x002B7D54]
+	(No symbol) [0x0018BE53]
+	(No symbol) [0x001CFCA6]
+	(No symbol) [0x001CFEEB]
+	(No symbol) [0x0020D852]
+	(No symbol) [0x001F1E44]
+	(No symbol) [0x0020B41E]
+	(No symbol) [0x001F1B96]
+	(No symbol) [0x001C3F3C]
+	(No symbol) [0x001C4EBD]
+	GetHandleVerifier [0x0060AC73+3017699]
+	GetHandleVerifier [0x0061B93B+3086507]
+	GetHandleVerifier [0x006140F2+3055714]
+	GetHandleVerifier [0x003C5AF0+637536]
+	(No symbol) [0x002C0A5D]
+	(No symbol) [0x002BDA28]
+	(No symbol) [0x002BDBC5]
+	(No symbol) [0x002B07F0]
+	BaseThreadInitThunk [0x75C57BA9+25]
+	RtlInitializeExceptionChain [0x7723C0CB+107]
+	RtlClearBits [0x7723C04F+191]
+	(No symbol) [0x00000000]
 
-2025-01-15 16:47:41,105 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+2025-01-16 17:25:58,807 - ERROR - browser_post - 60 - Trình duyệt bị đóng, thử lại sau 30s...
+2025-01-16 17:27:35,899 - ERROR - login - 349 - Lỗi login Quân 100026492650172 Celebrity Lifestyle &amp; Khloé K's Corner - US: Không thể thêm cookie {'name': 'dpr', 'path': '/', 'value': '1.75', 'domain': '.facebook.com', 'secure': True, 'expires': 1737608611, 'httpOnly': False} vào trình duyệt: Message: invalid cookie domain
+  (Session info: chrome=131.0.6778.265)
+Stacktrace:
+	GetHandleVerifier [0x0032FD53+23747]
+	(No symbol) [0x002B7D54]
+	(No symbol) [0x0018BCCD]
+	(No symbol) [0x0021B4EC]
+	(No symbol) [0x001F1DFC]
+	(No symbol) [0x0020B41E]
+	(No symbol) [0x001F1B96]
+	(No symbol) [0x001C3F3C]
+	(No symbol) [0x001C4EBD]
+	GetHandleVerifier [0x0060AC73+3017699]
+	GetHandleVerifier [0x0061B93B+3086507]
+	GetHandleVerifier [0x006140F2+3055714]
+	GetHandleVerifier [0x003C5AF0+637536]
+	(No symbol) [0x002C0A5D]
+	(No symbol) [0x002BDA28]
+	(No symbol) [0x002BDBC5]
+	(No symbol) [0x002B07F0]
+	BaseThreadInitThunk [0x75C57BA9+25]
+	RtlInitializeExceptionChain [0x7723C0CB+107]
+	RtlClearBits [0x7723C04F+191]
+	(No symbol) [0x00000000]
 
-2025-01-15 16:47:51,108 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
-2025-01-15 16:48:01,113 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+2025-01-16 17:27:41,807 - ERROR - login - 103 - Lỗi login: Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="email"]"}
+  (Session info: chrome=131.0.6778.265); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x0032FD53+23747]
+	(No symbol) [0x002B7D54]
+	(No symbol) [0x0018BE53]
+	(No symbol) [0x001CFCA6]
+	(No symbol) [0x001CFEEB]
+	(No symbol) [0x0020D852]
+	(No symbol) [0x001F1E44]
+	(No symbol) [0x0020B41E]
+	(No symbol) [0x001F1B96]
+	(No symbol) [0x001C3F3C]
+	(No symbol) [0x001C4EBD]
+	GetHandleVerifier [0x0060AC73+3017699]
+	GetHandleVerifier [0x0061B93B+3086507]
+	GetHandleVerifier [0x006140F2+3055714]
+	GetHandleVerifier [0x003C5AF0+637536]
+	(No symbol) [0x002C0A5D]
+	(No symbol) [0x002BDA28]
+	(No symbol) [0x002BDBC5]
+	(No symbol) [0x002B07F0]
+	BaseThreadInitThunk [0x75C57BA9+25]
+	RtlInitializeExceptionChain [0x7723C0CB+107]
+	RtlClearBits [0x7723C04F+191]
+	(No symbol) [0x00000000]
 
-2025-01-15 16:48:01,113 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:48:11,115 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
-2025-01-15 16:48:21,116 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:48:21,116 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:48:31,118 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
-2025-01-15 16:48:41,119 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:48:41,119 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:48:51,126 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
-2025-01-15 16:49:01,129 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:49:01,130 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:49:11,132 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
-2025-01-15 16:49:21,136 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:49:21,137 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:49:31,140 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
-2025-01-15 16:49:41,145 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:49:41,146 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:49:42,226 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
-2025-01-15 16:49:52,227 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
-2025-01-15 16:50:02,232 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:50:02,234 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:50:03,310 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
-2025-01-15 16:50:13,312 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
-2025-01-15 16:50:23,313 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:50:23,314 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:50:24,441 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
-2025-01-15 16:50:34,443 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
-2025-01-15 16:50:44,446 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:50:44,446 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:50:45,541 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
-2025-01-15 16:50:55,543 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
-2025-01-15 16:51:05,546 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:51:05,548 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:51:06,659 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
-2025-01-15 16:51:16,660 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
-2025-01-15 16:51:26,664 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:51:26,665 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:51:27,759 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
-2025-01-15 16:51:37,761 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: 4ca9e7f7-70b3-47dd-860a-3c3c5dc2e386
-2025-01-15 16:51:47,764 - ERROR - driver - 101 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:51:47,766 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:51:48,842 - ERROR - fanpage - 55 - Đã xảy ra lỗi khi cập nhật task_label: main thread is not in main loop
-2025-01-15 16:53:58,415 - ERROR - driver - 102 - Error starting Chrome browser: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:54:00,507 - ERROR - get_post_from_fanpage - 32 - Lỗi trong Crawl, khởi động lại sau 10s: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
-
-2025-01-15 16:54:00,508 - ERROR - get_post_from_fanpage - 37 - ==> Đang đóng tab: dbd3aeba-591d-4534-b17c-1d879c541455

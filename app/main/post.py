@@ -17,7 +17,7 @@ class PostProcess:
                 process["status"] = new_text
         except Exception as e:
             print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
-            logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
+            # logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
         
     def update_task(self, id, newtask):
         try:
@@ -29,7 +29,7 @@ class PostProcess:
                     task_label.config(text=len(process.get('tasks')))
         except Exception as e:
             print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
-            logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
+            # logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
 
         
     def stop_process(self, id):
@@ -64,7 +64,7 @@ class PostProcess:
                 threading.Thread(target=stop_task, args=(process,), daemon=True).start()
         except Exception as e:
             print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
-            logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
+            # logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
 
     def get_all_processes(self):
         return self.progress_data

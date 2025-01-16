@@ -158,6 +158,7 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
                             sleep(60)
                         else:
                             account = loginInstance.getAccount()
+                            loginInstance.updateStatusAcount(account.get('id'),3)
                             break
                     sleep(2)
                     try:
@@ -171,7 +172,7 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
 
                 else:
                     loginInstance = HandleLogin(browser,account)
-                loginInstance.updateStatusAcount(account.get('id'),{'status_login': 3})
+                    loginInstance.updateStatusAcount(account.get('id'),3)
                 
                 try:
                     switchPage = browser.find_element(By.XPATH, push['switchPage'](name))
@@ -309,9 +310,9 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                         sleep(60)
                     else:
                         account = loginInstance.getAccount()
+                        loginInstance.updateStatusAcount(account.get('id'),3)
                         break
 
-                loginInstance.updateStatusAcount(account.get('id'),{'status_login': 3})
                 sleep(2)
                 try:
                     profile_button = browser.find_element(By.XPATH, push['openProfile'])
@@ -392,8 +393,8 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                             print('Đã lấy được 1 bài lưu db')
                             crawl_instance.shareCopyLink()
                             crawl_instance.sharePostAndOpenNotify()
-                            icon = crawl_instance.likePost()
-                            post['icon'] = icon
+                            # icon = crawl_instance.likePost()
+                            # post['icon'] = icon
                             closeModal(crawl_instance.index,browser)
                             sleep(1)
                             print(json.dumps({

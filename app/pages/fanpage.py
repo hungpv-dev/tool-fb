@@ -64,11 +64,14 @@ def fanpage_page():
     page_input_entry = ttk.Entry(frame, font=("Segoe UI", 12), width=20)
     page_input_entry.pack(pady=10)
 
-    submit_button = ttk.Button(frame, text="Xác nhận", style="Custom.TButton", command=lambda: submit_page_count(page_input_entry,total_process_label))
-    submit_button.pack(fill=tk.X, pady=5, expand=True)
+    button_frame = tk.Frame(frame, bg="#f0f2f5")
+    button_frame.pack(pady=10)
 
-    back_button = ttk.Button(frame, text="Quay lại", style="Custom.TButton", command=lambda: render('home'))
-    back_button.pack(fill=tk.X, pady=5, expand=True)
+    submit_button = ttk.Button(button_frame,width=15, text="Xác nhận", style="Custom.TButton", command=lambda: submit_page_count(page_input_entry,total_process_label))
+    submit_button.pack(side=tk.LEFT,fill=tk.X, pady=5, expand=True)
+
+    back_button = ttk.Button(button_frame,width=15, text="Quay lại", style="Custom.TButton", command=lambda: render('home'))
+    back_button.pack(side=tk.LEFT,fill=tk.X, pady=5, expand=True)
 
 
     canvas = tk.Canvas(frame)

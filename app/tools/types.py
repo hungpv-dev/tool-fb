@@ -69,6 +69,7 @@ push = {
     'openProfile': '//*[@aria-label="Your profile"]',
     'allPages': '//*[contains(text(), "Switch to")]',
     'createPost': ["What's on your mind", "What are you thinking about"],
+    'allProfile': '//*[@aria-label="See all profiles"]',
     'switchPage': lambda name: f'//*[contains(@aria-label, "Switch to") and contains(@aria-label, "{name}")]',
     'comments': lambda text: f'//*[@aria-label="Comment as {text}"]'
 }

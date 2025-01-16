@@ -79,6 +79,14 @@ def process_fanpage(account, name, dirextension, stop_event, managerDriver):
     for thread in threads:
         thread.join()
     
+    account_instance = Account()
+    try:
+        acc = account_instance.find(account.get('id'))
+        if acc.get('status_login') == 3:
+            account_instance.update_account(account.get('id'),{'status_login': 2})
+    except Exception as e:
+        print(e)
+
     sleep(5)
     newsfeed_process_instance.update_process(account.get('id'), f'Chương trình đã bị dừng...')
     logging.info(f"Hoàn thành xử lý fanpage: {name}")

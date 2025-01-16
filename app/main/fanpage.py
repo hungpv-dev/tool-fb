@@ -52,7 +52,7 @@ class FanpageProcess:
                     label.after(0, lambda: label.config(text=new_text))  # Thực hiện cập nhật trong main thread
                     process["status_show"] = new_text
         except Exception as e:
-            logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
+            # logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
             print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
         
 
@@ -80,7 +80,7 @@ class FanpageProcess:
                 # Chạy stop_task trong một thread riêng biệt
             threading.Thread(target=stop_task, args=(process,), daemon=True).start()
         except Exception as e:
-            logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
+            # logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
             print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
 
 

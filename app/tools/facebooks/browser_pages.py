@@ -198,6 +198,8 @@ class BrowserFanpage:
                 except:
                     pass
 
+                if not name:
+                    name = page.get('name')
                 dataUpdatePage['status'] = 1
                 self.page_instance.update_page(page['id'],dataUpdatePage)
                 return name

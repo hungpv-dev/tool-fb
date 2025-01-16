@@ -54,16 +54,18 @@ class Push:
                 account = loginInstance.getAccount()
                 post_process_instance.update_process(self.account.get('id'),'Đăng nhập thành công')
                 self.account = account
-                break
-            except Exception as e:
+                self.handleData(stop_event);          
+            except ValueError as e:
                 post_process_instance.update_process(self.account.get('id'),'Login thất bài, thử lại sau 1p...')
                 logging.error(f"Lỗi khi xử lý đăng bài viết!: {e}")
                 print(f"Lỗi khi xử lý đăng bài viết!: {e}")
                 self.error_instance.insertContent(e)
+            except Exception as e:
+                raise e
+            finally:
                 logging.error("Thử lại sau 1 phút...")
                 print("Thử lại sau 1 phút...")
                 sleep(60)
-        self.handleData(stop_event);          
 
     def handleData(self,stop_event):    
         try:
@@ -85,6 +87,7 @@ class Push:
                         post_process_instance.update_task(self.account.get('id'),worker_thread)
             except Exception as e:
                 logging.error(e)
+                self.error_instance.insertContent(e)
                 print(e)
                 
             try:
@@ -95,13 +98,19 @@ class Push:
                 post_process_instance.update_task(self.account.get('id'),worker_thread)
             except Exception as e:
                 logging.error(e)
+                self.error_instance.insertContent(e)
                 print(e)
-            logging.error('Chờ 60s để tiếp tục...')
-            print('Chờ 60s để tiếp tục...')
-            sleep(60)
-                
+
             for thread in threads:
                 thread.join()
+                
+            account_instance = Account()
+            try:
+                acc = account_instance.find(self.account.get('id'))
+                if acc.get('status_login') == 4:
+                    account_instance.update_account(acc.get('id'),{'status_login': 2})
+            except Exception as e:
+                print(e)
             post_process_instance.update_process(self.account.get('id'), f'Chương trình đã bị dừng...')
 
         except Exception as e:

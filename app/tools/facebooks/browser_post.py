@@ -5,6 +5,7 @@ from sql.accounts import Account
 from tools.facebooks.handle_browser_push import Push
 from sql.errors import Error
 import logging
+from tkinter import messagebox
 from main.post import get_post_process_instance
 
 account_instance = Account()
@@ -35,29 +36,32 @@ def process_post(account,stop_event):
                 manager = Browser(f"/push/{account['id']}/home",dirextension,loadContent=True)
                 browser = manager.start()
                 post_process_instance.update_process(account.get('id'),'Đã khởi tạo trình duyệt')
-                break
             else:
                 post_process_instance.update_process(account.get('id'),'Proxy không dùng được')
                 raise Exception("Proxy không hợp lệ")
+            
+            try:
+                post_process_instance.update_process(account.get('id'),'Chuyển hướng tới fb')
+                browser.get("https://facebook.com")
+                crawl = Push(browser,account,dirextension,manager)
+                crawl.handle(stop_event)
+                sleep(5)
+            except Exception as e:
+                logging.error(f"Lỗi trong push: {e}")
+                print(f"Lỗi trong push: {e}")
         except Exception as e:
             error_instance.insertContent(e)
-            post_process_instance.update_process(account.get('id'),'Không thể khởi tạo trình duyệt, đợi 30s...')
-            logging.error(f"Không thể khởi tạo trình duyệt, thử lại sau 30s...")
-            print(f"Không thể khởi tạo trình duyệt, thử lại sau 30s...")
-            sleep(30)
+            post_process_instance.update_process(account.get('id'),'Trình duyệt bị đóng, đợi 30s...')
             account = account_instance.find(account['id'])
+        finally:
+            if browser:
+                browser.quit()
+                manager.cleanup()
+            logging.error(f"Trình duyệt bị đóng, thử lại sau 30s...")
+            print(f"Trình duyệt bị đóng, thử lại sau 30s...")
+            sleep(30)
+            
     
-    try:
-        post_process_instance.update_process(account.get('id'),'Chuyển hướng tới fb')
-        browser.get("https://facebook.com")
-        crawl = Push(browser,account,dirextension,manager)
-        crawl.handle(stop_event)
-        sleep(5)
-    except Exception as e:
-        logging.error(f"Lỗi trong push: {e}")
-        print(f"Lỗi trong push: {e}")
-    finally:
-        if browser:
-            browser.quit()
-            manager.cleanup()
+   
+    
 

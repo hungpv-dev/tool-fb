@@ -1388,6 +1388,10 @@
    'C:\\Users\\Admin\\OneDrive\\Máy '
    'tính\\Workspace\\CrawFacebookNotLogin\\app\\app\\helpers\\image.py',
    'PYMODULE'),
+  ('helpers.log',
+   'C:\\Users\\Admin\\OneDrive\\Máy '
+   'tính\\Workspace\\CrawFacebookNotLogin\\app\\app\\helpers\\log.py',
+   'PYMODULE'),
   ('helpers.login',
    'C:\\Users\\Admin\\OneDrive\\Máy '
    'tính\\Workspace\\CrawFacebookNotLogin\\app\\app\\helpers\\login.py',
