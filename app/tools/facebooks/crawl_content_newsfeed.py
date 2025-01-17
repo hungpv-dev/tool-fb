@@ -10,6 +10,8 @@ from threading import Thread, Event
 from tools.facebooks.handle_craw_newsfeed import handleCrawlNewFeed,crawlNewFeed,handleCrawlNewFeedVie
 from helpers.login import HandleLogin
 from time import sleep
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import logging
 import uuid
 from main.newsfeed import get_newsfeed_process_instance
@@ -106,8 +108,20 @@ class PageChecker:
             print(f"Đang ở trang chủ!")
             newsfeed_process_instance.update_process(account.get('id'),'Tìm số fanpage')
             try:
-                profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
+                # Chờ tối đa 10 giây để `profile_button` xuất hiện
+                profile_button = WebDriverWait(self.browser, 10).until(
+                    EC.presence_of_element_located((By.XPATH, push['openProfile']))
+                )
                 profile_button.click()
+
+                # Chờ tối đa 10 giây để `allFanPage` xuất hiện
+                try:
+                    allFanPage = WebDriverWait(self.browser, 10).until(
+                        EC.presence_of_element_located((By.XPATH, push['allProfile']))
+                    )
+                    allFanPage.click()
+                except Exception as e:
+                    pass
             except Exception as e:
                 raise e
 

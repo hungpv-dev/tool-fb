@@ -130,6 +130,7 @@ def push_list(account,dirextension,stop_event):
     browser = None
     loginInstance = None
     while not stop_event.is_set():
+        retry_count = {}
         try:
             manager = Browser(pathProfile,dirextension,'chrome',loadContent=True)
             browser = manager.start()
@@ -162,31 +163,45 @@ def push_list(account,dirextension,stop_event):
                 print(f"{account.get('name')} => đăng: {len(posts)} bài viết")
                 if len(posts) > 0:
                     for post in posts:
-                        try:
-                            post_process_instance.update_process(account.get('id'),f"Xử lý đăng bài: {post['id']}")
-                            page = post.get('page')
-                            name = push.switchPage(page,stop_event)
-                            profile_button = browser.find_element(By.XPATH, pushType['openProfile'])
+                        post_id = post['id']
+                        # Khởi tạo bộ đếm retry nếu chưa có
+                        if post_id not in retry_count:
+                            retry_count[post_id] = 0
 
-                            push.push(page,post,name)
-                            page_post_instance.update_status(post['id'],{
-                                'status':2,
-                                'cookie_id': account['latest_cookie']['id']
-                            })
-                            post_process_instance.update_process(account.get('id'),f"Đăng thành công bài: {post['id']}")
-                            sleep(2)
-                        except NoSuchElementException as e:
-                            page_post_instance.update_status(post['id'], {'status': 1})
-                            raise e
-                        except Exception as e:
-                            error_instance.insertContent(e)
-                            logging.error(e)
-                            print(e)
-                            error_instance.insertContent(e)
-                            page_post_instance.update_status(post['id'],{
-                                'status':4,
-                                'cookie_id': account['latest_cookie']['id']
-                            })
+                        while retry_count[post_id] < 3:
+                            try:
+                                post_process_instance.update_process(account.get('id'),f"Xử lý đăng bài: {post['id']}")
+                                page = post.get('page')
+                                name = push.switchPage(page,stop_event)
+                                profile_button = browser.find_element(By.XPATH, pushType['openProfile'])
+
+                                push.push(page,post,name)
+                                page_post_instance.update_status(post['id'],{
+                                    'status':2,
+                                    'cookie_id': account['latest_cookie']['id']
+                                })
+                                post_process_instance.update_process(account.get('id'),f"Đăng thành công bài: {post['id']}")
+                                sleep(2)
+                                retry_count.pop(post_id, None)
+                                break
+                            except NoSuchElementException as e:
+                                page_post_instance.update_status(post['id'], {'status': 1})
+                                raise e
+                            except Exception as e:
+                                retry_count[post_id] += 1
+                                error_instance.insertContent(e)
+                                logging.error(e)
+                                print(e)
+                                error_instance.insertContent(e)
+                                if retry_count[post_id] >= 3:
+                                    page_post_instance.update_status(post['id'],{
+                                        'status':4,
+                                        'cookie_id': account['latest_cookie']['id']
+                                    })
+                                    logging.error(f"Bài viết {post_id} đăng lỗi quá 3 lần. Bỏ qua.")
+                                    break
+                                logging.error(f"Lỗi đăng bài {post_id}. Thử lại sau 30s (lần thứ {retry_count[post_id]}).")
+                                sleep(30)
                 else:
                     logging.error('Không có bài nào cần đăng trong thời gian này, đợi 30s...')
                     print('Không có bài nào cần đăng trong thời gian này, đợi 30s...')

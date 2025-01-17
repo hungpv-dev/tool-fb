@@ -141,19 +141,35 @@ class Push:
             name = self.crawlid_instance.updateInfoFanpage(page,stop_event)
         except Exception as e:
             pass
-        logging.error('-> Mở popup thông tin cá nhân!')
-        print('-> Mở popup thông tin cá nhân!')
-        profile_button = self.browser.find_element(By.XPATH, push['openProfile'])
-        sleep(7)
-        profile_button.click()
-        sleep(5)
+
         try:
-            switchPage = self.browser.find_element(By.XPATH, push['switchPage'](name))
-            switchPage.click()
+            swichNow = self.browser.find_element(By.XPATH, push['switchNow'])
+            swichNow.click()
         except Exception as e:
-            logging.error("-> Không tìm thấy nút chuyển hướng tới trang quản trị!")
-            print("-> Không tìm thấy nút chuyển hướng tới trang quản trị!")
-        sleep(3)
+            logging.error('-> Mở popup thông tin cá nhân!')
+            print('-> Mở popup thông tin cá nhân!')
+            profile_button = WebDriverWait(self.browser, 10).until(
+                EC.presence_of_element_located((By.XPATH,  push['openProfile']))
+            )
+            profile_button.click()
+            sleep(5)
+            try:
+                try:
+                    allFanPage = WebDriverWait(self.browser, 10).until(
+                        EC.presence_of_element_located((By.XPATH, push['allProfile']))
+                    )
+                    allFanPage.click()
+                except Exception as e:
+                    pass
+
+                switchPage = WebDriverWait(self.browser, 10).until(
+                    EC.presence_of_element_located((By.XPATH, push['switchPage'](name)))
+                )
+                switchPage.click()
+            except Exception as e:
+                logging.error("-> Không tìm thấy nút chuyển hướng tới trang quản trị!")
+                print("-> Không tìm thấy nút chuyển hướng tới trang quản trị!")
+            sleep(3)
 
         try:
             usePage = self.browser.find_element(By.XPATH, '//*[@aria-label="Use Page"]')

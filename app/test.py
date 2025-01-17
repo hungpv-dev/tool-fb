@@ -10,11 +10,14 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 import os
 from sql.accounts import Account
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from helpers.login import HandleLogin
 account_instance = Account()
 import uuid
 from helpers.modal import closeModal
 import json
+from tools.types import push
 from tools.facebooks.crawl_content_post import CrawlContentPost
 
 class Test:
@@ -30,12 +33,34 @@ class Test:
         checkLogin = loginInstance.loginFacebook()
         if checkLogin == False: return
         push_instance = Push(driver,acc,extension,manager)
-        driver.get('https://facebook.com/profile')
+        profile_button = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH,  push['openProfile']))
+        )
+        profile_button.click()
+        try:
+            allFanPage = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, push['allProfile']))
+            )
+            allFanPage.click()
+        except Exception as e:
+            pass
+
+        switchPage = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, push['switchPage']('Sports Daily')))
+        )
+        switchPage.click()
+        sleep(10000)
+
+
+        driver.get('https://www.facebook.com/profile.php?id=61561397663469')
+        
+        swichNow = driver.find_element(By.XPATH, push['switchNow'])
+        swichNow.click()
+
         text = "What's on your mind?"
         yourThink = driver.find_element(By.XPATH,f'//*[text()="{text}"]')
         yourThink.click()
         sleep(3)
-        import pyperclip
         input_element = driver.switch_to.active_element
         def get_xpath(element):
             return driver.execute_script("""
@@ -137,8 +162,8 @@ class Test:
 
 # Đăng bài
 test = Test()
-# test.post(82)
-test.crawl(75)
+test.post(75)
+# test.crawl(75)
 
 # # href = 'https://www.facebook.com/homesoftherich/posts/982177123948005?__cft__[0]=AZUS2xdrxGoD7-RDr_t_JMMMFqfL-SfusGDTXs5Rij_QLdHXYZiHCKjKZLo3zwnaD4EqzWaL2OBQN_oo1kKWi_ReiljxaEYVrfOQcW8WX-_fZ902zHPzuHt8qs7KhnDArdZCXIq07aDa3XAq28VS6R0BTm4TZym9DyXNKujTPw_MUnDlVGre8jQZyn5EdP3-t8c&__tn__=%2CO%2CP-R'
 # from helpers.fb import clean_url_keep_params,clean_facebook_url_redirect
