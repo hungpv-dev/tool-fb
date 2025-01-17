@@ -4,7 +4,6 @@ from sql.account_cookies import AccountCookies
 import uuid
 from tools.driver import Browser
 import json
-from sql.system import System
 import unicodedata
 from time import sleep
 from helpers.login import HandleLogin
@@ -16,14 +15,20 @@ from tools.types import push,types
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from helpers.time import convert_to_db_format
-from helpers.modal import closeModal
-from helpers.system import get_system_info
+from helpers.modal import closeModal,openProfile
 
 from main.newsfeed import get_newsfeed_process_instance
 
 newsfeed_process_instance = get_newsfeed_process_instance()
 
-def handleCrawlNewFeedVie(account, managerDriver ,stop_event=None):
+from sql.system import System
+system_instance = System()
+
+def updateSystemMessage(system,message):
+    if system:
+        system_instance.push_message(system.get('id'),message)
+
+def handleCrawlNewFeedVie(account, managerDriver ,stop_event=None,system_account=None):
     process = newsfeed_process_instance.show(account.get('id'))
     newfeed_instance = NewFeedModel()
     error_instance = Error()
@@ -42,6 +47,7 @@ def handleCrawlNewFeedVie(account, managerDriver ,stop_event=None):
                 checkLogin = loginInstance.loginFacebook()
                 if checkLogin == False:
                     print('Đợi 1p rồi thử login lại!')
+                    updateSystemMessage(system_account,'Login thất bại')
                     sleep(60)
                 else:
                     account = loginInstance.getAccount()
@@ -56,6 +62,7 @@ def handleCrawlNewFeedVie(account, managerDriver ,stop_event=None):
             listId = set() 
             # log_newsfeed(account,f"====================Thực thi cào fanpage {name}=====================")
             while not stop_event.is_set() and process['status_vie'] == 2: 
+                updateSystemMessage(system_account,'Bắt đầu cào vie')
                 try:
                     profile_button = browser.find_element(By.XPATH, push['openProfile'])
                 except Exception as e:
@@ -115,11 +122,13 @@ def handleCrawlNewFeedVie(account, managerDriver ,stop_event=None):
                     browser.execute_script("window.scrollBy(0, 500);")
                 sleep(5)
                 process = newsfeed_process_instance.show(account.get('id'))
+
+            updateSystemMessage(system_account,'Tắt cào vie')
         except Exception as e:
             error_instance.insertContent(e)
             sleep(30)
 
-def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
+def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None,system_account=None):
     try:
         newfeed_instance = NewFeedModel()
         error_instance = Error()
@@ -133,55 +142,57 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
 
         while not stop_event.is_set():
             try:
-                if not isinstance(manager,Browser):
-                    while not stop_event.is_set():
-                        try:
-                            manager = Browser(pathProfile,dirextension)
-                            browser = manager.start()
-                            sleep(5)
-                            break
-                        except Exception as e:
-                            # log_newsfeed(account,f"{name} k dùng được proxy, chờ 30s để thử lại")
-                            sleep(30)
-                    
-                    loginInstance = HandleLogin(browser,account)
-
-                    while not stop_event.is_set():
-                        checkLogin = loginInstance.loginFacebook()
-                        if checkLogin == False:
-                            print('Đợi 1p rồi thử login lại!')
-                            sleep(60)
-                        else:
-                            account = loginInstance.getAccount()
-                            break
-                    sleep(2)
+                while not stop_event.is_set():
                     try:
-                        profile_button = browser.find_element(By.XPATH, push['openProfile'])
-                        profile_button.click()
-                        sleep(10)
+                        manager = Browser(pathProfile,dirextension)
+                        browser = manager.start()
+                        sleep(5)
+                        break
                     except Exception as e:
-                        print(f"Không thể mở profile: {name}")
-                    sleep(1)
+                        # log_newsfeed(account,f"{name} k dùng được proxy, chờ 30s để thử lại")
+                        sleep(30)
+                
+                loginInstance = HandleLogin(browser,account)
 
-                else:
-                    loginInstance = HandleLogin(browser,account)
-                loginInstance.updateStatusAcount(account.get('id'),{'status_login': 3})
+                while not stop_event.is_set():
+                    checkLogin = loginInstance.loginFacebook()
+                    if checkLogin == False:
+                        updateSystemMessage(system_account,'Login thất bại')
+                        print('Đợi 1p rồi thử login lại!')
+                        sleep(60)
+                    else:
+                        account = loginInstance.getAccount()
+                        break
+                sleep(2)
+                # try:
+                #     profile_button = browser.find_element(By.XPATH, push['openProfile'])
+                #     profile_button.click()
+                #     sleep(10)
+                # except Exception as e:
+                #     print(f"Không thể mở profile: {name}")
+                # sleep(1)
+
+                loginInstance.updateStatusAcount(account.get('id'),3)
                 
                 try:
-                    try:
-                        # Chờ tối đa 10 giây để `allFanPage` xuất hiện và click
-                        allFanPage = WebDriverWait(browser, 10).until(
-                            EC.presence_of_element_located((By.XPATH, push['allProfile']))
-                        )
-                        allFanPage.click()
-                    except Exception as e:
-                        pass
+                    # try:
+                    #     # Chờ tối đa 10 giây để `allFanPage` xuất hiện và click
+                    #     allFanPage = WebDriverWait(browser, 10).until(
+                    #         EC.presence_of_element_located((By.XPATH, push['allProfile']))
+                    #     )
+                    #     allFanPage.click()
+                    # except Exception as e:
+                    #     pass
 
-                    # Chờ tối đa 10 giây để `switchPage` xuất hiện và click
-                    switchPage = WebDriverWait(browser, 10).until(
-                        EC.presence_of_element_located((By.XPATH, push['switchPage'](name)))
-                    )
-                    switchPage.click()
+                    # updateSystemMessage(system_account,f'Chuyển hướng sang page {name}')
+
+                    # # Chờ tối đa 10 giây để `switchPage` xuất hiện và click
+                    # switchPage = WebDriverWait(browser, 10).until(
+                    #     EC.presence_of_element_located((By.XPATH, push['switchPage'](name)))
+                    # )
+                    # switchPage.click()
+                    openProfile(browser,name)
+                    sleep(10)
                 except Exception as e:
                     print(f"Không thể chuyển hướng tới fanpage: {name}")
                 
@@ -271,19 +282,14 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None):
         pass
         # log_newsfeed(account,f"==========================Đóng fanpage {name}=================================")
 
-def crawlNewFeed(account,name,dirextension,stop_event=None):
+def crawlNewFeed(account,name,dirextension,stop_event=None,system_account=None):
     try:
         account_id = account.get('id', 'default_id')
         pathProfile = f"/newsfeed/{str(account_id)}/{str(uuid.uuid4())}"
         account_cookie_instance = AccountCookies()
         from tools.facebooks.crawl_content_post import CrawlContentPost
-        system_instance = System()
         newfeed_instance = NewFeedModel()
         error_instance = Error()
-        info = get_system_info()
-        system = system_instance.insert({
-            'info': info
-        })
         print(f'Chuyển hướng tới fanpage: {name}')
         manager = None
         browser = None
@@ -304,36 +310,40 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                 while not stop_event.is_set():
                     checkLogin = loginInstance.loginFacebook()
                     if checkLogin == False:
+                        updateSystemMessage(system_account,'Login thất bại')
                         print('Đợi 1p rồi thử login lại!')
                         sleep(60)
                     else:
                         account = loginInstance.getAccount()
                         break
 
-                loginInstance.updateStatusAcount(account.get('id'),{'status_login': 3})
+                loginInstance.updateStatusAcount(account.get('id'),3)
                 sleep(2)
+                # try:
+                #     profile_button = browser.find_element(By.XPATH, push['openProfile'])
+                #     profile_button.click()
+                #     sleep(10)
+                # except Exception as e:
+                #     print(f"Không thể mở profile: {name}")
+                # sleep(1)
                 try:
-                    profile_button = browser.find_element(By.XPATH, push['openProfile'])
-                    profile_button.click()
-                    sleep(10)
-                except Exception as e:
-                    print(f"Không thể mở profile: {name}")
-                sleep(1)
-                try:
-                    try:
-                        # Chờ tối đa 10 giây để `allFanPage` xuất hiện và click
-                        allFanPage = WebDriverWait(browser, 10).until(
-                            EC.presence_of_element_located((By.XPATH, push['allProfile']))
-                        )
-                        allFanPage.click()
-                    except Exception as e:
-                        pass
+                    # try:
+                    #     # Chờ tối đa 10 giây để `allFanPage` xuất hiện và click
+                    #     allFanPage = WebDriverWait(browser, 10).until(
+                    #         EC.presence_of_element_located((By.XPATH, push['allProfile']))
+                    #     )
+                    #     allFanPage.click()
+                    # except Exception as e:
+                    #     pass
 
-                    # Chờ tối đa 10 giây để `switchPage` xuất hiện và click
-                    switchPage = WebDriverWait(browser, 10).until(
-                        EC.presence_of_element_located((By.XPATH, push['switchPage'](name)))
-                    )
-                    switchPage.click()
+                    # updateSystemMessage(system_account,f'Chuyển hướng page: {name}')
+                    # # Chờ tối đa 10 giây để `switchPage` xuất hiện và click
+                    # switchPage = WebDriverWait(browser, 10).until(
+                    #     EC.presence_of_element_located((By.XPATH, push['switchPage'](name)))
+                    # )
+                    # switchPage.click()
+                    openProfile(browser,name)
+                    sleep(10)
                 except Exception as e:
                     print(f"Không thể chuyển hướng tới fanpage: {name}")
 
@@ -384,10 +394,10 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                                 if any(remove_accents(keyword.lower()) in comment_content_no_accents for keyword in keywords):
                                     check = True
 
-                            if keywords is None or len(keywords) == 0:
-                                if 'media' in post and 'images' in post['media'] and 'videos' in post['media']:
-                                    if len(post['media']['images']) > 0 or len(post['media']['videos']) > 0:
-                                        check = True
+                            # if keywords is None or len(keywords) == 0:
+                            #     if 'media' in post and 'images' in post['media'] and 'videos' in post['media']:
+                            #         if len(post['media']['images']) > 0 or len(post['media']['videos']) > 0:
+                            #             check = True
                         except Exception as e:
                             print('Lỗi khi check keywords')
 
@@ -396,8 +406,8 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                             print('Đã lấy được 1 bài lưu db')
                             crawl_instance.shareCopyLink()
                             crawl_instance.sharePostAndOpenNotify()
-                            icon = crawl_instance.likePost()
-                            post['icon'] = icon
+                            # icon = crawl_instance.likePost()
+                            # post['icon'] = icon
                             closeModal(crawl_instance.index,browser)
                             sleep(1)
                             print(json.dumps({
@@ -406,7 +416,6 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                             },indent=4))
                             crawl_instance.viewImages(post)
                             crawl_instance.insertPostAndComment(post,comments,{},id)
-                            system_instance.update_count(system['id'])
                             account_cookie_instance.updateCount(account['latest_cookie']['id'], 'count_get')
                             browser.get('https://facebook.com')
                             sleep(2)
@@ -421,8 +430,6 @@ def crawlNewFeed(account,name,dirextension,stop_event=None):
                 # log_newsfeed(account,'Lỗi khi cào lưu db, thử lại sau 30s')
                 sleep(30)
             finally: 
-                if system:
-                    system_instance.update(system['id'], {'status': 2})
                 if browser:
                     browser.quit()
                     browser = None

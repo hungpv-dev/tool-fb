@@ -11,10 +11,10 @@ class NewsFeedProcess:
         try:
             if id in self.progress_data:
                 process = self.progress_data[id]
+                process["status"] = new_text
                 status_label = process.get("status_label") 
                 if status_label:
                     status_label.config(text=new_text) 
-                process["status"] = new_text
         except Exception as e:
             # logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
             print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")

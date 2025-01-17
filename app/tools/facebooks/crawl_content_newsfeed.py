@@ -14,16 +14,20 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import logging
 import uuid
+from sql.system import System
+from helpers.modal import openProfile,remove_notifications
+system_instance = System()
 from main.newsfeed import get_newsfeed_process_instance
 
 newsfeed_process_instance = get_newsfeed_process_instance()
 
 class CrawContentNewsfeed:
-    def __init__(self, browser, account, dirextension, manager):
+    def __init__(self, browser, account, dirextension, manager,system_account = None):
         self.browser = browser
         self.account = account
         self.dirextension = dirextension
         self.manager = manager
+        self.system_account = system_account
         self.page_instance = Page()
         self.error_instance = Error()
         self.account_cookies = AccountCookies()
@@ -45,30 +49,34 @@ class CrawContentNewsfeed:
                 self.account = account
                 loginInstance.updateStatusAcount(self.account['id'],3) # Đang lấy
                 self.crawlNewFeed(account,stop_event) 
-                break
-            except Exception as e:
+            except ValueError as e:
                 newsfeed_process_instance.update_process(self.account.get('id'),'Login thất bài, thử lại sau 1p...')
+                if self.system_account:
+                    system_instance.push_message(self.system_account.get('id'),'Đăng nhập thất bại!')
                 logging.error(f"Lỗi khi xử lý lấy dữ liệu!: {e}")
                 print(f"Lỗi khi xử lý lấy dữ liệu!: {e}")
                 self.error_instance.insertContent(e)
+            except Exception as e:
+                raise e
+            finally:
                 logging.error("Thử lại sau 1 phút...")
                 print("Thử lại sau 1 phút...")
-                sleep(60)                
+                sleep(60)
 
     def crawlNewFeed(self,account,stop_event):
         # log_newsfeed(account,f"**********************************")
-        checker = PageChecker(self.browser, self.dirextension,self.manager)
+        checker = PageChecker(self.browser, self.dirextension,self.manager,self.system_account)
         checker.run(account,stop_event)
         
 
-def process_fanpage(account, name, dirextension, stop_event, managerDriver):
+def process_fanpage(account, name, dirextension, stop_event, managerDriver,system_account):
     logging.info(f"Đang xử lý fanpage: {name}")
     print(f"Đang xử lý fanpage: {name}")
     threads = [
-        Thread(target=handleCrawlNewFeedVie, args=(account, managerDriver, stop_event)),
-        Thread(target=handleCrawlNewFeed, args=(account, name, dirextension, stop_event)),
-        Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
-        Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event)),
+        Thread(target=handleCrawlNewFeedVie, args=(account, managerDriver, stop_event,system_account)),
+        Thread(target=handleCrawlNewFeed, args=(account, name, dirextension, stop_event,system_account)),
+        Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event,system_account)),
+        Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event,system_account)),
     ]
 
     # Khởi chạy các thread
@@ -95,8 +103,9 @@ def process_fanpage(account, name, dirextension, stop_event, managerDriver):
     print(f"Hoàn thành xử lý fanpage: {name}")
 
 class PageChecker:
-    def __init__(self, browser, dirextension,manager):
+    def __init__(self, browser, dirextension,manager,system_account):
         self.browser = browser
+        self.system_account = system_account
         self.manager = manager
         self.error_instance = Error()
         self.dirextension = dirextension
@@ -106,59 +115,35 @@ class PageChecker:
         try:
             logging.info(f"Đang ở trang chủ!")
             print(f"Đang ở trang chủ!")
-            newsfeed_process_instance.update_process(account.get('id'),'Tìm số fanpage')
-            try:
-                # Chờ tối đa 10 giây để `profile_button` xuất hiện
-                profile_button = WebDriverWait(self.browser, 10).until(
-                    EC.presence_of_element_located((By.XPATH, push['openProfile']))
-                )
-                profile_button.click()
-
-                # Chờ tối đa 10 giây để `allFanPage` xuất hiện
-                try:
-                    allFanPage = WebDriverWait(self.browser, 10).until(
-                        EC.presence_of_element_located((By.XPATH, push['allProfile']))
-                    )
-                    allFanPage.click()
-                except Exception as e:
-                    pass
-            except Exception as e:
-                raise e
-
-            sleep(10)
             # Tìm tất cả các page
-            allPages = self.browser.find_elements(By.XPATH, '//div[contains(@aria-label, "Switch to")]')
+            allPages = openProfile(self.browser)
+            newsfeed_process_instance.update_process(account.get('id'),f'Lấy được: {len(allPages)} page')
             logging.info(f'Số fanpage để lướt: {len(allPages)}')
             print(f'Số fanpage để lướt: {len(allPages)}')
             newsfeed_process_instance.update_process(account.get('id'),f'Lấy được: {len(allPages)} page')
 
-            names = []
             managerDriver = {
                 'manager': self.manager,
                 'browser': self.browser,
             }
+
             if len(allPages) > 0: 
+                newsfeed_process_instance.update_process(account.get('id'), f'Xử lý: {len(allPages)} page')
                 for idx, page in enumerate(allPages):
                     if stop_event.is_set():
                         break
-
-                    name = page.text.strip()
-                    names.append(name)
-                    names_str = ", ".join(names)  # Biến mảng thành chuỗi
-                    newsfeed_process_instance.update_process(account.get('id'), f'Xử lý page: {names_str}')
+                    name = remove_notifications(page.text).strip()
                     logging.info(f'=================={name}================')
                     print(f'=================={name}================')
-
                     # Khởi tạo các process
-                    thread = Thread(target=process_fanpage, args=(account, name,self.dirextension, stop_event, managerDriver))
-                    threads.append(thread)
-                    thread.start()
-                    sleep(2)
-                    for thread in threads:
-                        thread.join()
+                #     thread = Thread(target=process_fanpage, args=(account, name,self.dirextension, stop_event, managerDriver,self.system_account))
+                #     threads.append(thread)
+                #     thread.start()
+                #     sleep(2)
+                # for thread in threads:
+                #     thread.join()
             else: 
                 newsfeed_process_instance.update_process(account.get('id'), f'Không sở hữu fanpage nào!')
-
 
         except Exception as e:
             raise e

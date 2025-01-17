@@ -484,7 +484,8 @@ class CrawlContentPost:
                     newfeed_instance.update(newfeedid,{'post_id': res['post_id'],'status': 3})
             else:
                 if newfeedid != 0:
-                    newfeed_instance.destroy(newfeedid)
+                    newfeed_instance.update(newfeedid,{'status': 4})
+                    # newfeed_instance.destroy(newfeedid)
             
             logging.error("=> Đã lưu thành công!")
             print("=> Đã lưu thành công!")

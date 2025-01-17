@@ -10,11 +10,11 @@ class PostProcess:
     def update_process(self, id, new_text):
         try:
             if id in self.progress_data:
+                process["status"] = new_text
                 process = self.progress_data[id]
                 status_label = process.get("status_label") 
                 if status_label:
                     status_label.config(text=new_text) 
-                process["status"] = new_text
         except Exception as e:
             print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
             # logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
@@ -60,11 +60,11 @@ class PostProcess:
                     self.progress_data[id].get('row').destroy()
                     del self.progress_data[id]  # Xóa khỏi progress_data
 
+            # logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
                 # Chạy stop_task trong một thread riêng biệt
                 threading.Thread(target=stop_task, args=(process,), daemon=True).start()
         except Exception as e:
             print(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
-            # logging.error(f"Đã xảy ra lỗi khi cập nhật task_label: {e}")
 
     def get_all_processes(self):
         return self.progress_data

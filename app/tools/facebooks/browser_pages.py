@@ -13,18 +13,15 @@ from time import sleep
 from helpers.fb import clean_url_keep_params
 import logging
 from helpers.time import convert_to_db_format
-from sql.system import System
 from main.fanpage import get_fanpage_process_instance
 
 fanpage_process_instance = get_fanpage_process_instance()
 
 class BrowserFanpage:
-    def __init__(self, browser,system = None):
+    def __init__(self, browser):
         self.browser = browser
-        self.system = system
         self.page_instance = Page()
         self.error_instance = Error()
-        self.system_instance = System()
         self.account_cookies = AccountCookies()
         self.history_instance = HistoryCrawlPage()
         self.account_instance = Account()
@@ -150,8 +147,6 @@ class BrowserFanpage:
             for post in post_data:
                 startLength = startLength + 1
                 fanpage_process_instance.update_process(tab_id,f'{name}: ~~{startLength}~~/{len(post_data)}')
-                if self.system is not None:
-                    self.system_instance.update_count(self.system['id'])
                 crawl_instance.get(page, post, his)
                 fanpage_process_instance.update_process(tab_id,f'{name}: {startLength}/{len(post_data)}')
         sleep(3)

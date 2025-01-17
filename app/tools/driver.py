@@ -49,17 +49,16 @@ class Browser:
         if self.anonymous:
             chrome_options.add_argument("--incognito")
 
-        if headless:
-            headlessConfig = config('headless')
-            if headlessConfig == False:
-                chrome_options.add_argument("--headless=new")
-                chrome_options.add_argument("--no-sandbox")
-                chrome_options.add_argument("--disable-gpu")
-                chrome_options.add_argument("--enable-unsafe-swiftshader")
-                chrome_options.add_argument("--disable-webgl")
-                chrome_options.add_argument("--use-gl=swiftshader")
+        headlessConfig = config('headless')
+        if not headlessConfig:
+            chrome_options.add_argument("--headless=new")
+            chrome_options.add_argument("--no-sandbox")
+            chrome_options.add_argument("--disable-gpu")
+            chrome_options.add_argument("--enable-unsafe-swiftshader")
+            chrome_options.add_argument("--disable-webgl")
+            chrome_options.add_argument("--use-gl=swiftshader")
         
-        if self.loadContent == False:
+        if not self.loadContent:
             prefs = {
                 "profile.managed_default_content_settings.images": 2,  # Tắt tải ảnh
                 "profile.managed_default_content_settings.plugins": 2,  # Tắt tải video
@@ -90,12 +89,13 @@ class Browser:
                 #     'https': f'http://{proxy["user"]}:{proxy["pass"]}@{proxy["ip"]}:{proxy["port"]}',
                 #     'no_proxy': 'localhost, 127.0.0.1'
                 # }
-            # service = Service(config('driver_path'))
+            service = Service(config('driver_path'))
             # service = Service('./tools/chromedriver.exe')
-            service = Service('./tools/chromedriver')
+            # service = Service('./tools/chromedriver')
             driver = webdriver.Chrome(service=service, options=chrome_options)
 
             driver.set_page_load_timeout(120)
+            driver.execute_cdp_cmd("Network.setCacheDisabled", {"cacheDisabled":True})
             
             return driver
         except Exception as e:

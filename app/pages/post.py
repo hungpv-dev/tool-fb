@@ -54,15 +54,17 @@ def post_page():
 
             row = 0 
             column = 0
+            max_name_length = 40
             for account in accounts:
                 if account.get('id') in account_selected:
                     continue
                 var = tk.BooleanVar()
-                cb = ttk.Checkbutton(checkbutton_frame, text=account["name"], variable=var, style="Custom.TCheckbutton")
-                cb.grid(row=row, column=column, padx=10, pady=5, sticky="w")  
+                display_name = account["name"] if len(account["name"]) <= max_name_length else account["name"][:max_name_length] + "..."
+                cb = ttk.Checkbutton(checkbutton_frame, text=display_name, variable=var, style="Custom.TCheckbutton")
+                cb.grid(row=row, column=column, padx=10, pady=5, sticky="w")
                 checkboxes[account["id"]] = {"checkbox_var": var, "account_data": account}
                 column += 1
-                if column == 4:
+                if column == 5:
                     column = 0
                     row += 1
 
@@ -140,39 +142,38 @@ def post_page_list():
         table_frame = ttk.Frame(frame)
         table_frame.pack(fill="both", expand=True)
 
-        # Tạo bảng với các thẻ <tr> và <td>
-        table = tk.Frame(table_frame)
-        table.pack(fill="x", padx=20, pady=5)
+        canvas = tk.Canvas(table_frame)
+        canvas.pack(side="left", fill="both", expand=True)
+        
+        scrollbar = ttk.Scrollbar(table_frame, orient="vertical", command=canvas.yview)
+        scrollbar.pack(side="right", fill="y")
 
-        # Tạo header bảng
-        header = tk.Frame(table)
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        table_inner_frame = ttk.Frame(canvas)
+        canvas.create_window((0, 0), window=table_inner_frame, anchor="nw")
+
+        # Đặt kích thước nội dung và kích hoạt cuộn khi cần
+        def on_frame_configure(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        table_inner_frame.bind("<Configure>", on_frame_configure)
+
+        header = ttk.Frame(table_inner_frame)
         header.pack(fill="x", pady=5)
-
-        header_label1 = tk.Label(header, text="Tài khoản", font=("Segoe UI", 12, 'bold'), width=25)
-        header_label1.pack(side="left", padx=5)
-
-        header_label1 = tk.Label(header, text="Tổng số tiến trình", font=("Segoe UI", 12, 'bold'), width=25)
-        header_label1.pack(side="left", padx=5)
-
-        header_label2 = tk.Label(header, text="Trạng thái", font=("Segoe UI", 12, 'bold'), width=25)
-        header_label2.pack(side="left", padx=5)
-
-        header_label3 = tk.Label(header, text="Hành động", font=("Segoe UI", 12, 'bold'), width=15)
-        header_label3.pack(side="right", padx=5)
+        ttk.Label(header, text="Tài khoản", font=("Segoe UI", 12, 'bold'), width=25).pack(side="left", padx=5)
+        ttk.Label(header, text="Tổng số tiến trình", font=("Segoe UI", 12, 'bold'), width=25).pack(side="left", padx=5)
+        ttk.Label(header, text="Trạng thái", font=("Segoe UI", 12, 'bold'), width=25).pack(side="left", padx=5)
+        ttk.Label(header, text="Hành động", font=("Segoe UI", 12, 'bold'), width=15).pack(side="right", padx=5)
 
         # Hiển thị các tiến trình
         for account_id, account in accounts.items():
-            row = tk.Frame(table)
+            row = ttk.Frame(table_inner_frame)
             row.pack(fill="x", pady=5)
 
-            account_label = tk.Label(row, text=account["name"], font=("Segoe UI", 12), width=25)
-            account_label.pack(side="left", padx=5)
-
-            task_label = tk.Label(row, text=len(account.get('tasks')), font=("Segoe UI", 12), width=25)
-            task_label.pack(side="left", padx=5)
-
-            status_label = tk.Label(row, text="Đang xử lý", font=("Segoe UI", 12), width=25)
-            status_label.pack(side="left", padx=5)
+            account_label = ttk.Label(row, text=account["name"], font=("Segoe UI", 12), width=25).pack(side="left", padx=5)
+            status_label = ttk.Label(row, text=len(account.get('tasks')), font=("Segoe UI", 12), width=25).pack(side="left", padx=5)
+            task_label = ttk.Label(row, text=account.get("status"), font=("Segoe UI", 12), width=25).pack(side="left", padx=5)
 
             account['status_label'] = status_label
             account['task_label'] = task_label
@@ -185,8 +186,7 @@ def post_page_list():
             close_button.pack(side="right", padx=5)
             account['close_button'] = close_button
 
-
-        table.update_idletasks()
+        table_inner_frame.update_idletasks()
     else:
         no_process_label = tk.Label(frame, text="Không có tiến trình nào đang chạy.", font=("Segoe UI", 12), bg="#f0f2f5", fg="#1c1e21")
         no_process_label.pack(pady=20)

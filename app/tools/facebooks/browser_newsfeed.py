@@ -7,16 +7,22 @@ from sql.accounts import Account
 from sql.errors import Error
 from main.newsfeed import get_newsfeed_process_instance
 import logging
+from sql.system import System
 
 
 account_instance = Account()
 error_instance = Error()
+system_instance = System()
 newsfeed_process_instance = get_newsfeed_process_instance()
 
 
 def process_newsfeed(account, stop_event):
     browser = None
     manager = None
+    system_account = system_instance.create_account({
+        'account_id': account.get('id'),
+        'type': 2,
+    })
     
     logging.info(f'=========={account["name"]}============')
     print(f'=========={account["name"]}============')
@@ -39,31 +45,37 @@ def process_newsfeed(account, stop_event):
                 manager = Browser(f"/newsfeed/home/{account['id']}",extension)
                 browser = manager.start()
                 newsfeed_process_instance.update_process(account.get('id'),'Đã khởi tạo trình duyệt')
-                break
             else:
                 newsfeed_process_instance.update_process(account.get('id'),'Proxy không dùng được')
+                system_instance.push_message(system_account.get('id'),'Không dùng được proxy')
                 raise Exception("Proxy không hợp lệ")
+
+            try:
+                # browser.get('https://whatismyipaddress.com')
+                # sleep(10000)
+                newsfeed_process_instance.update_process(account.get('id'),'Chuyển hướng tới facebook')
+                browser.get("https://facebook.com")
+                newfeed = CrawContentNewsfeed(browser,account,extension,manager,system_account)
+                newfeed.handle(stop_event)
+                sleep(5)
+            except Exception as e:
+                logging.error(f"Lỗi khi lấy bài new feed: {e}")
+                print(f"Lỗi khi lấy bài new feed: {e}")
         except Exception as e:
             error_instance.insertContent(e)
             newsfeed_process_instance.update_process(account.get('id'),'Không thể khởi tạo trình duyệt, đợi 30s...')
+            system_instance.push_message(system_account.get('id'),'Không khởi tạo được trình duyệt')
+            account = account_instance.find(account['id'])
+        finally:
+            if browser:
+                browser.quit()
+                manager.cleanup()
             logging.error(f"Không thể khởi tạo trình duyệt, thử lại sau 30s...")
             print(f"Không thể khởi tạo trình duyệt, thử lại sau 30s...")
             sleep(30)
-            account = account_instance.find(account['id'])
+        
+    system_instance.update_account(system_account.get('id'),{'status': 2})
 
-    try:
-        # browser.get('https://whatismyipaddress.com')
-        # sleep(10000)
-        newsfeed_process_instance.update_process(account.get('id'),'Chuyển hướng tới facebook')
-        browser.get("https://facebook.com")
-        newfeed = CrawContentNewsfeed(browser,account,extension,manager)
-        newfeed.handle(stop_event)
-        sleep(5)
-    except Exception as e:
-        logging.error(f"Lỗi khi lấy bài new feed: {e}")
-        print(f"Lỗi khi lấy bài new feed: {e}")
-    finally:
-        if browser:
-            browser.quit()
-            manager.cleanup()
+    
+    
 

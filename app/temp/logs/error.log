@@ -1,0 +1,615 @@
+2025-01-17 15:12:17,277 - ERROR - login - 103 - Lỗi login: Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="email"]"}
+  (Session info: chrome=131.0.6778.265); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x0030FD53+23747]
+	(No symbol) [0x00297D54]
+	(No symbol) [0x0016BE53]
+	(No symbol) [0x001AFCA6]
+	(No symbol) [0x001AFEEB]
+	(No symbol) [0x001ED852]
+	(No symbol) [0x001D1E44]
+	(No symbol) [0x001EB41E]
+	(No symbol) [0x001D1B96]
+	(No symbol) [0x001A3F3C]
+	(No symbol) [0x001A4EBD]
+	GetHandleVerifier [0x005EAC73+3017699]
+	GetHandleVerifier [0x005FB93B+3086507]
+	GetHandleVerifier [0x005F40F2+3055714]
+	GetHandleVerifier [0x003A5AF0+637536]
+	(No symbol) [0x002A0A5D]
+	(No symbol) [0x0029DA28]
+	(No symbol) [0x0029DBC5]
+	(No symbol) [0x002907F0]
+	BaseThreadInitThunk [0x75EF7BA9+25]
+	RtlInitializeExceptionChain [0x774CC0CB+107]
+	RtlClearBits [0x774CC04F+191]
+	(No symbol) [0x00000000]
+
+2025-01-17 15:12:17,277 - ERROR - crawl_content_newsfeed - 50 - Lỗi khi xử lý lấy dữ liệu!: Không thể login
+2025-01-17 15:12:17,347 - ERROR - crawl_content_newsfeed - 56 - Thử lại sau 1 phút...
+2025-01-17 15:13:22,067 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 15:13:52,314 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 15:14:23,453 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 15:40:18,466 - ERROR - crawl_content_newsfeed - 61 - Thử lại sau 1 phút...
+2025-01-17 15:41:18,467 - ERROR - browser_newsfeed - 62 - Lỗi khi lấy bài new feed: PageChecker.__init__() takes 4 positional arguments but 5 were given
+2025-01-17 15:41:20,800 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 15:44:37,186 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 1
+2025-01-17 15:45:05,492 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:45:05,799 - ERROR - crawl_content_post - 509 - Không tìm thấy nội dung
+2025-01-17 15:45:09,026 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-17 15:45:25,864 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:45:30,912 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:45:38,376 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:45:43,281 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:45:49,557 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:45:53,345 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-17 15:45:59,658 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:46:00,751 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:46:04,544 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:46:05,374 - ERROR - crawl_content_post - 286 - => Lưu được 5 bình luận!
+2025-01-17 15:46:10,814 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:46:11,503 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:46:15,303 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:46:16,442 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:46:21,430 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:46:22,848 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:46:25,037 - ERROR - crawl_content_post - 242 - Thẻ <a> có thẻ <img> phía trước, không lấy href.
+2025-01-17 15:46:25,071 - ERROR - crawl_content_post - 286 - => Lưu được 2 bình luận!
+2025-01-17 15:46:26,203 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-17 15:46:32,330 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:46:37,095 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:46:43,397 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:46:45,766 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:46:48,316 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:46:49,900 - ERROR - crawl_content_post - 286 - => Lưu được 6 bình luận!
+2025-01-17 15:46:56,000 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:46:59,008 - ERROR - crawl_content_post - 435 - Không thể turn on notify
+2025-01-17 15:47:00,572 - ERROR - crawl_content_post - 286 - => Lưu được 9 bình luận!
+2025-01-17 15:47:08,747 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:47:11,954 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 15:47:12,480 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 00:46:44
+2025-01-17 15:47:12,480 - ERROR - crawl_content_post - 478 - Response: {'post_id': 115573}
+2025-01-17 15:47:12,541 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 15:47:12,541 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 15:47:13,255 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:47:19,272 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:47:22,905 - ERROR - crawl_content_post - 286 - => Lưu được 2 bình luận!
+2025-01-17 15:47:24,295 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:47:29,343 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:47:30,243 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:47:34,137 - ERROR - crawl_content_post - 286 - => Lưu được 2 bình luận!
+2025-01-17 15:47:35,441 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:47:40,237 - ERROR - crawl_content_post - 286 - => Lưu được 9 bình luận!
+2025-01-17 15:47:41,041 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:47:45,908 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:47:48,364 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:47:52,515 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:47:53,105 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:47:56,490 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-17 15:47:59,703 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:48:03,707 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:48:05,820 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:48:07,658 - ERROR - crawl_content_post - 286 - => Lưu được 2 bình luận!
+2025-01-17 15:48:16,542 - ERROR - crawl_content_post - 435 - Không thể turn on notify
+2025-01-17 15:48:29,736 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 15:48:30,142 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-16 15:48:01
+2025-01-17 15:48:30,143 - ERROR - crawl_content_post - 478 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-17 15:48:30,194 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 15:48:30,195 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 15:48:43,609 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:48:47,575 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-17 15:48:54,478 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:48:59,115 - ERROR - crawl_content_post - 286 - => Lưu được 5 bình luận!
+2025-01-17 15:49:05,597 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:49:10,441 - ERROR - crawl_content_post - 286 - => Lưu được 9 bình luận!
+2025-01-17 15:49:14,895 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:49:19,915 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:49:21,098 - ERROR - crawl_content_post - 435 - Không thể turn on notify
+2025-01-17 15:49:27,981 - ERROR - modal - 13 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 15:49:32,503 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 15:49:33,930 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 15:49:34,424 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-16 15:49:06
+2025-01-17 15:49:34,425 - ERROR - crawl_content_post - 478 - Response: {'post_id': 115585}
+2025-01-17 15:49:34,769 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 15:49:34,769 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 15:51:21,848 - ERROR - crawl_content_newsfeed - 61 - Thử lại sau 1 phút...
+2025-01-17 15:52:29,265 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 15:55:26,027 - ERROR - crawl_content_newsfeed - 61 - Thử lại sau 1 phút...
+2025-01-17 15:56:52,009 - ERROR - crawl_content_newsfeed - 61 - Thử lại sau 1 phút...
+2025-01-17 15:57:55,958 - ERROR - login - 103 - Lỗi login: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+2025-01-17 15:57:56,038 - ERROR - crawl_content_newsfeed - 55 - Lỗi khi xử lý lấy dữ liệu!: Không thể login
+2025-01-17 15:57:56,114 - ERROR - crawl_content_newsfeed - 61 - Thử lại sau 1 phút...
+2025-01-17 15:59:00,369 - WARNING - connectionpool - 870 - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002245FF320D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/e4865ff7c88d57534ee9f1acb5dd7411/url
+2025-01-17 15:59:04,429 - WARNING - connectionpool - 870 - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002245FF30E10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/e4865ff7c88d57534ee9f1acb5dd7411/url
+2025-01-17 15:59:08,487 - WARNING - connectionpool - 870 - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002245FF2D2D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/e4865ff7c88d57534ee9f1acb5dd7411/url
+2025-01-17 15:59:12,532 - ERROR - login - 103 - Lỗi login: HTTPConnectionPool(host='localhost', port=56006): Max retries exceeded with url: /session/e4865ff7c88d57534ee9f1acb5dd7411/url (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002245FF21C50>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-01-17 15:59:12,587 - ERROR - crawl_content_newsfeed - 55 - Lỗi khi xử lý lấy dữ liệu!: Không thể login
+2025-01-17 15:59:12,649 - ERROR - crawl_content_newsfeed - 61 - Thử lại sau 1 phút...
+2025-01-17 16:14:53,602 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 16:15:53,603 - ERROR - browser_newsfeed - 62 - Lỗi khi lấy bài new feed: 'WebElement' object is not iterable
+2025-01-17 16:15:56,098 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 16:16:37,911 - ERROR - login - 349 - Lỗi login Gary Rivers: Không thể thêm cookie {'name': 'sb', 'path': '/', 'value': 'OTtuZ7yeoWZl8Mg8Hxx--wr_', 'domain': '.facebook.com', 'secure': True, 'expires': 1771215154.263968, 'httpOnly': True} vào trình duyệt: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=131.0.6778.265)
+Stacktrace:
+	GetHandleVerifier [0x0030FD53+23747]
+	(No symbol) [0x00297D54]
+	(No symbol) [0x0016BE53]
+	(No symbol) [0x0014D91B]
+	(No symbol) [0x001D7EFF]
+	(No symbol) [0x001EAD49]
+	(No symbol) [0x001D1B96]
+	(No symbol) [0x001A3F3C]
+	(No symbol) [0x001A4EBD]
+	GetHandleVerifier [0x005EAC73+3017699]
+	GetHandleVerifier [0x005FB93B+3086507]
+	GetHandleVerifier [0x005F40F2+3055714]
+	GetHandleVerifier [0x003A5AF0+637536]
+	(No symbol) [0x002A0A5D]
+	(No symbol) [0x0029DA28]
+	(No symbol) [0x0029DBC5]
+	(No symbol) [0x002907F0]
+	BaseThreadInitThunk [0x75EF7BA9+25]
+	RtlInitializeExceptionChain [0x774CC0CB+107]
+	RtlClearBits [0x774CC04F+191]
+	(No symbol) [0x00000000]
+
+2025-01-17 16:16:44,090 - WARNING - connectionpool - 870 - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020ED0735B10>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/3895bbe6c0745882510e0c8f050646f3/url
+2025-01-17 16:16:48,206 - WARNING - connectionpool - 870 - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020ED0733D90>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/3895bbe6c0745882510e0c8f050646f3/url
+2025-01-17 16:16:52,261 - WARNING - connectionpool - 870 - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020ED074E9D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')': /session/3895bbe6c0745882510e0c8f050646f3/url
+2025-01-17 16:17:39,095 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 16:18:39,096 - ERROR - browser_newsfeed - 62 - Lỗi khi lấy bài new feed: object of type 'WebElement' has no len()
+2025-01-17 16:18:42,531 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 16:19:38,115 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 16:31:01,687 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 16:32:09,076 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 16:37:20,184 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 1
+2025-01-17 16:37:51,210 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:37:56,007 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 16:38:02,649 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:38:06,503 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-17 16:38:12,788 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:38:17,324 - ERROR - crawl_content_post - 286 - => Lưu được 5 bình luận!
+2025-01-17 16:38:34,162 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:38:39,101 - ERROR - crawl_content_post - 286 - => Lưu được 9 bình luận!
+2025-01-17 16:38:46,594 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:38:51,120 - ERROR - crawl_content_post - 286 - => Lưu được 9 bình luận!
+2025-01-17 16:38:53,705 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:38:57,422 - ERROR - crawl_content_post - 286 - => Lưu được 2 bình luận!
+2025-01-17 16:38:57,991 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:39:02,697 - ERROR - crawl_content_post - 286 - => Lưu được 9 bình luận!
+2025-01-17 16:39:04,686 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:39:08,850 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:39:09,609 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 16:39:12,720 - ERROR - crawl_content_post - 286 - => Lưu được 5 bình luận!
+2025-01-17 16:39:16,768 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:39:21,711 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 16:39:23,339 - ERROR - crawl_content_post - 435 - Không thể turn on notify
+2025-01-17 16:39:28,841 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:39:35,930 - ERROR - crawl_content_post - 458 - Lỗi khi truy cập hình ảnh https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/472985186_122193502760149541_6053911757542347372_n.jpg?stp=dst-jpg_s640x640_tt6&_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_ohc=9chs-oLenxgQ7kNvgH0ROsN&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=A45_TyVHEZPdxtDWaM12rfd&oh=00_AYDe7n_sB-fiX5tey5zTj3ESeTSNzSud8CzBbtxQ1d-eng&oe=67900585: Message: element click intercepted: Element <img height="640" width="508" alt="May be an image of Eltz Castle" class="x1ey2m1c xds687c x5yr21d x10l6tqk x17qophe x13vifvy xh8yej3 xl1xv1r" referrerpolicy="origin-when-cross-origin" src="https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/472985186_122193502760149541_6053911757542347372_n.jpg?stp=dst-jpg_s640x640_tt6&amp;_nc_cat=107&amp;ccb=1-7&amp;_nc_sid=833d8c&amp;_nc_ohc=9chs-oLenxgQ7kNvgH0ROsN&amp;_nc_zt=23&amp;_nc_ht=scontent-iad3-1.xx&amp;_nc_gid=A45_TyVHEZPdxtDWaM12rfd&amp;oh=00_AYDe7n_sB-fiX5tey5zTj3ESeTSNzSud8CzBbtxQ1d-eng&amp;oe=67900585"> is not clickable at point (951, 505). Other element would receive the click: <div>...</div>
+  (Session info: chrome=131.0.6778.265)
+Stacktrace:
+	GetHandleVerifier [0x0030FD53+23747]
+	(No symbol) [0x00297D54]
+	(No symbol) [0x0016BE53]
+	(No symbol) [0x001B5C57]
+	(No symbol) [0x001B40C3]
+	(No symbol) [0x001B1CCD]
+	(No symbol) [0x001B1034]
+	(No symbol) [0x001A5F57]
+	(No symbol) [0x001D1DFC]
+	(No symbol) [0x001A59A4]
+	(No symbol) [0x001D2094]
+	(No symbol) [0x001EB41E]
+	(No symbol) [0x001D1B96]
+	(No symbol) [0x001A3F3C]
+	(No symbol) [0x001A4EBD]
+	GetHandleVerifier [0x005EAC73+3017699]
+	GetHandleVerifier [0x005FB93B+3086507]
+	GetHandleVerifier [0x005F40F2+3055714]
+	GetHandleVerifier [0x003A5AF0+637536]
+	(No symbol) [0x002A0A5D]
+	(No symbol) [0x0029DA28]
+	(No symbol) [0x0029DBC5]
+	(No symbol) [0x002907F0]
+	BaseThreadInitThunk [0x75EF7BA9+25]
+	RtlInitializeExceptionChain [0x774CC0CB+107]
+	RtlClearBits [0x774CC04F+191]
+	(No symbol) [0x00000000]
+
+2025-01-17 16:39:35,933 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 16:39:36,360 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-11 16:39:09
+2025-01-17 16:39:36,362 - ERROR - crawl_content_post - 478 - Response: {'post_id': 115798}
+2025-01-17 16:39:36,419 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 16:39:36,419 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 16:39:39,958 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:39:47,048 - ERROR - crawl_content_post - 458 - Lỗi khi truy cập hình ảnh https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/473363590_528110030277667_2498287090114393596_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_ohc=qgdoDljUrg4Q7kNvgHkqgKA&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=AXBQ-d3xpzmtkuI0HokZAR_&oh=00_AYBEXqawrxATQH3kerQyuAMFj3j6389f-Hgf0rZAK5r7YA&oe=678FE664: Message: element click intercepted: Element <img height="486" width="735" alt="No photo description available." class="x1ey2m1c xds687c x5yr21d x10l6tqk x17qophe x13vifvy xh8yej3 xl1xv1r" referrerpolicy="origin-when-cross-origin" src="https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/473363590_528110030277667_2498287090114393596_n.jpg?_nc_cat=101&amp;ccb=1-7&amp;_nc_sid=833d8c&amp;_nc_ohc=qgdoDljUrg4Q7kNvgHkqgKA&amp;_nc_zt=23&amp;_nc_ht=scontent-iad3-1.xx&amp;_nc_gid=AXBQ-d3xpzmtkuI0HokZAR_&amp;oh=00_AYBEXqawrxATQH3kerQyuAMFj3j6389f-Hgf0rZAK5r7YA&amp;oe=678FE664"> is not clickable at point (951, 387). Other element would receive the click: <div class="html-div xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x6s0dn4 x78zum5 x2lah0s x1qughib x879a55 x1n2onr6">...</div>
+  (Session info: chrome=131.0.6778.265)
+Stacktrace:
+	GetHandleVerifier [0x0030FD53+23747]
+	(No symbol) [0x00297D54]
+	(No symbol) [0x0016BE53]
+	(No symbol) [0x001B5C57]
+	(No symbol) [0x001B40C3]
+	(No symbol) [0x001B1CCD]
+	(No symbol) [0x001B1034]
+	(No symbol) [0x001A5F57]
+	(No symbol) [0x001D1DFC]
+	(No symbol) [0x001A59A4]
+	(No symbol) [0x001D2094]
+	(No symbol) [0x001EB41E]
+	(No symbol) [0x001D1B96]
+	(No symbol) [0x001A3F3C]
+	(No symbol) [0x001A4EBD]
+	GetHandleVerifier [0x005EAC73+3017699]
+	GetHandleVerifier [0x005FB93B+3086507]
+	GetHandleVerifier [0x005F40F2+3055714]
+	GetHandleVerifier [0x003A5AF0+637536]
+	(No symbol) [0x002A0A5D]
+	(No symbol) [0x0029DA28]
+	(No symbol) [0x0029DBC5]
+	(No symbol) [0x002907F0]
+	BaseThreadInitThunk [0x75EF7BA9+25]
+	RtlInitializeExceptionChain [0x774CC0CB+107]
+	RtlClearBits [0x774CC04F+191]
+	(No symbol) [0x00000000]
+
+2025-01-17 16:39:47,057 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 16:39:47,557 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-14 16:39:17
+2025-01-17 16:39:47,558 - ERROR - crawl_content_post - 478 - Response: {'post_id': 115799}
+2025-01-17 16:39:47,608 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 16:39:47,608 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 16:40:02,761 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 16:41:10,132 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 16:46:42,109 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:46:44,342 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 1
+2025-01-17 16:46:48,999 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 16:46:55,548 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:46:59,298 - ERROR - crawl_content_post - 286 - => Lưu được 1 bình luận!
+2025-01-17 16:47:10,505 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:47:14,435 - ERROR - crawl_content_post - 286 - => Lưu được 4 bình luận!
+2025-01-17 16:47:28,017 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 16:47:28,309 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 12:46:55
+2025-01-17 16:47:28,309 - ERROR - crawl_content_post - 478 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-17 16:47:28,383 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 16:47:28,383 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 16:47:30,041 - ERROR - crawl_content_post - 435 - Không thể turn on notify
+2025-01-17 16:47:34,371 - ERROR - crawl_content_post - 319 - Không có icon: Love
+2025-01-17 16:47:34,380 - ERROR - crawl_content_post - 319 - Không có icon: Like
+2025-01-17 16:47:34,387 - ERROR - crawl_content_post - 319 - Không có icon: Care
+2025-01-17 16:47:34,395 - ERROR - crawl_content_post - 319 - Không có icon: Haha
+2025-01-17 16:47:34,404 - ERROR - crawl_content_post - 319 - Không có icon: Wow
+2025-01-17 16:47:34,412 - ERROR - crawl_content_post - 319 - Không có icon: Sad
+2025-01-17 16:47:34,420 - ERROR - crawl_content_post - 319 - Không có icon: Angry
+2025-01-17 16:47:34,420 - ERROR - crawl_content_post - 344 - Không có phần tử nào khả dụng.
+2025-01-17 16:47:34,426 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:47:38,913 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:47:41,732 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 16:47:42,036 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 10:47:10
+2025-01-17 16:47:42,037 - ERROR - crawl_content_post - 478 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-17 16:47:42,082 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 16:47:42,082 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 16:47:42,944 - ERROR - crawl_content_post - 286 - => Lưu được 4 bình luận!
+2025-01-17 16:47:49,947 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:47:53,849 - ERROR - crawl_content_post - 242 - Thẻ <a> có thẻ <img> phía trước, không lấy href.
+2025-01-17 16:47:53,952 - ERROR - crawl_content_post - 286 - => Lưu được 5 bình luận!
+2025-01-17 16:48:13,661 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:48:17,836 - ERROR - crawl_content_post - 286 - => Lưu được 6 bình luận!
+2025-01-17 16:48:19,352 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 16:48:19,791 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 13:47:50
+2025-01-17 16:48:19,791 - ERROR - crawl_content_post - 478 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-17 16:48:19,843 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 16:48:19,843 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 16:48:25,441 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:48:30,112 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 16:48:34,426 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:48:37,880 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-17 16:48:47,775 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:48:52,032 - ERROR - crawl_content_post - 242 - Thẻ <a> có thẻ <img> phía trước, không lấy href.
+2025-01-17 16:48:52,241 - ERROR - crawl_content_post - 286 - => Lưu được 2 bình luận!
+2025-01-17 16:48:55,652 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 16:48:56,097 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 16:07:26
+2025-01-17 16:48:56,097 - ERROR - crawl_content_post - 478 - Response: {'post_id': 115823}
+2025-01-17 16:48:56,143 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 16:48:56,143 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 16:49:02,801 - ERROR - crawl_content_post - 435 - Không thể turn on notify
+2025-01-17 16:49:09,470 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:49:14,287 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 16:49:15,547 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 16:49:16,036 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-16 22:48:48
+2025-01-17 16:49:16,036 - ERROR - crawl_content_post - 478 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-17 16:49:16,092 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 16:49:16,093 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 16:49:26,623 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:49:31,806 - ERROR - crawl_content_post - 286 - => Lưu được 9 bình luận!
+2025-01-17 16:49:39,728 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 16:49:40,166 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 06:49:10
+2025-01-17 16:49:40,166 - ERROR - crawl_content_post - 478 - Response: {'post_id': 115825}
+2025-01-17 16:49:40,246 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 16:49:40,247 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 16:49:52,995 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:49:56,644 - ERROR - crawl_content_post - 286 - => Lưu được 2 bình luận!
+2025-01-17 16:49:57,428 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 16:49:57,851 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 05:49:27
+2025-01-17 16:49:57,852 - ERROR - crawl_content_post - 478 - Response: {'post_id': 115828}
+2025-01-17 16:49:57,914 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 16:49:57,914 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 16:50:33,261 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 16:51:40,627 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 16:53:39,320 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 1
+2025-01-17 16:53:43,734 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:53:48,426 - ERROR - crawl_content_post - 286 - => Lưu được 3 bình luận!
+2025-01-17 16:53:59,037 - ERROR - crawl_content_post - 435 - Không thể turn on notify
+2025-01-17 16:54:00,051 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:54:07,251 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 16:54:07,625 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 14:53:45
+2025-01-17 16:54:07,626 - ERROR - crawl_content_post - 478 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-17 16:54:07,680 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 16:54:07,680 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 16:54:09,975 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 16:54:15,434 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 16:54:24,987 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 16:55:32,354 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 17:00:45,802 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 1
+2025-01-17 17:00:47,509 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:00:52,318 - ERROR - crawl_content_post - 286 - => Lưu được 2 bình luận!
+2025-01-17 17:00:59,424 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:01:02,806 - ERROR - crawl_content_post - 286 - => Lưu được 1 bình luận!
+2025-01-17 17:01:08,862 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:01:09,160 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:01:12,150 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-17 17:01:12,827 - ERROR - crawl_content_post - 286 - => Lưu được 2 bình luận!
+2025-01-17 17:01:19,517 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:01:23,444 - ERROR - crawl_content_post - 435 - Không thể turn on notify
+2025-01-17 17:01:24,303 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 17:01:24,452 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:01:30,660 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:01:31,722 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 17:01:32,032 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 06:01:09
+2025-01-17 17:01:32,033 - ERROR - crawl_content_post - 478 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-17 17:01:32,125 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 17:01:32,126 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 17:01:35,495 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 17:01:43,161 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:01:47,701 - ERROR - crawl_content_post - 286 - => Lưu được 9 bình luận!
+2025-01-17 17:01:55,448 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:01:56,424 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:01:59,097 - ERROR - crawl_content_post - 286 - => Lưu được 2 bình luận!
+2025-01-17 17:02:00,915 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 17:02:06,571 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:02:09,671 - ERROR - crawl_content_post - 435 - Không thể turn on notify
+2025-01-17 17:02:10,120 - ERROR - crawl_content_post - 286 - => Lưu được 2 bình luận!
+2025-01-17 17:02:10,677 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:02:16,418 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:02:17,848 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 17:02:18,143 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 10:01:55
+2025-01-17 17:02:18,143 - ERROR - crawl_content_post - 478 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-17 17:02:18,206 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 17:02:18,206 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 17:02:20,987 - ERROR - crawl_content_post - 286 - => Lưu được 5 bình luận!
+2025-01-17 17:02:28,915 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:02:33,629 - ERROR - crawl_content_post - 286 - => Lưu được 9 bình luận!
+2025-01-17 17:02:34,643 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:02:40,903 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:02:41,737 - ERROR - crawl_content_post - 458 - Lỗi khi truy cập hình ảnh https://scontent-iad3-2.xx.fbcdn.net/v/t39.30808-6/473242007_1194791049312697_7146595350855207795_n.jpg?stp=dst-jpg_s1080x2048_tt6&_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_ohc=vQnTJnoTa1UQ7kNvgG0Nsf7&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&_nc_gid=AKOLGZCETdyOakYyeyX163C&oh=00_AYAWxDlJAFxeA15o0IWPv5IO-t4PT5DfACYaDX5TX-wkeA&oe=678FF964: Message: element click intercepted: Element <img height="534" width="1080" alt="May be an image of 3 people, people playing football and text" class="x1ey2m1c xds687c x5yr21d x10l6tqk x17qophe x13vifvy xh8yej3 xl1xv1r" referrerpolicy="origin-when-cross-origin" src="https://scontent-iad3-2.xx.fbcdn.net/v/t39.30808-6/473242007_1194791049312697_7146595350855207795_n.jpg?stp=dst-jpg_s1080x2048_tt6&amp;_nc_cat=105&amp;ccb=1-7&amp;_nc_sid=127cfc&amp;_nc_ohc=vQnTJnoTa1UQ7kNvgG0Nsf7&amp;_nc_zt=23&amp;_nc_ht=scontent-iad3-2.xx&amp;_nc_gid=AKOLGZCETdyOakYyeyX163C&amp;oh=00_AYAWxDlJAFxeA15o0IWPv5IO-t4PT5DfACYaDX5TX-wkeA&amp;oe=678FF964"> is not clickable at point (951, 447). Other element would receive the click: <div class="x1i10hfl xjbqb8w x1ejq31n xd10rxx x1sy0etr x17r0tee x972fbf xcfux6l x1qhh985 xm0m39n xe8uvvx x1hl2dhg xggy1nq x1o1ewxj x3x9cwd x1e5q0jg x13rtm0m x87ps6o x1lku1pv x1a2a7pz xjyslct x9f619 x1ypdohk x78zum5 x1q0g3np x2lah0s x1i6fsjq xfvfia3 xnqzcj9 x1gh759c x1n2onr6 x16tdsg8 x1ja2u2z x6s0dn4 x1y1aw1k xwib8y2 x1q8cg2c xnjli0" role="menuitem" tabindex="-1">...</div>
+  (Session info: chrome=131.0.6778.265)
+Stacktrace:
+	GetHandleVerifier [0x0030FD53+23747]
+	(No symbol) [0x00297D54]
+	(No symbol) [0x0016BE53]
+	(No symbol) [0x001B5C57]
+	(No symbol) [0x001B40C3]
+	(No symbol) [0x001B1CCD]
+	(No symbol) [0x001B1034]
+	(No symbol) [0x001A5F57]
+	(No symbol) [0x001D1DFC]
+	(No symbol) [0x001A59A4]
+	(No symbol) [0x001D2094]
+	(No symbol) [0x001EB41E]
+	(No symbol) [0x001D1B96]
+	(No symbol) [0x001A3F3C]
+	(No symbol) [0x001A4EBD]
+	GetHandleVerifier [0x005EAC73+3017699]
+	GetHandleVerifier [0x005FB93B+3086507]
+	GetHandleVerifier [0x005F40F2+3055714]
+	GetHandleVerifier [0x003A5AF0+637536]
+	(No symbol) [0x002A0A5D]
+	(No symbol) [0x0029DA28]
+	(No symbol) [0x0029DBC5]
+	(No symbol) [0x002907F0]
+	BaseThreadInitThunk [0x75EF7BA9+25]
+	RtlInitializeExceptionChain [0x774CC0CB+107]
+	RtlClearBits [0x774CC04F+191]
+	(No symbol) [0x00000000]
+
+2025-01-17 17:02:41,744 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 17:02:42,216 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 01:02:17
+2025-01-17 17:02:42,216 - ERROR - crawl_content_post - 478 - Response: {'post_id': 115882}
+2025-01-17 17:02:43,292 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 17:02:43,292 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 17:02:46,245 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 17:02:52,038 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:02:54,105 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:02:55,403 - ERROR - crawl_content_post - 286 - => Lưu được 0 bình luận!
+2025-01-17 17:02:57,725 - ERROR - crawl_content_post - 286 - => Lưu được 2 bình luận!
+2025-01-17 17:03:01,221 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:03:01,645 - ERROR - crawl_content_post - 509 - Không tìm thấy nội dung
+2025-01-17 17:03:04,081 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:03:04,851 - ERROR - crawl_content_post - 286 - => Lưu được 1 bình luận!
+2025-01-17 17:03:09,159 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 17:03:10,939 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:03:14,954 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:03:15,810 - ERROR - crawl_content_post - 286 - => Lưu được 9 bình luận!
+2025-01-17 17:03:18,659 - ERROR - crawl_content_post - 286 - => Lưu được 1 bình luận!
+2025-01-17 17:03:29,235 - ERROR - crawl_content_post - 435 - Không thể turn on notify
+2025-01-17 17:03:29,542 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:03:30,243 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:03:36,849 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 17:03:37,408 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 17:03:37,766 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 10:03:11
+2025-01-17 17:03:37,768 - ERROR - crawl_content_post - 478 - Response: {'post_id': 115884}
+2025-01-17 17:03:37,852 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 17:03:37,853 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 17:03:37,882 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 07:03:15
+2025-01-17 17:03:37,882 - ERROR - crawl_content_post - 478 - Response: {'post_id': 115885}
+2025-01-17 17:03:37,937 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 17:03:37,943 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 17:03:54,299 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 17:05:01,674 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 17:11:12,379 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 1
+2025-01-17 17:11:15,915 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:11:20,900 - ERROR - crawl_content_post - 286 - => Lưu được 1 bình luận!
+2025-01-17 17:11:23,183 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:11:27,577 - ERROR - crawl_content_post - 286 - => Lưu được 7 bình luận!
+2025-01-17 17:11:31,584 - ERROR - crawl_content_post - 435 - Không thể turn on notify
+2025-01-17 17:11:32,595 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:11:38,193 - ERROR - crawl_content_post - 435 - Không thể turn on notify
+2025-01-17 17:11:39,198 - ERROR - modal - 17 - Không tìm thấy phần tử hợp lệ tại index: 0
+2025-01-17 17:11:39,771 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 17:11:40,108 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 00:11:17
+2025-01-17 17:11:40,108 - ERROR - crawl_content_post - 478 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-17 17:11:40,170 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 17:11:40,170 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 17:11:46,382 - ERROR - crawl_content_post - 468 - Đang lưu bài viết và bình luận vào database...
+2025-01-17 17:11:46,713 - ERROR - crawl_content_post - 476 - ==> Thời gian đăng: 2025-01-17 01:11:23
+2025-01-17 17:11:46,713 - ERROR - crawl_content_post - 478 - Response: {'message': 'Bài viết đã tồn tại!'}
+2025-01-17 17:11:46,766 - ERROR - crawl_content_post - 490 - => Đã lưu thành công!
+2025-01-17 17:11:46,766 - ERROR - crawl_content_post - 492 - 
+-----------------------------------------------------
+
+2025-01-17 17:12:01,519 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 17:13:08,876 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 17:20:35,499 - ERROR - login - 349 - Lỗi login Vũ Thịnh 100070535467906 Mzansi Life SA: Không thể thêm cookie {'name': 'fr', 'path': '/', 'value': '111UudAq0n6EqikMj.AWW6lsphrtvkNMXfGf_pFm1Groo.BniL6m..AAA.0.0.BniNIQ.AWUSrOtwTfI', 'domain': '.facebook.com', 'expiry': 1744795921, 'secure': True, 'httpOnly': True, 'sameSite': 'None'} vào trình duyệt: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=131.0.6778.265)
+Stacktrace:
+	GetHandleVerifier [0x0030FD53+23747]
+	(No symbol) [0x00297D54]
+	(No symbol) [0x0016BE53]
+	(No symbol) [0x0014D91B]
+	(No symbol) [0x001D7EFF]
+	(No symbol) [0x001EAD49]
+	(No symbol) [0x001D1B96]
+	(No symbol) [0x001A3F3C]
+	(No symbol) [0x001A4EBD]
+	GetHandleVerifier [0x005EAC73+3017699]
+	GetHandleVerifier [0x005FB93B+3086507]
+	GetHandleVerifier [0x005F40F2+3055714]
+	GetHandleVerifier [0x003A5AF0+637536]
+	(No symbol) [0x002A0A5D]
+	(No symbol) [0x0029DA28]
+	(No symbol) [0x0029DBC5]
+	(No symbol) [0x002907F0]
+	BaseThreadInitThunk [0x75EF7BA9+25]
+	RtlInitializeExceptionChain [0x774CC0CB+107]
+	RtlClearBits [0x774CC04F+191]
+	(No symbol) [0x00000000]
+
+2025-01-17 17:20:37,647 - ERROR - login - 103 - Lỗi login: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=131.0.6778.265)
+Stacktrace:
+	GetHandleVerifier [0x0030FD53+23747]
+	(No symbol) [0x00297D54]
+	(No symbol) [0x0016BE53]
+	(No symbol) [0x0014D91B]
+	(No symbol) [0x001D7EFF]
+	(No symbol) [0x001EAD49]
+	(No symbol) [0x001D1B96]
+	(No symbol) [0x001A3F3C]
+	(No symbol) [0x001A4EBD]
+	GetHandleVerifier [0x005EAC73+3017699]
+	GetHandleVerifier [0x005FB93B+3086507]
+	GetHandleVerifier [0x005F40F2+3055714]
+	GetHandleVerifier [0x003A5AF0+637536]
+	(No symbol) [0x002A0A5D]
+	(No symbol) [0x0029DA28]
+	(No symbol) [0x0029DBC5]
+	(No symbol) [0x002907F0]
+	BaseThreadInitThunk [0x75EF7BA9+25]
+	RtlInitializeExceptionChain [0x774CC0CB+107]
+	RtlClearBits [0x774CC04F+191]
+	(No symbol) [0x00000000]
+
+2025-01-17 17:22:17,887 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 17:23:49,309 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 17:25:24,650 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 17:26:42,583 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 17:27:42,587 - ERROR - browser_newsfeed - 62 - Lỗi khi lấy bài new feed: Message: element click intercepted: Element <div aria-expanded="false" aria-label="Your profile" class="x1i10hfl x1qjc9v5 xjbqb8w xjqpnuy xa49m3k xqeqjp1 x2hbi6w x13fuv20 xu3j5b3 x1q0q8m5 x26u7qi x972fbf xcfux6l x1qhh985 xm0m39n x9f619 x1ypdohk xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x2lwn1j xeuugli xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x16tdsg8 x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1o1ewxj x3x9cwd x1e5q0jg x13rtm0m x1q0g3np x87ps6o x1lku1pv x1a2a7pz xzsf02u x1rg5ohu" role="button" tabindex="0">...</div> is not clickable at point (1312, 28). Other element would receive the click: <div class="x1qjc9v5 x9f619 x78zum5 xdt5ytf x1iyjqo2 xl56j7k xshlqvt">...</div>
+  (Session info: chrome=131.0.6778.265)
+Stacktrace:
+	GetHandleVerifier [0x0030FD53+23747]
+	(No symbol) [0x00297D54]
+	(No symbol) [0x0016BE53]
+	(No symbol) [0x001B5C57]
+	(No symbol) [0x001B40C3]
+	(No symbol) [0x001B1CCD]
+	(No symbol) [0x001B1034]
+	(No symbol) [0x001A5F57]
+	(No symbol) [0x001D1DFC]
+	(No symbol) [0x001A59A4]
+	(No symbol) [0x001D2094]
+	(No symbol) [0x001EB41E]
+	(No symbol) [0x001D1B96]
+	(No symbol) [0x001A3F3C]
+	(No symbol) [0x001A4EBD]
+	GetHandleVerifier [0x005EAC73+3017699]
+	GetHandleVerifier [0x005FB93B+3086507]
+	GetHandleVerifier [0x005F40F2+3055714]
+	GetHandleVerifier [0x003A5AF0+637536]
+	(No symbol) [0x002A0A5D]
+	(No symbol) [0x0029DA28]
+	(No symbol) [0x0029DBC5]
+	(No symbol) [0x002907F0]
+	BaseThreadInitThunk [0x75EF7BA9+25]
+	RtlInitializeExceptionChain [0x774CC0CB+107]
+	RtlClearBits [0x774CC04F+191]
+	(No symbol) [0x00000000]
+
+2025-01-17 17:27:45,018 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 17:29:36,461 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 17:30:36,463 - ERROR - browser_newsfeed - 62 - Lỗi khi lấy bài new feed: pop from empty list
+2025-01-17 17:30:38,571 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 17:34:21,665 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 17:35:28,947 - ERROR - browser_newsfeed - 73 - Không thể khởi tạo trình duyệt, thử lại sau 30s...
+2025-01-17 17:37:26,891 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 17:39:06,018 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...
+2025-01-17 17:40:09,160 - ERROR - crawl_content_newsfeed - 62 - Thử lại sau 1 phút...

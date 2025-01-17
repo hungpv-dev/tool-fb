@@ -92,7 +92,7 @@ def handle_login(account):
             extension = create_proxy_extension(proxy)
 
     if checkProxy == True:
-        manager = Browser(f"/login/{account['id']}", extension)
+        manager = Browser(f"/login/{account['id']}", extension, loadContent=True)
         browser = manager.start(False)
     else:
         messagebox.showerror("Thất bại", f"Proxy không dùng được!")

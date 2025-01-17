@@ -161,9 +161,13 @@ class Test:
 
 
 # Đăng bài
-test = Test()
-test.post(75)
-# test.crawl(75)
+# test = Test()
+# test.post(75)
+# # test.crawl(75)
+from helpers.modal import remove_notifications
+
+text = "Pop Prince 200 notifications"
+print(remove_notifications(text))
 
 # # href = 'https://www.facebook.com/homesoftherich/posts/982177123948005?__cft__[0]=AZUS2xdrxGoD7-RDr_t_JMMMFqfL-SfusGDTXs5Rij_QLdHXYZiHCKjKZLo3zwnaD4EqzWaL2OBQN_oo1kKWi_ReiljxaEYVrfOQcW8WX-_fZ902zHPzuHt8qs7KhnDArdZCXIq07aDa3XAq28VS6R0BTm4TZym9DyXNKujTPw_MUnDlVGre8jQZyn5EdP3-t8c&__tn__=%2CO%2CP-R'
 # from helpers.fb import clean_url_keep_params,clean_facebook_url_redirect
