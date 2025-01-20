@@ -450,6 +450,12 @@ class CrawlContentPost:
                             sleep(5)
                             closeModal(0,self.browser)
                             sleep(1)
+                            # Đóng các tab thừa nếu có
+                            while len(self.browser.window_handles) > 1:
+                                for handle in self.browser.window_handles[1:]:
+                                    self.browser.switch_to.window(handle)
+                                    self.browser.close()
+                                self.browser.switch_to.window(self.browser.window_handles[0])
                         else:
                             logging.error(f"URL không hợp lệ: {img}")
                             print(f"URL không hợp lệ: {img}")

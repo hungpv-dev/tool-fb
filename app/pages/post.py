@@ -172,8 +172,10 @@ def post_page_list():
             row.pack(fill="x", pady=5)
 
             account_label = ttk.Label(row, text=account["name"], font=("Segoe UI", 12), width=25).pack(side="left", padx=5)
-            status_label = ttk.Label(row, text=len(account.get('tasks')), font=("Segoe UI", 12), width=25).pack(side="left", padx=5)
-            task_label = ttk.Label(row, text=account.get("status"), font=("Segoe UI", 12), width=25).pack(side="left", padx=5)
+            task_label = ttk.Label(row, text=len(account.get('tasks')), font=("Segoe UI", 12), width=25)
+            task_label.pack(side="left", padx=5)
+            status_label = ttk.Label(row, text=account.get("status"), font=("Segoe UI", 12), width=25)
+            status_label.pack(side="left", padx=5)
 
             account['status_label'] = status_label
             account['task_label'] = task_label

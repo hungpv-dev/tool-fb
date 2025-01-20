@@ -5,6 +5,8 @@ from time import sleep
 from main.fanpage import get_fanpage_process_instance
 from sql.errors import Error
 import logging
+from bot import send
+
 fanpage_process_instance = get_fanpage_process_instance()
 
 def process_crawl(id, stop_event):
@@ -32,6 +34,7 @@ def process_crawl(id, stop_event):
                 browser.quit()
             sleep(10)
 
+    send(f'Tab cào fanpage mã: {id} đã bị đóng')
     fanpage_process_instance.update_process(id,'Tab đã bị đóng, xoá và chạy lại...')
 
 

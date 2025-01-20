@@ -164,21 +164,14 @@ class Test:
 # test = Test()
 # test.post(75)
 # # test.crawl(75)
-from helpers.modal import remove_notifications
+# from helpers.modal import remove_notifications
 
-text = "Pop Prince 200 notifications"
-print(remove_notifications(text))
+# text = "Pop Prince 200 notifications"
+# print(remove_notifications(text))
 
-# # href = 'https://www.facebook.com/homesoftherich/posts/982177123948005?__cft__[0]=AZUS2xdrxGoD7-RDr_t_JMMMFqfL-SfusGDTXs5Rij_QLdHXYZiHCKjKZLo3zwnaD4EqzWaL2OBQN_oo1kKWi_ReiljxaEYVrfOQcW8WX-_fZ902zHPzuHt8qs7KhnDArdZCXIq07aDa3XAq28VS6R0BTm4TZym9DyXNKujTPw_MUnDlVGre8jQZyn5EdP3-t8c&__tn__=%2CO%2CP-R'
-# from helpers.fb import clean_url_keep_params,clean_facebook_url_redirect
-# import urllib
-# hrefs = [
-#     'https://l.facebook.com/l.php?u=https%3A%2F%2Fhomesoftherich.net%2F%3Fs%3Dgeorgia%26fbclid%3DIwZXh0bgNhZW0CMTAAAR25nlkMk94AcF8f-1GWm6Bd-YwIfBu8ozPBT7LWfj-U6qQn6NMCphzupMs_aem_wZjvYlVwSLGze_h4JJbtBg&h=AT1zb_HiX8nv68-dDEa-4ByzC-7hEHAWVRjhcxDun5oD3PeYFe0khr_D4AyLuBM23uLOe3VaP6pC6CdnYhoc7KPzTr-MdP92c1_YORzniIw4wgJVpw5NcXoNGXaGN4UrDe45D16i_MxY1sXV&__tn__=R]-R&c[0]=AT2tZSWbS7JHY4kmMSyjJjcAHQ7NLpq98h1i4XwYPWq1b7jsysaOi6KZLjrplaPYWekx4FTlyeqUkWKd9i3oERvA1uviVxIdcWQ7cJZBcbW5h5nqCv7Oh0CO3WtP0QcD3W-3HGD8NCF3JG32sFox7EPUNs5cJv76W_qLwKEEZxtWdoHU_hOC2repqn_FYCrN',
-#     'https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/473568457_982177083948009_6456232874414359120_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_ohc=CieBVTEu9-UQ7kNvgGX-dJr&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=ATEHWXeV-oDam1v1EAvLz3Y&oh=00_AYBt2sPTty1ZH6g0j2jBCAlfomTTDIq2boMdlk7ky6DtQQ&oe=678A5D8B',
-#     'https://scontent-iad3-1.xx.fbcdn.net/v/t39.30808-6/473192326_982177077281343_8538946828122243783_n.jpg?stp=dst-jpg_p480x480_tt6&_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_ohc=54op3P1nYcEQ7kNvgFc-wo-&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&_nc_gid=ATEHWXeV-oDam1v1EAvLz3Y&oh=00_AYClC8CHv2VQymbqQQTYgOa2Ap_-1OOmrKCWL1OOciGhyA&oe=678A72FD'
-# ]
-# for href in hrefs:
-#     print(clean_facebook_url_redirect(href))
+from helpers.fb import clean_url_keep_params,clean_facebook_url_redirect
+href = 'https://www.facebook.com/permalink.php?story_fbid=pfbid027o67JwuNoXyqJBESHAf58XvE7ByWwVF96JM2CX3vUud9woQDzU4RgFniyaS6XuMPl&amp;id=61571869795635'
+print(clean_url_keep_params(href))
 
 
 

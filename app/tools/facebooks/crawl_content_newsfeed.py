@@ -12,11 +12,13 @@ from helpers.login import HandleLogin
 from time import sleep
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 import logging
 import uuid
 from sql.system import System
-from helpers.modal import openProfile,remove_notifications
+from helpers.modal import openProfile,remove_notifications,clickOk
 system_instance = System()
+from bot import send
 from main.newsfeed import get_newsfeed_process_instance
 
 newsfeed_process_instance = get_newsfeed_process_instance()
@@ -56,6 +58,7 @@ class CrawContentNewsfeed:
                 logging.error(f"Lỗi khi xử lý lấy dữ liệu!: {e}")
                 print(f"Lỗi khi xử lý lấy dữ liệu!: {e}")
                 self.error_instance.insertContent(e)
+                send(f"Tài khoản {account.get('name')} không thể đăng nhập!")
             except Exception as e:
                 raise e
             finally:
@@ -73,7 +76,7 @@ def process_fanpage(account, name, dirextension, stop_event, managerDriver,syste
     logging.info(f"Đang xử lý fanpage: {name}")
     print(f"Đang xử lý fanpage: {name}")
     threads = [
-        Thread(target=handleCrawlNewFeedVie, args=(account, managerDriver, stop_event,system_account)),
+        Thread(target=handleCrawlNewFeedVie, args=(account, managerDriver, dirextension, stop_event,system_account)),
         Thread(target=handleCrawlNewFeed, args=(account, name, dirextension, stop_event,system_account)),
         Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event,system_account)),
         Thread(target=crawlNewFeed, args=(account, name, dirextension, stop_event,system_account)),
@@ -127,7 +130,8 @@ class PageChecker:
                 'browser': self.browser,
             }
 
-            if len(allPages) > 0: 
+            if allPages: 
+                names = []
                 newsfeed_process_instance.update_process(account.get('id'), f'Xử lý: {len(allPages)} page')
                 for idx, page in enumerate(allPages):
                     if stop_event.is_set():
@@ -135,13 +139,15 @@ class PageChecker:
                     name = remove_notifications(page.text).strip()
                     logging.info(f'=================={name}================')
                     print(f'=================={name}================')
+                    names.append(name)
                     # Khởi tạo các process
-                #     thread = Thread(target=process_fanpage, args=(account, name,self.dirextension, stop_event, managerDriver,self.system_account))
-                #     threads.append(thread)
-                #     thread.start()
-                #     sleep(2)
-                # for thread in threads:
-                #     thread.join()
+                    thread = Thread(target=process_fanpage, args=(account, name,self.dirextension, stop_event, managerDriver,self.system_account))
+                    threads.append(thread)
+                    thread.start()
+                    sleep(2)
+                send(f'{account.get("name")} cào newsfeed: {", ".join(names)}')
+                for thread in threads:
+                    thread.join()
             else: 
                 newsfeed_process_instance.update_process(account.get('id'), f'Không sở hữu fanpage nào!')
 

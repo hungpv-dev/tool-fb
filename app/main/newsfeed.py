@@ -1,5 +1,5 @@
 import threading
-import logging
+import json
 class NewsFeedProcess:
     def __init__(self):
         self.progress_data = {}
@@ -11,8 +11,8 @@ class NewsFeedProcess:
         try:
             if id in self.progress_data:
                 process = self.progress_data[id]
-                process["status"] = new_text
                 status_label = process.get("status_label") 
+                process["status"] = new_text
                 if status_label:
                     status_label.config(text=new_text) 
         except Exception as e:

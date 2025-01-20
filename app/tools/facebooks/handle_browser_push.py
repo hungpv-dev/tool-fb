@@ -8,7 +8,7 @@ from tools.types import push
 import pyperclip
 from sql.pagePosts import PagePosts
 from sql.pages import Page
-from helpers.modal import closeModal
+from helpers.modal import closeModal,clickOk
 from sql.errors import Error
 import uuid
 from helpers.fb import clean_url_keep_params,copy_and_paste_text
@@ -23,15 +23,17 @@ from helpers.login import HandleLogin
 from tools.facebooks.func_handle_push_post import push_page,push_list
 from main.post import get_post_process_instance
 import logging
-
+from sql.system import System
+system_instance = System()
 post_process_instance = get_post_process_instance()
 
 class Push:
-    def __init__(self,browser,account,dirextension,manager):
+    def __init__(self,browser,account,dirextension,manager,system_account = None):
         self.browser = browser
         self.account = account
         self.manager = manager
         self.dirextension = dirextension
+        self.system_account = system_account
         self.crawlid_instance = BrowserFanpage(browser)
         self.post_instance = Post()
         self.page_instance = Page()
@@ -58,6 +60,8 @@ class Push:
             except ValueError as e:
                 post_process_instance.update_process(self.account.get('id'),'Login thất bài, thử lại sau 1p...')
                 logging.error(f"Lỗi khi xử lý đăng bài viết!: {e}")
+                if self.system_account:
+                    system_instance.push_message(self.system_account.get('id'),'Đăng nhập thất bại!')
                 print(f"Lỗi khi xử lý đăng bài viết!: {e}")
                 self.error_instance.insertContent(e)
             except Exception as e:
@@ -80,7 +84,7 @@ class Push:
                 for pot in awaitListPage:
                     if pot.get('id') not in pageIds:
                         pageIds.add(pot.get('id'))
-                        worker_thread = threading.Thread(target=push_page, args=(pot,self.account,self.dirextension,stop_event))
+                        worker_thread = threading.Thread(target=push_page, args=(pot,self.account,self.dirextension,stop_event,self.system_account))
                         worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
                         worker_thread.start()
                         threads.append(worker_thread)
@@ -91,8 +95,8 @@ class Push:
                 print(e)
                 
             try:
-                worker_thread = threading.Thread(target=push_list, args=(self.account,self.dirextension,stop_event))
-                worker_thread.daemon = True  
+                worker_thread = threading.Thread(target=push_list, args=(self.account,self.dirextension,stop_event,self.system_account))
+                worker_thread.daemon = True
                 worker_thread.start()
                 threads.append(worker_thread)
                 post_process_instance.update_task(self.account.get('id'),worker_thread)
@@ -138,6 +142,7 @@ class Push:
         try:
             self.browser.get(page['link'])
             sleep(2)
+            clickOk(self.browser)
             name = self.crawlid_instance.updateInfoFanpage(page,stop_event)
         except Exception as e:
             pass
@@ -146,31 +151,33 @@ class Push:
             swichNow = self.browser.find_element(By.XPATH, push['switchNow'])
             swichNow.click()
         except Exception as e:
-            logging.error('-> Mở popup thông tin cá nhân!')
-            print('-> Mở popup thông tin cá nhân!')
-            profile_button = WebDriverWait(self.browser, 10).until(
-                EC.presence_of_element_located((By.XPATH,  push['openProfile']))
-            )
-            profile_button.click()
-            sleep(5)
-            try:
-                try:
-                    allFanPage = WebDriverWait(self.browser, 10).until(
-                        EC.presence_of_element_located((By.XPATH, push['allProfile']))
-                    )
-                    allFanPage.click()
-                except Exception as e:
-                    pass
+            # logging.error('-> Mở popup thông tin cá nhân!')
+            # print('-> Mở popup thông tin cá nhân!')
+            # profile_button = WebDriverWait(self.browser, 10).until(
+            #     EC.presence_of_element_located((By.XPATH,  push['openProfile']))
+            # )
+            # profile_button.click()
+            # sleep(5)
+            # try:
+                # try:
+                #     allFanPage = WebDriverWait(self.browser, 10).until(
+                #         EC.presence_of_element_located((By.XPATH, push['allProfile']))
+                #     )
+                #     allFanPage.click()
+                # except Exception as e:
+                #     pass
 
-                switchPage = WebDriverWait(self.browser, 10).until(
-                    EC.presence_of_element_located((By.XPATH, push['switchPage'](name)))
-                )
-                switchPage.click()
-            except Exception as e:
-                logging.error("-> Không tìm thấy nút chuyển hướng tới trang quản trị!")
-                print("-> Không tìm thấy nút chuyển hướng tới trang quản trị!")
+                # switchPage = WebDriverWait(self.browser, 10).until(
+                #     EC.presence_of_element_located((By.XPATH, push['switchPage'](name)))
+                # )
+                # switchPage.click()
+                # openProfile(self.browser,name)
+            # except Exception as e:
+            #     logging.error("-> Không tìm thấy nút chuyển hướng tới trang quản trị!")
+            #     print("-> Không tìm thấy nút chuyển hướng tới trang quản trị!")
             sleep(3)
 
+        clickOk(self.browser)
         try:
             usePage = self.browser.find_element(By.XPATH, '//*[@aria-label="Use Page"]')
             usePage.click()
@@ -300,6 +307,7 @@ class Push:
         logging.error('Đã lấy được link up')
         print('Đã lấy được link up')
         page_post_instance = PagePosts()
+        link_up = clean_url_keep_params(link_up)
         page_post_instance.update_status(up['id'],{'link_up': link_up})
         sleep(2)
         

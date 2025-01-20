@@ -10,8 +10,8 @@ class PostProcess:
     def update_process(self, id, new_text):
         try:
             if id in self.progress_data:
-                process["status"] = new_text
                 process = self.progress_data[id]
+                process["status"] = new_text
                 status_label = process.get("status_label") 
                 if status_label:
                     status_label.config(text=new_text) 

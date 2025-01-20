@@ -8,7 +8,7 @@ from sql.errors import Error
 from main.newsfeed import get_newsfeed_process_instance
 import logging
 from sql.system import System
-
+from bot import send
 
 account_instance = Account()
 error_instance = Error()
@@ -74,6 +74,7 @@ def process_newsfeed(account, stop_event):
             print(f"Không thể khởi tạo trình duyệt, thử lại sau 30s...")
             sleep(30)
         
+    send(f"Tài khoản {account.get('name')} đã bị dừng cào newsfeed!")
     system_instance.update_account(system_account.get('id'),{'status': 2})
 
     

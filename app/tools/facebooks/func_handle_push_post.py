@@ -7,6 +7,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from sql.pagePosts import PagePosts
 from sql.errors import Error
+from helpers.modal import clickOk
 from sql.account_cookies import AccountCookies
 import logging
 
@@ -14,7 +15,14 @@ import logging
 from main.post import get_post_process_instance
 post_process_instance = get_post_process_instance()
 
-def push_page(page,account,dirextension,stop_event):
+from sql.system import System
+system_instance = System()
+
+def updateSystemMessage(system,message):
+    if system:
+        system_instance.push_message(system.get('id'),message)
+
+def push_page(page,account,dirextension,stop_event,system_account = None):
     from tools.facebooks.browser_post import Push
     error_instance = Error()
     name = page.get('name')
@@ -45,6 +53,7 @@ def push_page(page,account,dirextension,stop_event):
                 try:
                     checkLogin = loginInstance.loginFacebook()
                     if checkLogin == False:
+                        updateSystemMessage(system_account,'Login thất bại')
                         post_process_instance.update_process(account.get('id'),'Không login được, đợi 1p')
                     else:
                         account = loginInstance.getAccount()
@@ -67,35 +76,49 @@ def push_page(page,account,dirextension,stop_event):
 
             logging.error(f'Bắt đầu theo dõi page: {name}')
             print(f'Bắt đầu theo dõi page: {name}')
+            updateSystemMessage(system_account,f'Bắt đầu đăng page: {name}')
+            retry_count = {}
             while not stop_event.is_set():
                 cookie = account.get('latest_cookie')
                 pageUP = page_post_instance.get_page_up({'page_id': page["id"],'account_id':account['id']})
                 if pageUP:
-                    try:
-                        post_process_instance.update_process(account.get('id'),f"Xử lý đăng bài: {pageUP['id']}")
-                        res = account_instance.updateCount(cookie.get('id'),'counts')
-                        name = push_instance.switchPage(page,stop_event)
-                        profile_button = browser.find_element(By.XPATH, pushType['openProfile'])
-                        push_instance.push(page,pageUP,name)
-                        page_post_instance.update_status(pageUP['id'],{
-                            'status':2,
-                            'cookie_id': cookie['id']
-                        })
-                        awaitSleep = int(pageUP.get('await', 0)) * 60
-                        logging.error(f'=====>{name}: cần đợi {pageUP.get("await", 0)}p để đăng bài tiếp theo!')
-                        print(f'=====>{name}: cần đợi {pageUP.get("await", 0)}p để đăng bài tiếp theo!')
-                        post_process_instance.update_process(account.get('id'),f"Đăng thành công bài {pageUP['id']}")
-                        sleep(awaitSleep)
-                    except NoSuchElementException as e:
-                        page_post_instance.update_status(pageUP['id'], {'status': 1})
-                        raise e
-                    except Exception as e:
-                        error_instance.insertContent(e)
-                        page_post_instance.update_status(pageUP['id'],{
-                            'status': 4,
-                            'cookie_id': cookie['id']
-                        })
-                        sleep(5)
+                    pot_id = pageUP.get('id')
+                    if pot_id not in retry_count:
+                        retry_count[pot_id] = 0
+                    while retry_count[pot_id] < 3:
+                        try:
+                            post_process_instance.update_process(account.get('id'),f"Xử lý đăng bài: {pageUP['id']}")
+                            res = account_instance.updateCount(cookie.get('id'),'counts')
+                            name = push_instance.switchPage(page,stop_event)
+                            profile_button = browser.find_element(By.XPATH, pushType['openProfile'])
+                            push_instance.push(page,pageUP,name)
+                            page_post_instance.update_status(pageUP['id'],{
+                                'status':2,
+                                'cookie_id': cookie['id']
+                            })
+                            awaitSleep = int(pageUP.get('await', 0)) * 60
+                            logging.error(f'=====>{name}: cần đợi {pageUP.get("await", 0)}p để đăng bài tiếp theo!')
+                            print(f'=====>{name}: cần đợi {pageUP.get("await", 0)}p để đăng bài tiếp theo!')
+                            post_process_instance.update_process(account.get('id'),f"Đăng thành công bài {pageUP['id']}")
+                            retry_count.pop(pot_id, None)
+                            sleep(awaitSleep)
+                            break
+                        except NoSuchElementException as e:
+                            page_post_instance.update_status(pageUP['id'], {'status': 1})
+                            raise e
+                        except Exception as e:
+                            retry_count[pot_id] += 1
+                            logging.error(e)
+                            print(e)
+                            error_instance.insertContent(e)
+                            if retry_count[pot_id] >= 3:
+                                page_post_instance.update_status(pageUP['id'],{
+                                    'status': 4,
+                                    'cookie_id': cookie['id']
+                                })
+                                logging.error(f"Bài viết {pot_id} đăng lỗi quá 3 lần. Bỏ qua.")
+                                break
+                            sleep(5)
                 else: 
                     logging.error('Chưa có bài viết nào trong hàng chờ, chờ 1p để tiếp tục....')
                     print('Chưa có bài viết nào trong hàng chờ, chờ 1p để tiếp tục....')
@@ -110,10 +133,9 @@ def push_page(page,account,dirextension,stop_event):
             logging.error('Lỗi khi đăng bài page,thử lại sau 30s')
             print('Lỗi khi đăng bài page,thử lại sau 30s')
             sleep(30)
-            if 'browser' in locals():
-                if browser:
-                    browser.quit()
-                    manager.cleanup()
+            if browser:
+                browser.quit()
+                manager.cleanup()
 
 
 def browseTime(account):
@@ -121,7 +143,7 @@ def browseTime(account):
     listPosts = pagePosts_instance.get_post_time({'account_id': account['id']})
     return listPosts
 
-def push_list(account,dirextension,stop_event):
+def push_list(account,dirextension,stop_event,system_account = None):
     page_post_instance = PagePosts()
     error_instance = Error()
     from tools.facebooks.browser_post import Push
@@ -136,13 +158,12 @@ def push_list(account,dirextension,stop_event):
             browser = manager.start()
             loginInstance = HandleLogin(browser,account)
             sleep(3)
-            browser.get('https://facebook.com')
-            sleep(15)
             while not stop_event.is_set():
                 try:
                     checkLogin = loginInstance.loginFacebook()
                     if checkLogin == False:
                         post_process_instance.update_process(account.get('id'),'Không login được, đợi 1p')
+                        updateSystemMessage(system_account,'Login thất bại')
                     else:
                         account = loginInstance.getAccount()
                         loginInstance.updateStatusAcount(account.get('id'),4)
@@ -173,8 +194,8 @@ def push_list(account,dirextension,stop_event):
                                 post_process_instance.update_process(account.get('id'),f"Xử lý đăng bài: {post['id']}")
                                 page = post.get('page')
                                 name = push.switchPage(page,stop_event)
+                                updateSystemMessage(system_account,f'Bắt đầu đăng page: {name}')
                                 profile_button = browser.find_element(By.XPATH, pushType['openProfile'])
-
                                 push.push(page,post,name)
                                 page_post_instance.update_status(post['id'],{
                                     'status':2,

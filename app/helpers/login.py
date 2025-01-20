@@ -2,8 +2,10 @@ from time import sleep
 from tools.types import push
 from selenium.webdriver.common.by import By
 from sql.accounts import Account
+from helpers.modal import clickOk
 import logging
 import re
+from bot import send
 from selenium.common.exceptions import NoSuchElementException
 class HandleLogin:
     def __init__(self,driver,acc,main_model = None):
@@ -35,6 +37,7 @@ class HandleLogin:
             print(f"Bắt đầu thực khi login: {self.account.get('name')}")
             self.driver.get("https://facebook.com")
             sleep(2)
+            clickOk(self.driver)
 
             try:
                 allow_cookies_buttons = self.driver.find_elements(By.XPATH, '//*[@aria-label="Allow all cookies"]')
@@ -66,10 +69,13 @@ class HandleLogin:
                     self.driver.find_element(By.ID,'loginbutton').click()
                 sleep(5)
 
+                sleep(60)
+
                 self.updateMainModel('Login với username, password')
                 check = self.saveLogin()
                 if check == False:
                     try:
+                        self.toggleType('Authentication app')
                         authenapp = self.driver.find_element(
                             By.XPATH, "//*[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'authentication app')]"
                         )
@@ -88,7 +94,7 @@ class HandleLogin:
                             print(f'{self.account.get("name")} lấy mã từ Outlook')
                             try:
                                 self.updateMainModel('Login với Outlook')
-                                self.toggleEmail() # Chuyển sang nhận mã từ email
+                                self.toggleType('Email') # Chuyển sang nhận mã từ email
                                 code = self.loginEmailAndGetCode() # Lấy code
                                 self.updateMainModel(f'Code là: {code}')
                                 check = self.pushCode(code)
@@ -127,13 +133,13 @@ class HandleLogin:
         self.backTab()
         return code
 
-    def toggleEmail(self):
+    def toggleType(self,type):
         self.clickText('Try another way')
         sleep(2)
-        self.clickText('Email')
+        self.clickText(type)
         sleep(2)
         self.clickText('Continue')
-        pass
+        sleep(5)
 
     def loginEmailAndGetCode(self):
         logging.info(f'{self.account.get("name")} Mờ outlook')
@@ -272,9 +278,13 @@ class HandleLogin:
         try:
             checkBlock = self.checkBlock()
             if checkBlock:
+                send(f"Tài khoản: {self.account.get('name')} đã bị khoá")
                 self.updateMainModel('Tài khoản đã bị khoá!')
                 self.account_instance.update_account(self.account.get('id'),{'status_login': 5})
                 return check
+
+            sleep(2)
+            clickOk(self.driver)
 
             self.driver.find_element(By.XPATH, push['openProfile'])
             cookies = self.driver.get_cookies()

@@ -17,6 +17,7 @@ def newfeedhandle(selected_accounts):
             thread.start()
             account['tasks'] = [thread]
             account['stop_event'] = stop_event
+            account['status'] = 'Sẵn sàng cào'
             account['status_process'] = 1 # 1: Hoạt động, 2: Đã đóng
             account['status_vie'] = 1 # 1: Cào, 2: Đã đóng
             newsfeed_process_instance.add_process(account)
@@ -162,12 +163,14 @@ def newsfeed_page_list():
             row.pack(fill="x", pady=5)
 
             account_label = ttk.Label(row, text=account["name"], font=("Segoe UI", 12), width=25).pack(side="left", padx=5)
-            status_label = ttk.Label(row, text=len(account.get('tasks')), font=("Segoe UI", 12), width=25).pack(side="left", padx=5)
-            task_label = ttk.Label(row, text=account.get("status"), font=("Segoe UI", 12), width=25).pack(side="left", padx=5)
-
-
-            account['status_label'] = status_label
+            task_label = ttk.Label(row, text=len(account.get('tasks')), font=("Segoe UI", 12), width=25)
+            task_label.pack(side="left", padx=5)
             account['task_label'] = task_label
+
+            status_label = ttk.Label(row, text=account.get("status"), font=("Segoe UI", 12), width=25)
+            status_label.pack(side="left", padx=5)
+            account['status_label'] = status_label
+
             account['row'] = row
             
             if account.get('status_process') == 1:
@@ -186,6 +189,9 @@ def newsfeed_page_list():
             )
             vie_button.pack(side="right", padx=5)
             account['vie_button'] = vie_button
+
+            accounts = newsfeed_process_instance.get_all_processes()  # Kiểm tra kiểu dữ liệu trả về
+
         table_inner_frame.update_idletasks()
     else:
         no_process_label = tk.Label(frame, text="Không có tiến trình nào đang chạy.", font=("Segoe UI", 12), bg="#f0f2f5", fg="#1c1e21")

@@ -43,8 +43,14 @@ def openProfile(browser,name_fanpage = ''):
 
     sleep(10)
     allPages = browser.find_elements(By.XPATH, '//*[@aria-label="Your profile" and @role="dialog"]//*[@role="list"]//*[@role="listitem" and @data-visualcompletion="ignore-dynamic"]')
-    if len(allPages) > 1:
-        allPages = allPages[1:-1]
+    if len(allPages) > 0:
+        allPages = allPages[1:]
+        for i, page in enumerate(allPages):
+            textPage = page.text
+            if "Create new profile" in textPage:
+                allPages = allPages[:i]
+                break
+
     else:
         try:
             see_more_button = WebDriverWait(browser, 10).until(
@@ -56,11 +62,12 @@ def openProfile(browser,name_fanpage = ''):
         sleep(10)
         allPages = browser.find_elements(By.XPATH, '//*[@role="dialog"]//*[@role="list"]//*[@role="listitem" and @data-visualcompletion="ignore-dynamic"]')
         allPages.pop(0)
+    actionsChains = ActionChains(browser)
     if name_fanpage:
         for page in allPages:
-            name = page.text
-            if name_fanpage in name:
-                ActionChains.move_to_element(page).perform()
+            name = remove_notifications(page.text)
+            if name_fanpage == name:
+                actionsChains.move_to_element(page).perform()
                 sleep(1)
                 page.click() 
                 break
@@ -78,3 +85,11 @@ def remove_notifications(text):
             text_parts = text_parts[:-1]
             text = ' '.join(text_parts)
     return text
+
+def clickOk(driver):
+    try:
+        ok_button = driver.find_element(By.XPATH, '//*[@aria-label="OK"]')
+        ok_button.click()
+        sleep(2)
+    except Exception as e:
+        pass
