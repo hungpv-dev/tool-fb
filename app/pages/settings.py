@@ -12,11 +12,12 @@ from tkinter import ttk
 import os
 
 # Lưu cấu hình (chỉ lưu headless)
-def save_configuration(headless_var):
+def save_configuration(headless_var,omocaptcha_token_var):
     from helpers.base import render
 
     def save_config(headless_var):
         headless = headless_var.get()
+        omocaptcha_token = omocaptcha_token_var.get()
 
         try:
             # Lưu thông tin cấu hình vào file config.json
@@ -25,6 +26,7 @@ def save_configuration(headless_var):
 
             # Cập nhật chỉ trường "headless" mà không thay đổi các thông tin khác
             config["headless"] = headless
+            config["omocaptcha_token"] = omocaptcha_token
 
             with open("config.json", "w") as config_file:
                 json.dump(config, config_file, indent=4)
@@ -150,6 +152,15 @@ def settings_page():
     )
     headless_check.pack(pady=5)
 
+    # Thêm ô nhập cho omocaptcha_token
+    token_label = tk.Label(
+        main_frame, text="OmoCaptcha Token:", font=("Segoe UI", 12), bg="#f0f2f5"
+    )
+    token_label.pack(pady=5)
+    omocaptcha_token_var = tk.StringVar(value=current_config.get("omocaptcha_token", ""))
+    token_entry = ttk.Entry(main_frame, textvariable=omocaptcha_token_var, width=100)
+    token_entry.pack(pady=5)
+
     # Khởi tạo frame để chứa các nút
     button_frame = tk.Frame(main_frame, bg="#f0f2f5")
     button_frame.pack(pady=10)
@@ -159,7 +170,7 @@ def settings_page():
         button_frame,
         text="Lưu cấu hình",
         style="Custom.TButton",
-        command=lambda: save_configuration(headless_var),
+        command=lambda: save_configuration(headless_var,omocaptcha_token_var),
         width=15  # Giảm kích thước nút
     )
     save_button.pack(side=tk.LEFT, padx=5)
@@ -210,6 +221,7 @@ def display_current_config(main_frame, current_config):
         # Thêm dữ liệu vào bảng
         config_tree.insert("", "end", values=("Mở giao diện", "Có" if current_config.get("headless", False) else "Không"))
         config_tree.insert("", "end", values=("Driver path", current_config.get("driver_path", "Chưa có")))
+        config_tree.insert("", "end", values=("Omocaptcha Token", current_config.get("omocaptcha_token", "Chưa có")))
 
         # Cấu hình style
         style = ttk.Style()

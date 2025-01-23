@@ -8,6 +8,7 @@ from selenium.webdriver.chrome.options import Options
 # from selenium.webdriver.edge.service import Service as EdgeService
 # from selenium.webdriver.edge.options import Options as EdgeOptions
 # from webdriver_manager.microsoft import EdgeChromiumDriverManager
+import shutil
 import logging
 from tkinter import messagebox
 import os
@@ -22,6 +23,10 @@ class Browser:
         self.browser_type = browser_type  # Chọn loại trình duyệt
         base_profile_dir = "./temp/profiles" + account
         
+        if os.path.exists(base_profile_dir):
+            if base_profile_dir != './temp/profiles/crawl':
+                shutil.rmtree(base_profile_dir)
+
         if not os.path.exists(base_profile_dir):
             os.makedirs(base_profile_dir, mode=0o755)
         
@@ -100,7 +105,7 @@ class Browser:
             return driver
         except Exception as e:
             logging.error(f"Error starting Chrome browser: {e}")
-            messagebox.showerror('Lỗi','Vui lòng tải driver')
+            # messagebox.showerror('Lỗi','Vui lòng tải driver')
             print(f"Error starting Chrome browser: {e}")
             raise e
 

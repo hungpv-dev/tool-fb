@@ -5,9 +5,9 @@ from sql.accounts import Account
 from tools.facebooks.handle_browser_push import Push
 from sql.errors import Error
 import logging
-from tkinter import messagebox
 from main.post import get_post_process_instance
 from sql.system import System
+from bot import send
 
 account_instance = Account()
 error_instance = Error()
@@ -45,16 +45,12 @@ def process_post(account,stop_event):
             else:
                 post_process_instance.update_process(account.get('id'),'Proxy không dùng được')
                 raise Exception("Proxy không hợp lệ")
-            
-            try:
-                post_process_instance.update_process(account.get('id'),'Chuyển hướng tới fb')
-                browser.get("https://facebook.com")
-                crawl = Push(browser,account,dirextension,manager,system_account)
-                crawl.handle(stop_event)
-                sleep(5)
-            except Exception as e:
-                logging.error(f"Lỗi trong push: {e}")
-                print(f"Lỗi trong push: {e}")
+        
+            post_process_instance.update_process(account.get('id'),'Chuyển hướng tới fb')
+            browser.get("https://facebook.com")
+            crawl = Push(browser,account,dirextension,manager,system_account)
+            crawl.handle(stop_event)
+            sleep(5)
         except Exception as e:
             error_instance.insertContent(e)
             post_process_instance.update_process(account.get('id'),'Trình duyệt bị đóng, đợi 30s...')
@@ -68,6 +64,7 @@ def process_post(account,stop_event):
             print(f"Trình duyệt bị đóng, thử lại sau 30s...")
             sleep(30)
 
+    send(f"Tài khoản {account.get('name')} đã bị dừng đăng bài!")
     system_instance.update_account(system_account.get('id'),{'status': 2})
             
     

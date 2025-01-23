@@ -6,7 +6,14 @@ from helpers.modal import clickOk
 import logging
 import re
 from bot import send
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException,TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+from captcha import Captcha
+
+captcha_instance = Captcha()
+
 class HandleLogin:
     def __init__(self,driver,acc,main_model = None):
         self.driver = driver
@@ -30,22 +37,17 @@ class HandleLogin:
             self.main_model.update_process(self.account.get('id'),text)
     
 
-    def loginFacebook(self):
+    def loginFacebook(self,sendNoti = True):
+        self.sendNoti = sendNoti
         self.setAccount()
         try:
             logging.info(f"Bắt đầu thực khi login: {self.account.get('name')}")
             print(f"Bắt đầu thực khi login: {self.account.get('name')}")
             self.driver.get("https://facebook.com")
-            sleep(2)
+            sleep(3)
             clickOk(self.driver)
 
-            try:
-                allow_cookies_buttons = self.driver.find_elements(By.XPATH, '//*[@aria-label="Allow all cookies"]')
-                if len(allow_cookies_buttons) > 1:
-                    allow_cookies_buttons[-1].click()
-                sleep(2)
-            except Exception as e:
-                pass
+            self.saveAlowCookie()
             
             try:
                 self.updateMainModel('Login với cookie')
@@ -54,6 +56,7 @@ class HandleLogin:
                 self.updateMainModel('Không thể login với cookie')
                 pass
 
+            self.saveAlowCookie()
             check = self.saveLogin(False)
             sleep(2)
             if check == False:
@@ -68,8 +71,9 @@ class HandleLogin:
                 except: 
                     self.driver.find_element(By.ID,'loginbutton').click()
                 sleep(5)
+                self.saveAlowCookie()
 
-                sleep(60)
+                self.handleCaptcha()
 
                 self.updateMainModel('Login với username, password')
                 check = self.saveLogin()
@@ -104,14 +108,49 @@ class HandleLogin:
                                 print(f'{self.account.get("name")} lấy mã từ Audio (chiu)')
                         except Exception as e:
                             pass
-            
         except Exception as e:
             logging.error(f'Lỗi login: {e}')
             print(f'Lỗi login: {e}')
             check = False
         return check
 
+    def handleCaptcha(self):
+        try:
+            print('Lấy capcha xử lý')
+            img_elements = WebDriverWait(self.driver,5).until(
+                EC.presence_of_all_elements_located((By.XPATH,'//img[@referrerpolicy="origin-when-cross-origin"]'))
+            )
+            src = ''
+            for img in img_elements:
+                captcha_url = img.get_attribute("src")
+                if 'captcha' in captcha_url:
+                    src = captcha_url
+                    break
+
+            if src == '':
+                raise ValueError('Khôgn tìm thấy img captcha')
             
+            send(f'{self.account.get("name")} bắt đầu xử lý captcha để đăng nhập')
+            code = captcha_instance.getCode(src)
+            send(f'{self.account.get("name")} lấy từ captchat: {code}')
+            self.pushCode(code)
+        except Exception as e:
+            print('Lỗi khi xử lý captcha')
+            print(e)
+            logging.error(e)
+
+
+    def saveAlowCookie(self):
+        try:
+            print('Chấp nhận tất cả cookie')
+            allow_cookies_buttons = WebDriverWait(self.driver,5).until(
+                EC.presence_of_all_elements_located((By.XPATH, '//*[@aria-label="Allow all cookies"]'))
+            )
+            if len(allow_cookies_buttons) > 1:
+                allow_cookies_buttons[-1].click()
+            sleep(2)
+        except Exception as e:
+            pass
         
     def getCode2Fa(self):
         logging.info(f'{self.account.get("name")} Mở web lấy mã')
@@ -278,7 +317,8 @@ class HandleLogin:
         try:
             checkBlock = self.checkBlock()
             if checkBlock:
-                send(f"Tài khoản: {self.account.get('name')} đã bị khoá")
+                if self.sendNoti:
+                    send(f"Tài khoản: {self.account.get('name')} đã bị khoá")
                 self.updateMainModel('Tài khoản đã bị khoá!')
                 self.account_instance.update_account(self.account.get('id'),{'status_login': 5})
                 return check
@@ -304,14 +344,24 @@ class HandleLogin:
         return check
     
     def checkBlock(self):
+        clickOk(self.driver)
         try:
             self.driver.find_element(By.XPATH, "//*[contains(text(), 'your account has been locked')]")
+            print('your account has been locked')
             return True
         except NoSuchElementException:
             pass
         
         try:
             self.driver.find_element(By.XPATH, "//*[contains(text(), 'Account locked')]")
+            print('Account locked')
+            return True
+        except NoSuchElementException:
+            pass
+
+        try:
+            self.driver.find_element(By.XPATH, "//*[contains(text(), 'You’re Temporarily Blocked')]")
+            print('You’re Temporarily Blocked')
             return True
         except NoSuchElementException:
             pass

@@ -79,7 +79,6 @@ def handleCrawlNewFeedVie(account, managerDriver,dirextension = None, stop_event
                         clickOk(browser)
                         profile_button = browser.find_element(By.XPATH, push['openProfile'])
                     except NoSuchElementException as e:
-                        send(f"Tài khoản {account.get('name')} không thể đăng nhập!")
                         raise e
                         
                     actions = ActionChains(browser)
@@ -119,6 +118,7 @@ def handleCrawlNewFeedVie(account, managerDriver,dirextension = None, stop_event
                                                 'account_id': account.get('id'),
                                             }
                                             res = newfeed_instance.insert(data)
+                                            print(f"{account.get('name')}: {data.get('post_fb_link')}")
                                             # log_newsfeed(account, f"* +1 đường dẫn * {str(res.get('data', {}).get('id', 'Không có id'))}")
 
                         except Exception as e:
@@ -163,7 +163,7 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None,system
 
         manager = None
         browser = None
-
+        sendNoti = True
         while not stop_event.is_set():
             try:
                 while not stop_event.is_set():
@@ -233,9 +233,13 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None,system
                     try:
                         clickOk(browser)
                         profile_button = browser.find_element(By.XPATH, push['openProfile'])
-                    except Exception as e:
+                    except NoSuchElementException as e:
+                        if sendNoti:
+                            send(f"Tài khoản {account.get('name')} không thể đăng nhập!")
+                            sendNoti = False
                         raise e
                         
+                    sendNoti = True
                     actions = ActionChains(browser)
                     
                     listPosts = browser.find_elements(By.XPATH, types['list_posts']) 
@@ -273,6 +277,7 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None,system
                                                 'account_id': account.get('id'),
                                             }
                                             res = newfeed_instance.insert(data)
+                                            print(f"{name}: {data.get('post_fb_link')}")
                                             # log_newsfeed(account, f"* +1 đường dẫn * {str(res.get('data', {}).get('id', 'Không có id'))}")
 
                         except Exception as e:
@@ -304,8 +309,8 @@ def handleCrawlNewFeed(account, name, dirextension = None,stop_event=None,system
     except Exception as e:
         error_instance.insertContent(e)
     finally:
-        pass
-        # log_newsfeed(account,f"==========================Đóng fanpage {name}=================================")
+        print(f"==========================Đóng fanpage {name}=================================")
+        logging.info(f"==========================Đóng fanpage {name}=================================")
 
 def crawlNewFeed(account,name,dirextension,stop_event=None,system_account=None):
     try:
@@ -465,8 +470,8 @@ def crawlNewFeed(account,name,dirextension,stop_event=None,system_account=None):
         print(e)
         error_instance.insertContent(e)
     finally:
-        pass
-        # log_newsfeed(account,f"========> Đóng cào lưu đb {name} <=============")
+        print(f"========> Đóng cào lưu đb {name} <=============")
+        logging.info(f"========> Đóng cào lưu đb {name} <=============")
 
 
      

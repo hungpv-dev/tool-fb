@@ -10,7 +10,7 @@ from sql.errors import Error
 from helpers.modal import clickOk
 from sql.account_cookies import AccountCookies
 import logging
-
+from bot import send
 
 from main.post import get_post_process_instance
 post_process_instance = get_post_process_instance()
@@ -105,6 +105,7 @@ def push_page(page,account,dirextension,stop_event,system_account = None):
                             break
                         except NoSuchElementException as e:
                             page_post_instance.update_status(pageUP['id'], {'status': 1})
+                            send(f"Tài khoản {account.get('name')} không thể đăng nhập!")
                             raise e
                         except Exception as e:
                             retry_count[pot_id] += 1
@@ -207,6 +208,7 @@ def push_list(account,dirextension,stop_event,system_account = None):
                                 break
                             except NoSuchElementException as e:
                                 page_post_instance.update_status(post['id'], {'status': 1})
+                                send(f"Tài khoản {account.get('name')} không thể đăng nhập!")
                                 raise e
                             except Exception as e:
                                 retry_count[post_id] += 1

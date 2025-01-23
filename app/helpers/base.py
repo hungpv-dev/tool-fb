@@ -1,8 +1,8 @@
-from router import router
 from tkinter import messagebox
 import json
 
 def render(page_name):
+    from router import router
     """Xóa toàn bộ widget trong frame trừ các widget của trang log."""
     from main.root import get_frame
     frame = get_frame()
@@ -17,7 +17,6 @@ def render(page_name):
     for widget in frame.winfo_children():
         if widget not in log_widgets:  # Không xóa các widget của trang log
             widget.destroy()
-
     # Sau đó gọi router để render trang mới
     router.get(page_name)()
 
@@ -43,7 +42,8 @@ def config(key=None):
         config_data = {
             "browser": "chrome",
             "headless": True,
-            "driver_path": ""
+            "driver_path": "",
+            "omocaptcha_token": "",
         }
         with open("config.json", "w") as config_file:
             json.dump(config_data, config_file, indent=4)

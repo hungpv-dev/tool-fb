@@ -92,4 +92,5 @@ def clickOk(driver):
         ok_button.click()
         sleep(2)
     except Exception as e:
+        print('Không có ok')
         pass

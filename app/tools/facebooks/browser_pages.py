@@ -32,12 +32,13 @@ class BrowserFanpage:
             try:
                 fanpage_process_instance.update_process(tab_id,'Bắt đầu cào page')
                 self.crawl(tab_id,stop_event)
-            except Exception as e:
-                self.error_instance.insertContent(e)
+                fanpage_process_instance.update_process(tab_id,'Đợi 3s tới page kế tiếp')
                 logging.error("Thử lại sau 3s...")
                 print("Thử lại sau 3s...")
-            fanpage_process_instance.update_process(tab_id,'Đợi 3s tới page kế tiếp')
-            sleep(3)
+                sleep(3)
+            except Exception as e:
+                self.error_instance.insertContent(e)
+                raise e
           
     def crawl(self,tab_id,stop_event):
         his = None

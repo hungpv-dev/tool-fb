@@ -169,9 +169,13 @@ class Test:
 # text = "Pop Prince 200 notifications"
 # print(remove_notifications(text))
 
-from helpers.fb import clean_url_keep_params,clean_facebook_url_redirect
-href = 'https://www.facebook.com/permalink.php?story_fbid=pfbid027o67JwuNoXyqJBESHAf58XvE7ByWwVF96JM2CX3vUud9woQDzU4RgFniyaS6XuMPl&amp;id=61571869795635'
-print(clean_url_keep_params(href))
+# from helpers.fb import clean_url_keep_params,clean_facebook_url_redirect
+# href = 'https://www.facebook.com/permalink.php?story_fbid=pfbid0syVHGJi1vypbtjmAp5tKs181n5drr32aLP9jPLvzWe94Wn8sFBBTrkTJqBU9oPBJl&amp;id=61572025409861'
+# print(clean_url_keep_params(href))
+
+from bot import send
+
+send('Heello')
 
 
 

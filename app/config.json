@@ -1,4 +1,5 @@
 {
     "headless": true,
-    "driver_path": "C:\\Users\\Admin\\.wdm\\drivers\\chromedriver\\win64\\131.0.6778.264\\chromedriver-win32/chromedriver.exe"
+    "driver_path": "C:\\Users\\Admin\\.wdm\\drivers\\chromedriver\\win64\\131.0.6778.264\\chromedriver-win32/chromedriver.exe",
+    "omocaptcha_token": "OMO_K7RYJNUYJXVFGQXDED8VOXZLMHKIALPPM7NOME3PLBK8QCR5NT6Y2MRJ1E8FAJ1737510099"
 }

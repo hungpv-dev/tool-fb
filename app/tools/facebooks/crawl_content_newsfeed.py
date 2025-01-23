@@ -37,15 +37,17 @@ class CrawContentNewsfeed:
 
     def handle(self,stop_event):
         loginInstance = HandleLogin(self.browser,self.account,newsfeed_process_instance)
+        sendNoti = True
         while not stop_event.is_set():
             try:
                 newsfeed_process_instance.update_process(self.account.get('id'),'Bắt đầu đăng nhập')
                 # log_newsfeed(self.account,f'* Bắt đầu ({self.account["name"]}) *')
                 logging.info(f'==================Newsfeed ({self.account["name"]})================')
                 print(f'==================Newsfeed ({self.account["name"]})================')
-                checkLogin = loginInstance.loginFacebook()
+                checkLogin = loginInstance.loginFacebook(sendNoti)
                 if checkLogin == False:
                     raise ValueError('Không thể login')
+                sendNoti = True
                 account = loginInstance.getAccount()
                 newsfeed_process_instance.update_process(self.account.get('id'),'Đăng nhập thành công')
                 self.account = account
@@ -58,7 +60,9 @@ class CrawContentNewsfeed:
                 logging.error(f"Lỗi khi xử lý lấy dữ liệu!: {e}")
                 print(f"Lỗi khi xử lý lấy dữ liệu!: {e}")
                 self.error_instance.insertContent(e)
-                send(f"Tài khoản {account.get('name')} không thể đăng nhập!")
+                if sendNoti:
+                    send(f"Tài khoản {self.account.get('name')} không thể đăng nhập!")
+                    sendNoti = False
             except Exception as e:
                 raise e
             finally:

@@ -50,17 +50,13 @@ def process_newsfeed(account, stop_event):
                 system_instance.push_message(system_account.get('id'),'Không dùng được proxy')
                 raise Exception("Proxy không hợp lệ")
 
-            try:
-                # browser.get('https://whatismyipaddress.com')
-                # sleep(10000)
-                newsfeed_process_instance.update_process(account.get('id'),'Chuyển hướng tới facebook')
-                browser.get("https://facebook.com")
-                newfeed = CrawContentNewsfeed(browser,account,extension,manager,system_account)
-                newfeed.handle(stop_event)
-                sleep(5)
-            except Exception as e:
-                logging.error(f"Lỗi khi lấy bài new feed: {e}")
-                print(f"Lỗi khi lấy bài new feed: {e}")
+            # browser.get('https://whatismyipaddress.com')
+            # sleep(10000)
+            newsfeed_process_instance.update_process(account.get('id'),'Chuyển hướng tới facebook')
+            browser.get("https://facebook.com")
+            newfeed = CrawContentNewsfeed(browser,account,extension,manager,system_account)
+            newfeed.handle(stop_event)
+            sleep(5)
         except Exception as e:
             error_instance.insertContent(e)
             newsfeed_process_instance.update_process(account.get('id'),'Không thể khởi tạo trình duyệt, đợi 30s...')

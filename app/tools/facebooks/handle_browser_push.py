@@ -26,6 +26,7 @@ import logging
 from sql.system import System
 system_instance = System()
 post_process_instance = get_post_process_instance()
+from bot import send
 
 class Push:
     def __init__(self,browser,account,dirextension,manager,system_account = None):
@@ -45,6 +46,7 @@ class Push:
         
     def handle(self,stop_event):
         loginInstance = HandleLogin(self.browser,self.account,post_process_instance)
+        sendNoti = True
         while not stop_event.is_set():
             try:
                 post_process_instance.update_process(self.account.get('id'),'Bắt đầu đăng nhập')
@@ -53,6 +55,7 @@ class Push:
                 checkLogin = loginInstance.loginFacebook()
                 if checkLogin == False:
                     raise ValueError('Không thể login')
+                sendNoti = True
                 account = loginInstance.getAccount()
                 post_process_instance.update_process(self.account.get('id'),'Đăng nhập thành công')
                 self.account = account
@@ -64,6 +67,9 @@ class Push:
                     system_instance.push_message(self.system_account.get('id'),'Đăng nhập thất bại!')
                 print(f"Lỗi khi xử lý đăng bài viết!: {e}")
                 self.error_instance.insertContent(e)
+                if sendNoti:
+                    send(f"Tài khoản {self.account.get('name')} không thể đăng nhập!")
+                    sendNoti = False
             except Exception as e:
                 raise e
             finally:
@@ -78,12 +84,14 @@ class Push:
             sleep(2)
             pageIds = set()
             threads = []
+            names = []
             try:
                 awaitListPage = self.getAwaitListPage()
                 post_process_instance.update_process(self.account.get('id'),f'Đang xử lý {len(awaitListPage)} fanpage')
                 for pot in awaitListPage:
                     if pot.get('id') not in pageIds:
                         pageIds.add(pot.get('id'))
+                        names.append(pot.get('name'))
                         worker_thread = threading.Thread(target=push_page, args=(pot,self.account,self.dirextension,stop_event,self.system_account))
                         worker_thread.daemon = True  # Dừng thread khi chương trình chính dừng
                         worker_thread.start()
@@ -93,6 +101,9 @@ class Push:
                 logging.error(e)
                 self.error_instance.insertContent(e)
                 print(e)
+
+            
+            send(f'{self.account.get("name")} đăng bài trên: {", ".join(names)}')
                 
             try:
                 worker_thread = threading.Thread(target=push_list, args=(self.account,self.dirextension,stop_event,self.system_account))
@@ -308,12 +319,13 @@ class Push:
         print('Đã lấy được link up')
         page_post_instance = PagePosts()
         link_up = clean_url_keep_params(link_up)
-        page_post_instance.update_status(up['id'],{'link_up': link_up})
+        save_like_up = clean_url_keep_params(link_up)
+        page_post_instance.update_status(up['id'],{'link_up': save_like_up})
         sleep(2)
         
         comments = up.get('comments', [])
         if comments and len(comments) > 0:
-            self.browser.get(link_up)  
+            self.browser.get(save_like_up)  
             sleep(3)
 
             try:

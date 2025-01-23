@@ -26,7 +26,6 @@ def process_crawl(id, stop_event):
             logging.error(f"Lỗi trong Crawl, khởi động lại sau 10s: {e}")
             print(f"Lỗi trong Crawl, khởi động lại sau 10s: {e}")
             fanpage_process_instance.update_process(id,'Tab bị lỗi, thử lại sau 10s....')
-            break
         finally:
             logging.error(f'==> Đang đóng tab: {id}')
             print(f'==> Đang đóng tab: {id}')

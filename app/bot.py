@@ -12,18 +12,31 @@ class BotTelegram:
         url = f'https://api.telegram.org/bot{self.token}/getUpdates'
         response = requests.get(url)
         data = response.json()
+        
+        # Xử lý nếu response không trả về 'result'
+        if 'result' not in data:
+            logging.error("Không tìm thấy trường 'result' trong API response.")
+            self.chat_ids = []
+            return self
+
         chat_ids = set()
         for chat in data['result']:
-            chat_id = chat['message']['chat']['id']
-            chat_ids.add(chat_id)
+            if 'message' in chat and 'chat' in chat['message']:
+                chat_id = chat['message']['chat']['id']
+                chat_ids.add(chat_id)
         self.chat_ids = list(chat_ids)
         return self
     
     async def send_messages(self, message=''):
+        await self.bot.send_message(chat_id='-4746381732', text=message)
+        logging.info(f"Đã gửi tin nhắn tới chat_id: {4746381732}")
+        return
         for chat_id in self.chat_ids:
-            await self.bot.send_message(chat_id=chat_id, text=message)
-        print('Đã gửi tin nhắn thành công')
-        logging.info('Đã gửi tin nhắn thành công')
+            try:
+                await self.bot.send_message(chat_id=chat_id, text=message)
+                logging.info(f"Đã gửi tin nhắn tới chat_id: {chat_id}")
+            except Exception as e:
+                logging.error(f"Lỗi khi gửi tin nhắn tới chat_id {chat_id}: {e}")
 
 
 # Tạo hàm send_message để sử dụng ở nơi khác
@@ -39,3 +52,4 @@ async def send_message(message):
 
 def send(message):
     asyncio.run(send_message(message))
+
